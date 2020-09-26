@@ -74,9 +74,9 @@ public:
     bool simStopCheck() {
         HRESULT kill = SimConnect_RequestSystemState(hSimConnect, RequestID, stopState);
         if (SUCCEEDED(kill)) {
-            return kill;
+            return true;
         }
-        return 0;
+        return false;
     }
     bool handleSimDisconnect() {
         WASM_SYS.destroy();
