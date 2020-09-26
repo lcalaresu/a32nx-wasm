@@ -1,3 +1,5 @@
 *.vcxproj*
 *.git
 /MSFS/Debug
+/.vs
+/CppProperties.json

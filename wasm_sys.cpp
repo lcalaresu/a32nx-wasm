@@ -95,23 +95,22 @@ extern "C" {
     {
         if(service.handleSimConnect(ctx, service_id, pData)){
             
-            bool initialized = 0;
-            bool kill = 0;
+            bool initialized = false;
+            bool kill = false;
             struct timeval time;
-            double lastRefresh = 0;
 
             while (!(kill)) {
                 gettimeofday(&time, 0);
-                double currentAbsTime = time.tv_usec * 1000;
+                const double currentAbsTime = time.tv_usec * 1000;
                 
                 if (!(initialized)) {
                     WASM_SYS.init();
-                    initialized = 1;
+                    initialized = true;
                 } else {
                     if (lastAbsTime == 0) {
                         lastAbsTime = currentAbsTime;
                     }
-                    lastRefresh = currentAbsTime - lastAbsTime;
+                    const double lastRefresh = currentAbsTime - lastAbsTime;
                     if (lastRefresh >= REFRESH_RATE) {
                         WASM_SYS.update(currentAbsTime);
                     }

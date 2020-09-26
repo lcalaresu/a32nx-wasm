@@ -64,9 +64,9 @@ typedef enum keyEventTrigger {
 }keyEventTrigger;
 
 typedef enum lSimVars {
-/*==============================================================================================================================================================================*/
-/*                                                                                      ELEC                                                                                    */
-/*==============================================================================================================================================================================*/
+    /*============================================================================*/
+    /*                                   ELEC                                     */
+    /*============================================================================*/
     /*
     * ========= *
     * Batteries *
@@ -194,9 +194,9 @@ typedef enum lSimVars {
     GALLY_CAB_SW,           //L : A32NX_ELEC_GALYCAB_TOGGLE
     GALLY_CAB_FAULT,        //L : A32NX_ELEC_GALYCAB_FAULT
 
-/*==============================================================================================================================================================================*/
-/*                                                                                    BLEED                                                                                     */
-/*==============================================================================================================================================================================*/
+/*============================================================================*/
+/*                                   BLEED                                    */
+/*============================================================================*/
     /*
     * ============ *
     * BLEED Valves *
@@ -230,10 +230,9 @@ typedef enum lSimVars {
     */
     X_BLEED,            //TODO
 
-/*==============================================================================================================================================================================*/
-/*                                                                                    PACKS                                                                                     */
-/*==============================================================================================================================================================================*/
-    
+/*============================================================================*/
+/*                                   PACKS                                    */
+/*============================================================================*/
     /*
     * ===== *
     * PACKS *
@@ -266,9 +265,9 @@ typedef enum lSimVars {
     PACK2_VALVE,            //TODO
     PACK_FLOW_CONTROLLER,   //TODO
 
-/*==============================================================================================================================================================================*/
-/*                                                                                   ENGINES                                                                                    */
-/*==============================================================================================================================================================================*/
+/*============================================================================*/
+/*                                   ENGINES                                  */
+/*============================================================================*/
 
     APU_FLAP_OPEN,          //"L:APU_FLAP_OPEN", "Percent"
     APU_N1,                 //"L:APU_N1","Percent"
@@ -315,143 +314,187 @@ typedef enum ElECConf {
 /*pcstring_<type> holds string inputs required by simconnect function
 Ensure that their indices match their corresponding enum definitions.*/
 
-const PCSTRINGZ pcstring_units[enumUnitsCount] = {	        "Bool",
-                                                            "Percent",
-                                                            "Volts",
-                                                            "Hertz",
-                                                            "PSI",
-                                                            "Number",
-                                                            "Enum"
-                                                };
+const PCSTRINGZ pcstring_units[enumUnitsCount] = {
+    "Bool",
+    "Percent",
+    "Volts",
+    "Hertz",
+    "PSI",
+    "Number",
+    "Enum"
+};
 
-const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {        "EXTERNAL POWER AVAILABLE, Bool",
-                                                            "EXTERNAL POWER ON, Bool",
-                                                            "FUELSYSTEM VALVE SWITCH : 8, Bool",
-                                                            "APU PCT RPM, Percent",
-                                                            "ENG N2 RPM:1, Percent",
-                                                            "ENG N2 RPM:2, Percent",
-                                                            "APU SWITCH, Bool",
-                                                            "ELECTRICAL MASTER BATTERY : 1 , Bool",
-                                                            "ELECTRICAL MASTER BATTERY : 2 , Bool",
-                                                            "AMBIENT TEMPERATURE, celsius",
-                                                            "AIRSPEED TRUE, Knots",
-                                                            "AIRSPEED INDICATED, Knots",
-                                                            "GENERAL ENG MASTER ALTERNATOR : 1, Bool",
-                                                            "GENERAL ENG MASTER ALTERNATOR : 2, Bool",
-                                                            "BLEED AIR ENGINE : 1, Bool",
-                                                            "BLEED AIR ENGINE : 2, Bool"
-                                                            "BLEED AIR APU, Bool",
-                                                            "GENERAL ENG STARTER:1, Bool",
-                                                            "GENERAL ENG STARTER:2, Bool"
-                                                };
+const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
+    "EXTERNAL POWER AVAILABLE, Bool",
+    "EXTERNAL POWER ON, Bool",
+    "FUELSYSTEM VALVE SWITCH : 8, Bool",
+    "APU PCT RPM, Percent",
+    "ENG N2 RPM:1, Percent",
+    "ENG N2 RPM:2, Percent",
+    "APU SWITCH, Bool",
+    "ELECTRICAL MASTER BATTERY : 1 , Bool",
+    "ELECTRICAL MASTER BATTERY : 2 , Bool",
+    "AMBIENT TEMPERATURE, celsius",
+    "AIRSPEED TRUE, Knots",
+    "AIRSPEED INDICATED, Knots",
+    "GENERAL ENG MASTER ALTERNATOR : 1, Bool",
+    "GENERAL ENG MASTER ALTERNATOR : 2, Bool",
+    "BLEED AIR ENGINE : 1, Bool",
+    "BLEED AIR ENGINE : 2, Bool"
+    "BLEED AIR APU, Bool",
+    "GENERAL ENG STARTER:1, Bool",
+    "GENERAL ENG STARTER:2, Bool"
+};
 
-const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {   //===============================ELEC======================
-                                                                "BATT1_ONLINE",         
-                                                                "BATT2_ONLINE",
-                                                                "BATT1_CAPACITY",
-                                                                "BATT2_CAPACITY",
-                                                                "BATT1_VOLTAGE",
-                                                                "BATT2_VOLTAGE",
-                                                                "BATT1_AMPERAGE",
-                                                                "BATT2_AMPERAGE",
-                                                                "BATT_BUS_LOAD",
-                                                                "EXT_GEN_VOLTAGE",
-                                                                "EXT_GEN_AMPERAGE",
-                                                                "EXT_GEN_FREQ",
-                                                                "APU_GEN_VOLTAGE",
-                                                                "APU_GEN_AMPERAGE",
-                                                                "APU_GEN_FREQ",
-                                                                "APU_LOAD_PERCENT",
-                                                                "GEN1_ONLINE",
-                                                                "GEN2_ONLINE",
-                                                                "GEN1_VOLTAGE",
-                                                                "GEN2_VOLTAGE",
-                                                                "GEN1_AMPERAGE",
-                                                                "GEN2_AMPERAGE",
-                                                                "GEN1_FREQ",
-                                                                "GEN2_FREQ",
-                                                                "GEN1_IDG_TEMP",
-                                                                "GEN2_IDG_TEMP",
-                                                                "EMER_ONLINE",
-                                                                "EMER_VOLTAGE",
-                                                                "EMER_AMPERAGE",
-                                                                "EMER_FREQ",
-                                                                "AC_BUS1",
-                                                                "AC_BUS2",
-                                                                "AC_ESS",
-                                                                "AC_SHED",
-                                                                "GALLEY_SHED",
-                                                                "DC_BUS1",
-                                                                "DC_BUS2",
-                                                                "DC_BATBUS",
-                                                                "DC_ESS",
-                                                                "DC_SHED",
-                                                                "HOT_BUS1",
-                                                                "HOT_BUS2",
-                                                                "TR1_ONLINE",
-                                                                "TR2_ONLINE",
-                                                                "TRESS_ONLINE",
-                                                                "TR1_VOLTAGE",
-                                                                "TR2_VOLTAGE",
-                                                                "TRESS_VOLTAGE",
-                                                                "TR1_AMPERAGE",
-                                                                "TR2_AMPERAGE",
-                                                                "TRESS_AMPERAGE",
-                                                                "STATIC_INV",
-                                                                "STATIC_INV_VOLTAGE",
-                                                                "STATIC_INV_FREQ",
-                                                                "ACPowerAvailable",
-                                                                "DCPowerAvailable",
-                                                                "A32NX_APU_START_ACTIVATED",
-                                                                "A32NX_ELEC_IDG1_FAULT",
-                                                                "A32NX_ELEC_IDG1_TOGGLE",
-                                                                "A32NX_ELEC_IDG2_FAULT",
-                                                                "A32NX_ELEC_IDG2_TOGGLE",
-                                                                "A32NX_ELEC_BUSTIE_TOGGLE",
-                                                                "A32NX_ELEC_ACESSFEED_FAULT",
-                                                                "A32NX_ELEC_ACESSFEED_TOGGLE",
-                                                                "A32NX_ELEC_COMMERCIAL_TOGGLE",
-                                                                "A32NX_ELEC_COMMERCIAL_FAULT",
-                                                                "A32NX_ELEC_GALYCAB_TOGGLE",
-                                                                "A32NX_ELEC_GALYCAB_FAULT",
-                                                                //===============================BLEED=========================
-                                                                "ENG1_IP_VALVE",
-                                                                "ENG2_IP_VALVE",
-                                                                "ENG1_HP_VALVE",
-                                                                "ENG2_HP_VALVE",
-                                                                "ENG1_BLEED_STARTER",
-                                                                "ENG2_BLEED_STARTER",
-                                                                "GPU_BLEED",
-                                                                "WING_ANTICE",
-                                                                "ENG1_BLEED_PRESSURE",
-                                                                "ENG2_BLEED_PRESSURE",
-                                                                "APU_BLEED_PRESSURE",
-                                                                "ENG1_BLEED_TEMPERATURE",
-                                                                "ENG2_BLEED_TEMPERATURE",
-                                                                //TODO
-                                                                //TODO
-                                                                //TODO
-                                                                //==============================PACKS============================
-                                                                "PACK1_OUTLET_TEMP",
-                                                                "PACK2_OUTLET_TEMP",
-                                                                "PACK1_CMPRSO_TEMP",
-                                                                "PACK2_CMPRSO_TEMP",
-                                                                "CKPT_TEMP",
-                                                                "FWD_TEMP",
-                                                                "AFT_TEMP",
-                                                                "A320_Neo_AIRCOND_LVL_1",
-                                                                "A320_Neo_AIRCOND_LVL_2",
-                                                                "A320_Neo_AIRCOND_LVL_3",
-                                                                //TODO
-                                                                //TODO
-                                                                //TODO
-                                                                //TODO
-                                                                //=============================ENGINES============================
-                                                                "APU_FLAP_OPEN",
-                                                                "APU_N1",
-                                                                "APU_EGT",
-                                                                "APU_EGT_WARN"
-                                                    };
+const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {  
+//===============================ELEC======================
+    "BATT1_ONLINE",
+    "BATT2_ONLINE",
+    "BATT1_CAPACITY",
+    "BATT2_CAPACITY",
+    "BATT1_VOLTAGE",
+    "BATT2_VOLTAGE",
+    "BATT1_AMPERAGE",
+    "BATT2_AMPERAGE",
+    "BATT_BUS_LOAD",
+    "EXT_GEN_VOLTAGE",
+    "EXT_GEN_AMPERAGE",
+    "EXT_GEN_FREQ",
+    "APU_GEN_VOLTAGE",
+    "APU_GEN_AMPERAGE",
+    "APU_GEN_FREQ",
+    "APU_LOAD_PERCENT",
+    "GEN1_ONLINE",
+    "GEN2_ONLINE",
+    "GEN1_VOLTAGE",
+    "GEN2_VOLTAGE",
+    "GEN1_AMPERAGE",
+    "GEN2_AMPERAGE",
+    "GEN1_FREQ",
+    "GEN2_FREQ",
+    "GEN1_IDG_TEMP",
+    "GEN2_IDG_TEMP",
+    "EMER_ONLINE",
+    "EMER_VOLTAGE",
+    "EMER_AMPERAGE",
+    "EMER_FREQ",
+    "AC_BUS1",
+    "AC_BUS2",
+    "AC_ESS",
+    "AC_SHED",
+    "GALLEY_SHED",
+    "DC_BUS1",
+    "DC_BUS2",
+    "DC_BATBUS",
+    "DC_ESS",
+    "DC_SHED",
+    "HOT_BUS1",
+    "HOT_BUS2",
+    "TR1_ONLINE",
+    "TR2_ONLINE",
+    "TRESS_ONLINE",
+    "TR1_VOLTAGE",
+    "TR2_VOLTAGE",
+    "TRESS_VOLTAGE",
+    "TR1_AMPERAGE",
+    "TR2_AMPERAGE",
+    "TRESS_AMPERAGE",
+    "STATIC_INV",
+    "STATIC_INV_VOLTAGE",
+    "STATIC_INV_FREQ",
+    "ACPowerAvailable",
+    "DCPowerAvailable",
+    "A32NX_APU_START_ACTIVATED",
+    "A32NX_ELEC_IDG1_FAULT",
+    "A32NX_ELEC_IDG1_TOGGLE",
+    "A32NX_ELEC_IDG2_FAULT",
+    "A32NX_ELEC_IDG2_TOGGLE",
+    "A32NX_ELEC_BUSTIE_TOGGLE",
+    "A32NX_ELEC_ACESSFEED_FAULT",
+    "A32NX_ELEC_ACESSFEED_TOGGLE",
+    "A32NX_ELEC_COMMERCIAL_TOGGLE",
+    "A32NX_ELEC_COMMERCIAL_FAULT",
+    "A32NX_ELEC_GALYCAB_TOGGLE",
+    "A32NX_ELEC_GALYCAB_FAULT",
+    //===============================BLEED=========================
+    "ENG1_IP_VALVE",
+    "ENG2_IP_VALVE",
+    "ENG1_HP_VALVE",
+    "ENG2_HP_VALVE",
+    "ENG1_BLEED_STARTER",
+    "ENG2_BLEED_STARTER",
+    "GPU_BLEED",
+    "WING_ANTICE",
+    "ENG1_BLEED_PRESSURE",
+    "ENG2_BLEED_PRESSURE",
+    "APU_BLEED_PRESSURE",
+    "ENG1_BLEED_TEMPERATURE",
+    "ENG2_BLEED_TEMPERATURE",
+    //TODO
+    //TODO
+    //TODO
+    //==============================PACKS============================
+    "PACK1_OUTLET_TEMP",
+    "PACK2_OUTLET_TEMP",
+    "PACK1_CMPRSO_TEMP",
+    "PACK2_CMPRSO_TEMP",
+    "CKPT_TEMP",
+    "FWD_TEMP",
+    "AFT_TEMP",
+    "A320_Neo_AIRCOND_LVL_1",
+    "A320_Neo_AIRCOND_LVL_2",
+    "A320_Neo_AIRCOND_LVL_3",
+    //TODO
+    //TODO
+    //TODO
+    //TODO
+    //=============================ENGINES============================
+    "APU_FLAP_OPEN",
+    "APU_N1",
+    "APU_EGT",
+    "APU_EGT_WARN"
+};
+
+class PID {
+private:
+    double _Kp;         //Proportional constant
+    double _Ki;         //Integral constant
+    double _Kd;         //Differential constant
+    double _Ep;         //current error
+    double _Ei;         //predicted error
+    double _Ed;         //rate of error change
+    double lastEp;      //last proportional error
+    double lastEi;      //last integral error(sum of all errors)
+    double lastUpdateTime;
+
+    void updateError(const double currentTime) {
+        const double deltaT = currentTime - lastUpdateTime;
+        _Ei = _Ep + lastEi;
+        _Ed = (_Ep - lastEp) / deltaT;
+        lastEp = _Ep;
+        lastEi = _Ei;
+        lastUpdateTime = currentTime;
+    }
+public:
+    void init(const double Kp, const double Ki, const double Kd) {
+        _Kp = Kp;
+        _Ki = Ki;
+        _Kd = Kd;
+        _Ep = 0;
+        _Ei = 0;
+        _Ed = 0;
+        lastEp = 0;
+        lastEi = 0;
+    }
+    /*
+    * add result of PID control to your variable 
+    */
+    double control(const double targetValue, const double currentValue, const double currentAbsTime){
+        _Ep = targetValue - currentValue;
+        updateError(currentAbsTime);
+        return (_Kp * _Ep + _Ki * _Ei + _Kd * _Ed);
+    }
+};
 
 ENUM* ENUM_UNITS;
 ID* ID_LSIMVAR;
