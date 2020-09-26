@@ -489,8 +489,8 @@ public:
     /*
     * add result of PID control to your variable 
     */
-    double control(const double targetValue, const double currentValue, const double currentAbsTime){
-        _Ep = targetValue - currentValue;
+    double control(const double currentError, const double currentAbsTime){
+        _Ep = currentError;
         updateError(currentAbsTime);
         return (_Kp * _Ep + _Ki * _Ei + _Kd * _Ed);
     }
