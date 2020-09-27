@@ -460,39 +460,40 @@ private:
     double _Kp;         //Proportional constant
     double _Ki;         //Integral constant
     double _Kd;         //Differential constant
-    double _Ep;         //current error
-    double _Ei;         //predicted error
-    double _Ed;         //rate of error change
+    double Ep;          //current error
+    double Ei;          //predicted error
+    double Ed;          //rate of error change
     double lastEp;      //last proportional error
-    double lastEi;      //last integral error(sum of all errors)
     double lastUpdateTime;
 
     void updateError(const double currentTime) {
         const double deltaT = currentTime - lastUpdateTime;
-        _Ei = _Ep + lastEi;
-        _Ed = (_Ep - lastEp) / deltaT;
-        lastEp = _Ep;
-        lastEi = _Ei;
+        if (Ep == 0) {
+            Ei = 0;
+        }
+        Ei += (Ep * deltaT);
+        Ed = (Ep - lastEp) / deltaT;            //TODO: add zero check for deltaT? should be fine as long as control() isn't called at the same timestamp as init()
+        lastEp = Ep;
         lastUpdateTime = currentTime;
     }
 public:
-    void init(const double Kp, const double Ki, const double Kd) {
+    void init(const double Kp, const double Ki, const double Kd, const double currentAbsTime) {
         _Kp = Kp;
         _Ki = Ki;
         _Kd = Kd;
-        _Ep = 0;
-        _Ei = 0;
-        _Ed = 0;
+        Ep = 0;
+        Ei = 0;
+        Ed = 0;
         lastEp = 0;
-        lastEi = 0;
+        lastUpdateTime = currentAbsTime;
     }
     /*
     * add result of PID control to your variable 
     */
     double control(const double currentError, const double currentAbsTime){
-        _Ep = currentError;
+        Ep = currentError;
         updateError(currentAbsTime);
-        return (_Kp * _Ep + _Ki * _Ei + _Kd * _Ed);
+        return (_Kp * Ep + _Ki * Ei + _Kd * Ed);
     }
 };
 
