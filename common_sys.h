@@ -466,11 +466,17 @@ private:
     double lastEp;      //last proportional error
     double lastUpdateTime;
 
+    bool crossZero() {
+        if ((lastEp <= 0 && Ep >= 0) || (lastEp >= 0 && Ep <= 0)) {
+            return true;
+        }
+        return false;
+    }
     void updateError(const double currentError, const double currentTime) {
         const double deltaT = currentTime - lastUpdateTime;
         Ep = currentError;
-        if (Ep == 0) {
-            Ei = 0;
+        if (crossZero()) {
+            Ei = 0;                 //predicted(integral) error is reset to 0 when it crosses zero.
         }
         Ei += (Ep * deltaT);
         if (deltaT != 0) {
