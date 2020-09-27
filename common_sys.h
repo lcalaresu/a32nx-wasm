@@ -466,13 +466,16 @@ private:
     double lastEp;      //last proportional error
     double lastUpdateTime;
 
-    void updateError(const double currentTime) {
+    void updateError(const double currentError, const double currentTime) {
         const double deltaT = currentTime - lastUpdateTime;
+        Ep = currentError;
         if (Ep == 0) {
             Ei = 0;
         }
         Ei += (Ep * deltaT);
-        Ed = (Ep - lastEp) / deltaT;            //TODO: add zero check for deltaT? should be fine as long as control() isn't called at the same timestamp as init()
+        if (deltaT != 0) {
+            Ed = (Ep - lastEp) / deltaT;
+        }
         lastEp = Ep;
         lastUpdateTime = currentTime;
     }
@@ -491,8 +494,7 @@ public:
     * add result of PID control to your variable 
     */
     double control(const double currentError, const double currentAbsTime){
-        Ep = currentError;
-        updateError(currentAbsTime);
+        updateError(currentError, currentAbsTime);
         return (_Kp * Ep + _Ki * Ei + _Kd * Ed);
     }
 };
