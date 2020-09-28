@@ -39,6 +39,8 @@ typedef enum aSimVars {
     APU_RPM,                //"APU PCT RPM", "percent"
     ENG1_N2,                //"ENG N2 RPM:1","percent"
     ENG2_N2,                //"ENG N2 RPM:2","percent"
+    ENG1_N1,                //"ENG N1 RPM:1","percent"
+    ENG2_N1,                //"ENG N1 RPM:2","percent"
     APU_START_SWITCH,       //"A:APU SWITCH", "Bool"
     BATT1_SW,               //A:ELECTRICAL MASTER BATTERY:#ID#, Bool
     BATT2_SW,               //A:ELECTRICAL MASTER BATTERY:#ID#, Bool
@@ -52,6 +54,7 @@ typedef enum aSimVars {
     APU_BLEED,              //"BLEED AIR APU","Bool"
     ENG1_STARTER,           //(A:GENERAL ENG STARTER:1, Bool)
     ENG2_STARTER,           //(A:GENERAL ENG STARTER:2, Bool)
+    STRUCT_ANTI_ICE,          //A:STRUCTURAL DEICE SWITCH, Bool
 
     aSimVarsCount
 }aSimVars;
@@ -206,6 +209,8 @@ typedef enum lSimVars {
     ENG2_IP_VALVE,          //L:ENG2_IP_VALVE, Bool
     ENG1_HP_VALVE,          //L:ENG1_HP_VALVE, Bool
     ENG2_HP_VALVE,          //L:ENG2_HP_VALVE, Bool
+    ENG1_BLEED_VALVE,       //L:ENG1_BLEED_VALVE, Bool
+    ENG2_BLEED_VALVE,       //L:ENG2_BLEED_VALVE, Bool
     ENG1_BLEED_STARTER,     //L:ENG1_BLEED_STARTER, Bool
     ENG2_BLEED_STARTER,     //L:ENG2_BLEED_STARTER, Bool
     GPU_BLEED,              //L:GPU_BLEED, Bool
@@ -220,6 +225,7 @@ typedef enum lSimVars {
     ENG1_BLEED_PRESSURE,    //L:ENG1_BLEED_PRESSURE, PSI
     ENG2_BLEED_PRESSURE,    //L:ENG2_BLEED_PRESSURE, PSI
     APU_BLEED_PRESSURE,     //L:APU_BLEED_PRESSURE, PSI
+    APU_BLEED_TEMPERATURE,  //L:APU_BLEED_TEMPERATURE, Celcius
     ENG1_BLEED_TEMPERATURE, //L:ENG1_BLEED_TEMPERATURE, Celcius
     ENG2_BLEED_TEMPERATURE, //L:ENG2_BLEED_TEMPERATURE, Celcius
    
@@ -331,6 +337,8 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "APU PCT RPM, Percent",
     "ENG N2 RPM:1, Percent",
     "ENG N2 RPM:2, Percent",
+    "ENG N1 RPM:1, Percent",
+    "ENG N1 RPM:2, Percent",
     "APU SWITCH, Bool",
     "ELECTRICAL MASTER BATTERY : 1 , Bool",
     "ELECTRICAL MASTER BATTERY : 2 , Bool",
@@ -343,7 +351,8 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "BLEED AIR ENGINE : 2, Bool"
     "BLEED AIR APU, Bool",
     "GENERAL ENG STARTER:1, Bool",
-    "GENERAL ENG STARTER:2, Bool"
+    "GENERAL ENG STARTER:2, Bool",
+    "STRUCTURAL DEICE SWITCH, Bool"
 };
 
 const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {  
@@ -357,9 +366,11 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
     "BATT1_AMPERAGE",
     "BATT2_AMPERAGE",
     "BATT_BUS_LOAD",
+    "EXT_GEN_ONLINE",
     "EXT_GEN_VOLTAGE",
     "EXT_GEN_AMPERAGE",
     "EXT_GEN_FREQ",
+    "APU_GEN_ONLINE",
     "APU_GEN_VOLTAGE",
     "APU_GEN_AMPERAGE",
     "APU_GEN_FREQ",
@@ -401,6 +412,7 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
     "TRESS_AMPERAGE",
     "STATIC_INV",
     "STATIC_INV_VOLTAGE",
+    "STATICINV_AMPERAGE",
     "STATIC_INV_FREQ",
     "ACPowerAvailable",
     "DCPowerAvailable",
@@ -421,6 +433,8 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
     "ENG2_IP_VALVE",
     "ENG1_HP_VALVE",
     "ENG2_HP_VALVE",
+    "ENG1_BLEED_VALVE",
+    "ENG2_BLEED_VALVE",
     "ENG1_BLEED_STARTER",
     "ENG2_BLEED_STARTER",
     "GPU_BLEED",
@@ -428,11 +442,10 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
     "ENG1_BLEED_PRESSURE",
     "ENG2_BLEED_PRESSURE",
     "APU_BLEED_PRESSURE",
+    "APU_BLEED_TEMPERATURE",
     "ENG1_BLEED_TEMPERATURE",
     "ENG2_BLEED_TEMPERATURE",
-    //TODO
-    //TODO
-    //TODO
+    "TODO",
     //==============================PACKS============================
     "PACK1_OUTLET_TEMP",
     "PACK2_OUTLET_TEMP",
@@ -444,10 +457,10 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
     "A320_Neo_AIRCOND_LVL_1",
     "A320_Neo_AIRCOND_LVL_2",
     "A320_Neo_AIRCOND_LVL_3",
-    //TODO
-    //TODO
-    //TODO
-    //TODO
+    "TODO",
+    "TODO",
+    "TODO",
+    "TODO",
     //=============================ENGINES============================
     "APU_FLAP_OPEN",
     "APU_N1",
