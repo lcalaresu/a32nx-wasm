@@ -255,17 +255,17 @@ private:
     }
     void updateIDGTEMP(ENUM ENG_N2, ENUM GEN_IDG, ENUM IDG_DISC, const double ambient, const double currentAbsTime) {
 
-        double maxIDG = lSimVarsValue[ENG_N2] / 100 * 1.8;
+        double maxIDG = aSimVarsValue[ENG_N2] * 1.8;
         if (ambient > 0) {
             maxIDG += ambient;
             if (maxIDG > 115) {
-                maxIDG = 115;
+                maxIDG = 114 + rand()%2;
             }
         }
         else {
             maxIDG -= ambient;
             if (maxIDG < 70) {
-                maxIDG = 70;
+                maxIDG = 70 - rand()%1;
             }
         }
         if (lSimVarsValue[IDG_DISC]) {
