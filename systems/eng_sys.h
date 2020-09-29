@@ -116,7 +116,7 @@ public:
         }
     }
     void update(const double currentAbsTime) {
-        if (aSimVarsValue[FUEL_VALUE_8]) {
+        if (aSimVarsValue[APU_MASTER]) {
             openFlap(currentAbsTime);
             if (lSimVarsValue[APU_FLAP_OPEN] == 100 && lSimVarsValue[APU_START]) {
                 startup(currentAbsTime);

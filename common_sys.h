@@ -35,7 +35,7 @@ typedef enum unitsEnum {
 typedef enum aSimVars {
     EXT_AVAIL,              //"EXTERNAL POWER AVAILABLE","Bool"
     EXT_POWER,              //"EXTERNAL POWER ON", "Bool"
-    FUEL_VALUE_8,           //"FUELSYSTEM VALVE SWITCH:8", "Bool"
+    APU_MASTER,             //"FUELSYSTEM VALVE SWITCH:8", "Bool"
     APU_RPM,                //"APU PCT RPM", "percent"
     ENG1_N2,                //"ENG N2 RPM:1","percent"
     ENG2_N2,                //"ENG N2 RPM:2","percent"
@@ -54,7 +54,9 @@ typedef enum aSimVars {
     APU_BLEED,              //"BLEED AIR APU","Bool"
     ENG1_STARTER,           //(A:GENERAL ENG STARTER:1, Bool)
     ENG2_STARTER,           //(A:GENERAL ENG STARTER:2, Bool)
-    STRUCT_ANTI_ICE,          //A:STRUCTURAL DEICE SWITCH, Bool
+    STRUCT_ANTI_ICE,        //A:STRUCTURAL DEICE SWITCH, Bool
+    ENG1_EGT,                //A:ENG EXHAUST GAS TEMPERATURE:1, Rankine
+    ENG2_EGT,                //A:ENG EXHAUST GAS TEMPERATURE:2, Rankine
 
     aSimVarsCount
 }aSimVars;
@@ -211,9 +213,10 @@ typedef enum lSimVars {
     ENG2_HP_VALVE,          //L:ENG2_HP_VALVE, Bool
     ENG1_BLEED_VALVE,       //L:ENG1_BLEED_VALVE, Bool
     ENG2_BLEED_VALVE,       //L:ENG2_BLEED_VALVE, Bool
+    APU_BLEED_VALVE,        //L:APU_BLEED_VALVE, Bool
+    GPU_BLEED_VALVE,        //L:GPU_BLEED_VALVE, Bool
     ENG1_BLEED_STARTER,     //L:ENG1_BLEED_STARTER, Bool
     ENG2_BLEED_STARTER,     //L:ENG2_BLEED_STARTER, Bool
-    GPU_BLEED,              //L:GPU_BLEED, Bool
     WING_ANTIICE,           //L:WING_ANTICE, Bool
 
 
@@ -225,10 +228,23 @@ typedef enum lSimVars {
     ENG1_BLEED_PRESSURE,    //L:ENG1_BLEED_PRESSURE, PSI
     ENG2_BLEED_PRESSURE,    //L:ENG2_BLEED_PRESSURE, PSI
     APU_BLEED_PRESSURE,     //L:APU_BLEED_PRESSURE, PSI
+    GPU_BLEED_PRESSURE,     //L:GPU_BLEED_PRESSURE, PSI
+    GPU_BLEED_TEMPERATURE,   //L:GPU_BLEED_TEMPERATURE, PSI
     APU_BLEED_TEMPERATURE,  //L:APU_BLEED_TEMPERATURE, Celcius
     ENG1_BLEED_TEMPERATURE, //L:ENG1_BLEED_TEMPERATURE, Celcius
     ENG2_BLEED_TEMPERATURE, //L:ENG2_BLEED_TEMPERATURE, Celcius
-   
+    /*
+    * ========== *
+    * BLEED DUCT *
+    * ========== *
+    */                      //PIORITY       0               1       2       3       4       5
+    DUCT1,                  //L:DUCT1 No source   GPU       APU     ENG1    DUCT2   RAT
+    DUCT2,                  //L:DUCT2 No source   ENG2      DUCT1
+    
+    DUCT1_TEMPERATURE,      //L:DUCT1_TEMPERATURE, Celcius
+    DUCT2_TEMPERATURE,      //L:DUCT2_TEMPERATURE, Celcius
+    DUCT1_PRESSURE,         //L:DUCT1_PRESSURE, PSI
+    DUCT2_PRESSURE,         //L:DUCT2_PRESSURE, PSI
     /*
     * ========== *
     * XML L VARS * 
@@ -305,6 +321,16 @@ typedef enum powerSource{
 
 }powerSource;
 
+typedef enum bleedSource {
+    NOBLEED,
+
+    GPU_BLEED,
+    APU_BLEED,
+    ENG1_BLEED,
+    ENG2_BLEED,
+    RAT_BLEED
+};
+
 typedef enum ElECConf {
     NORM_CONF,
     ONE_GEN_INOP,
@@ -352,7 +378,9 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "BLEED AIR APU, Bool",
     "GENERAL ENG STARTER:1, Bool",
     "GENERAL ENG STARTER:2, Bool",
-    "STRUCTURAL DEICE SWITCH, Bool"
+    "STRUCTURAL DEICE SWITCH, Bool",
+    "ENG EXHAUST GAS TEMPERATURE:1, Rankine",
+    "ENG EXHAUST GAS TEMPERATURE:2, Rankine"
 };
 
 const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {  
@@ -435,16 +463,25 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
     "ENG2_HP_VALVE",
     "ENG1_BLEED_VALVE",
     "ENG2_BLEED_VALVE",
+    "APU_BLEED_VALVE",
+    "GPU_BLEED_VALVE",
     "ENG1_BLEED_STARTER",
     "ENG2_BLEED_STARTER",
-    "GPU_BLEED",
     "WING_ANTICE",
     "ENG1_BLEED_PRESSURE",
     "ENG2_BLEED_PRESSURE",
     "APU_BLEED_PRESSURE",
+    "GPU_BLEED_PRESSURE",
+    "GPU_BLEED_TEMPERATURE",
     "APU_BLEED_TEMPERATURE",
     "ENG1_BLEED_TEMPERATURE",
     "ENG2_BLEED_TEMPERATURE",
+    "DUCT1",
+    "DUCT2",
+    "DUCT1_TEMPERATURE",
+    "DUCT2_TEMPERATURE",
+    "DUCT1_PRESSURE",
+    "DUCT2_PRESSURE",
     "TODO",
     //==============================PACKS============================
     "PACK1_OUTLET_TEMP",
