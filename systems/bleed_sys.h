@@ -65,6 +65,8 @@ private:
     double hp2_valve_open_pct = 0;
     double apu_valve_open_pct = 0;
     double gpu_valve_open_pct = 0;
+    double eng1_bleed_valve_open_pct = 0;
+    double eng2_bleed_valve_open_pct = 0;
     double anti_ice_valve_open_pct = 0;
     double xbleed_valve_open_pct = 0;
     const double apu_max_pressure = 40;
@@ -87,6 +89,7 @@ public:
             lSimVarsValue[ENG1_IP_VALVE] = 0;
             lSimVarsValue[ENG1_HP_VALVE] = 0;
         } else if (aSimVarsValue[ENG1_N1] < 84) {
+            lSimVarsValue[ENG1_BLEED_STARTER_VALVE] = 0;
             if (hp1_valve_open_pct < 1) {
                 hp1_valve_open_pct += (currentAbsTime - lastAbsTime)*0.001*valveOpenRate;
             }
@@ -95,6 +98,7 @@ public:
             }
             lSimVarsValue[ENG1_IP_VALVE] = 0;
         } else {
+            lSimVarsValue[ENG1_BLEED_STARTER_VALVE] = 0;
             if (ip1_valve_open_pct < 1) {
                 ip1_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
             }
@@ -103,12 +107,25 @@ public:
             }
             lSimVarsValue[ENG1_HP_VALVE] = 0;
         }
+        if (aSimVarsValue[ENG1_BLEED] && lSimVarsValue[ENG1_BLEED_TEMPERATURE] <= eng_bleed_max_temperature && lSimVarsValue[ENG1_BLEED_PRESSURE] <= eng_bleed_max_pressure) {
+            if (eng1_bleed_valve_open_pct < 1) {
+                eng1_bleed_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
+            }
+            if (eng1_bleed_valve_open_pct >= 1) {
+                lSimVarsValue[ENG1_BLEED_VALVE] = 1;
+            }
+        } else {
+            lSimVarsValue[ENG1_BLEED_VALVE] = 0;
+        }
+
+
         //ENG2
         if (aSimVarsValue[ENG2_STARTER] && aSimVarsValue[ENG2_N2] <= 20) {
             lSimVarsValue[ENG2_BLEED_STARTER_VALVE] = 1;
             lSimVarsValue[ENG2_IP_VALVE] = 0;
             lSimVarsValue[ENG2_HP_VALVE] = 0;
         } else if (aSimVarsValue[ENG2_N1] < 84) {
+            lSimVarsValue[ENG2_BLEED_STARTER_VALVE] = 0;
             if (hp2_valve_open_pct < 1) {
                 hp2_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
             }
@@ -117,6 +134,7 @@ public:
             }
             lSimVarsValue[ENG2_IP_VALVE] = 0;
         } else {
+            lSimVarsValue[ENG2_BLEED_STARTER_VALVE] = 0;
             if (ip2_valve_open_pct < 1) {
                 ip2_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
             }
@@ -125,6 +143,23 @@ public:
             }
             lSimVarsValue[ENG2_HP_VALVE] = 0;
         }
+        if (aSimVarsValue[ENG2_BLEED] && lSimVarsValue[ENG2_BLEED_TEMPERATURE] <= eng_bleed_max_temperature && lSimVarsValue[ENG1_BLEED_PRESSURE] <= eng_bleed_max_pressure) {
+            if (eng2_bleed_valve_open_pct < 1) {
+                eng2_bleed_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
+            }
+            if (eng2_bleed_valve_open_pct >= 1) {
+                lSimVarsValue[ENG1_BLEED_VALVE] = 1;
+            }
+        } else {
+            lSimVarsValue[ENG2_BLEED_VALVE] = 0;
+        }
+        //AUTO PITOT HEAT
+        if (aSimVarsValue[ENG1_N2] >= 30 || aSimVarsValue[ENG2_N2] >= 30) {
+            execute_calculator_code("1 (&gt;K:PITOT_HEAT_TOGGLE)", nullptr, nullptr, nullptr);
+        } else {
+            execute_calculator_code("0 (&gt;K:PITOT_HEAT_TOGGLE)", nullptr, nullptr, nullptr);
+        }
+
         //APU
         if (aSimVarsValue[APU_BLEED] && lSimVarsValue[APU_N1] >= 95 && lSimVarsValue[APU_BLEED_PRESSURE] <= apu_max_pressure && lSimVarsValue[APU_BLEED_TEMPERATURE] <= apu_max_temperature) {
             if (apu_valve_open_pct < 1) {
@@ -136,6 +171,8 @@ public:
         } else {
             lSimVarsValue[APU_BLEED_VALVE] = 0;
         }
+
+
         //GPU
         if (aSimVarsValue[EXT_POWER] && lSimVarsValue[GPU_BLEED_PRESSURE] <= gpu_max_pressure && lSimVarsValue[GPU_BLEED_TEMPERATURE] <= gpu_max_temperature) {
             if (gpu_valve_open_pct < 1) {
@@ -149,8 +186,28 @@ public:
             lSimVarsValue[GPU_BLEED_VALVE] = 0;
         }
         //ANTIICE
-        if (aSimVarsValue[STRUCT_ANTI_ICE] && ) {
-            lSimVarsValue[WING_ANTIICE] = 1
+        if (aSimVarsValue[STRUCT_ANTI_ICE] && (lSimVarsValue[DUCT1] || lSimVarsValue[DUCT2])) {
+            if (anti_ice_valve_open_pct < 1) {
+                anti_ice_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
+            }
+            if (anti_ice_valve_open_pct >= 1) {
+                lSimVarsValue[WING_ANTIICE] = 1;
+                execute_calculator_code("1 (&gt;K:TOGGLE_STRUCTURAL_DEICE)", nullptr, nullptr, nullptr)
+            }
+        } else {
+            lSimVarsValue[WING_ANTIICE] = 0;
+            execute_calculator_code("0 (&gt;K:TOGGLE_STRUCTURAL_DEICE)", nullptr, nullptr, nullptr)
+        }
+        //XBLEED
+        if ((lSimVarsValue[DUCT1] && !(lSimVarsValue[DUCT2])) || lSimVarsValue[DUCT2] && !(lSimVarsValue[DUCT1])) {
+            if (xbleed_valve_open_pct < 1) {
+                xbleed_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
+            }
+            if (xbleed_valve_open_pct >= 1) {
+                lSimVarsValue[X_BLEED_VALVE] = 1;
+            }
+        } else {
+            lSimVarsValue[X_BLEED_VALVE] = 0;
         }
     }
     void updateSimVars() {
@@ -260,7 +317,7 @@ public:
         lSimVarsValue[DUCT1] = updateDuct1();
         lSimVarsValue[DUCT2] = updateDuct2();
         updatePID(currentAbsTime);
-        if (lSimVarsValue[DUCT1] || (lSimVarsValue(DUCT2) && lSimVarsValue[X_BLEED])) {
+        if (lSimVarsValue[DUCT1] || (lSimVarsValue[DUCT2] && lSimVarsValue[X_BLEED])) {
             execute_calculator_code("1 (&gt;K:APU_BLEED_AIR_SOURCE_TOGGLE)", nullptr, nullptr, nullptr);            //all bleed starter engines require APU_BLEED SOURCE internally
         }
         else {
