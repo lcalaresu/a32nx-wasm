@@ -104,12 +104,10 @@ extern "C" {
                 const double currentAbsTime = time.tv_usec * 1000;
                 
                 if (!(initialized)) {
+                    lastAbsTime = currentAbsTime;
                     WASM_SYS.init();
                     initialized = true;
                 } else {
-                    if (lastAbsTime == 0) {
-                        lastAbsTime = currentAbsTime;
-                    }
                     const double lastRefresh = currentAbsTime - lastAbsTime;
                     if (lastRefresh >= REFRESH_RATE) {
                         WASM_SYS.update(currentAbsTime);
