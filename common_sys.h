@@ -45,6 +45,7 @@ typedef enum aSimVars {
     BATT1_SW,               //A:ELECTRICAL MASTER BATTERY:#ID#, Bool
     BATT2_SW,               //A:ELECTRICAL MASTER BATTERY:#ID#, Bool
     AMB_TEMP,               //"AMBIENT TEMPERATURE", "celsius"
+    AMB_PRESS,              //AMBIENT PRESSURE, inHg
     TAS,                    //"AIRSPEED TRUE","Knots"
     IAS,                    //"AIRSPEED INDICATED","Knots"
     GEN1_SW,                //A:GENERAL ENG MASTER ALTERNATOR:1
@@ -57,6 +58,7 @@ typedef enum aSimVars {
     STRUCT_ANTI_ICE,        //A:STRUCTURAL DEICE SWITCH, Bool
     ENG1_EGT,                //A:ENG EXHAUST GAS TEMPERATURE:1, Rankine
     ENG2_EGT,                //A:ENG EXHAUST GAS TEMPERATURE:2, Rankine
+    
 
     aSimVarsCount
 }aSimVars;
@@ -207,18 +209,18 @@ typedef enum lSimVars {
     * BLEED Valves *
     * ============ *
     */
-    ENG1_IP_VALVE,          //L:ENG1_IP_VALVE, Bool
-    ENG2_IP_VALVE,          //L:ENG2_IP_VALVE, Bool
-    ENG1_HP_VALVE,          //L:ENG1_HP_VALVE, Bool
-    ENG2_HP_VALVE,          //L:ENG2_HP_VALVE, Bool
-    ENG1_BLEED_VALVE,       //L:ENG1_BLEED_VALVE, Bool
-    ENG2_BLEED_VALVE,       //L:ENG2_BLEED_VALVE, Bool
-    APU_BLEED_VALVE,        //L:APU_BLEED_VALVE, Bool
-    GPU_BLEED_VALVE,        //L:GPU_BLEED_VALVE, Bool
-    ENG1_BLEED_STARTER,     //L:ENG1_BLEED_STARTER, Bool
-    ENG2_BLEED_STARTER,     //L:ENG2_BLEED_STARTER, Bool
-    WING_ANTIICE,           //L:WING_ANTICE, Bool
-
+    ENG1_IP_VALVE,              //L:ENG1_IP_VALVE, Bool
+    ENG2_IP_VALVE,              //L:ENG2_IP_VALVE, Bool
+    ENG1_HP_VALVE,              //L:ENG1_HP_VALVE, Bool
+    ENG2_HP_VALVE,              //L:ENG2_HP_VALVE, Bool
+    ENG1_BLEED_VALVE,           //L:ENG1_BLEED_VALVE, Bool
+    ENG2_BLEED_VALVE,           //L:ENG2_BLEED_VALVE, Bool
+    APU_BLEED_VALVE,            //L:APU_BLEED_VALVE, Bool
+    GPU_BLEED_VALVE,            //L:GPU_BLEED_VALVE, Bool
+    ENG1_BLEED_STARTER_VALVE,   //L:ENG1_BLEED_STARTER, Bool
+    ENG2_BLEED_STARTER_VALVE,   //L:ENG2_BLEED_STARTER, Bool
+    WING_ANTIICE,               //L:WING_ANTICE, Bool
+    X_BLEED_VALVE,              //L:X_BLEED_VALVE, Bool
 
     /*
     * ============== *
@@ -227,19 +229,21 @@ typedef enum lSimVars {
     */
     ENG1_BLEED_PRESSURE,    //L:ENG1_BLEED_PRESSURE, PSI
     ENG2_BLEED_PRESSURE,    //L:ENG2_BLEED_PRESSURE, PSI
-    APU_BLEED_PRESSURE,     //L:APU_BLEED_PRESSURE, PSI
-    GPU_BLEED_PRESSURE,     //L:GPU_BLEED_PRESSURE, PSI
-    GPU_BLEED_TEMPERATURE,   //L:GPU_BLEED_TEMPERATURE, PSI
-    APU_BLEED_TEMPERATURE,  //L:APU_BLEED_TEMPERATURE, Celcius
     ENG1_BLEED_TEMPERATURE, //L:ENG1_BLEED_TEMPERATURE, Celcius
     ENG2_BLEED_TEMPERATURE, //L:ENG2_BLEED_TEMPERATURE, Celcius
+    APU_BLEED_PRESSURE,     //L:APU_BLEED_PRESSURE, PSI
+    APU_BLEED_TEMPERATURE,  //L:APU_BLEED_TEMPERATURE, Celcius
+    GPU_BLEED_PRESSURE,     //L:GPU_BLEED_PRESSURE, PSI
+    GPU_BLEED_TEMPERATURE,  //L:GPU_BLEED_TEMPERATURE, Celcius
+    
+
     /*
     * ========== *
     * BLEED DUCT *
     * ========== *
-    */                      //PIORITY       0               1       2       3       4       5
-    DUCT1,                  //L:DUCT1 No source   GPU       APU     ENG1    DUCT2   RAT
-    DUCT2,                  //L:DUCT2 No source   ENG2      DUCT1
+    */                      //PIORITY       0       1       2       3       4       5
+    DUCT1,                  //L:DUCT1   NOBLEED     GPU     APU     ENG1    DUCT2   RAT
+    DUCT2,                  //L:DUCT2   NOBLEED     ENG2    DUCT1
     
     DUCT1_TEMPERATURE,      //L:DUCT1_TEMPERATURE, Celcius
     DUCT2_TEMPERATURE,      //L:DUCT2_TEMPERATURE, Celcius
@@ -369,6 +373,7 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "ELECTRICAL MASTER BATTERY : 1 , Bool",
     "ELECTRICAL MASTER BATTERY : 2 , Bool",
     "AMBIENT TEMPERATURE, celsius",
+    "AMBIENT PRESSURE, inHg",
     "AIRSPEED TRUE, Knots",
     "AIRSPEED INDICATED, Knots",
     "GENERAL ENG MASTER ALTERNATOR : 1, Bool",
@@ -465,17 +470,18 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
     "ENG2_BLEED_VALVE",
     "APU_BLEED_VALVE",
     "GPU_BLEED_VALVE",
-    "ENG1_BLEED_STARTER",
-    "ENG2_BLEED_STARTER",
-    "WING_ANTICE",
+    "ENG1_BLEED_STARTER_VALVE",
+    "ENG2_BLEED_STARTER_VALVE",
+    "WING_ANTICE_VALVE",
+    "X_BLEED_VALVE",
     "ENG1_BLEED_PRESSURE",
     "ENG2_BLEED_PRESSURE",
-    "APU_BLEED_PRESSURE",
-    "GPU_BLEED_PRESSURE",
-    "GPU_BLEED_TEMPERATURE",
-    "APU_BLEED_TEMPERATURE",
     "ENG1_BLEED_TEMPERATURE",
     "ENG2_BLEED_TEMPERATURE",
+    "APU_BLEED_PRESSURE",
+    "APU_BLEED_TEMPERATURE",
+    "GPU_BLEED_PRESSURE",
+    "GPU_BLEED_TEMPERATURE",
     "DUCT1",
     "DUCT2",
     "DUCT1_TEMPERATURE",
