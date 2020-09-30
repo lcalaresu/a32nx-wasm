@@ -9,7 +9,7 @@ public:
             lSimVarsValue[i] = 0;
         }
     }
-    void update() {
+    void update(const double currentAbsTime) {
         //TODO
     }
     void updateSimVars() {
@@ -27,7 +27,7 @@ public:
             lSimVarsValue[i] = 0;
         }
     }
-    void update() {
+    void update(const double currentAbsTime) {
         //TODO
     }
     void updateSimVars() {
@@ -45,7 +45,7 @@ public:
             lSimVarsValue[i] = 0;
         }
     }
-    void update() {
+    void update(const double currentAbsTime) {
         //TODO
     }
     void updateSimVars() {
@@ -279,7 +279,6 @@ private:
     EngineBleed engUnit;
     APUBleed apuUnit;
     GPUBleed gpuUnit;
-    RATAir ratUnit;
     Valves valveUnit;
     Ducts ductUnit;
 public:
@@ -291,13 +290,12 @@ public:
         valveUnit.init();
         ductUnit.init();
     }
-    void update() {
-        engUnit.update();
-        apuUnit.update();
-        gpuUnit.update();
-        ratUnit.update();
-        valveUnit.update();
-        ductUnit.update();
+    void update(const double currentAbsTime) {
+        engUnit.update(currentAbsTime);
+        apuUnit.update(currentAbsTime);
+        gpuUnit.update(currentAbsTime);
+        valveUnit.update(currentAbsTime);
+        ductUnit.update(currentAbsTime);
 
     }
     void updateSimVars() {
