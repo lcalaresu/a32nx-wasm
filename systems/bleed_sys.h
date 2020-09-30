@@ -235,15 +235,15 @@ private:
         duct2_press_PID.init(0.6, 0.02, 0.7, lastAbsTime, 30, -30);
     }
     void updatePID(const double currentAbsTime) {
-        duct1_temperature_error = duct1_temperature - lSimVarsValue[DUCT1_TEMPERATURE];
-        duct2_temperature_error = duct2_temperature - lSimVarsValue[DUCT2_TEMPERATURE];
-        duct1_pressure_error = duct1_pressure - lSimVarsValue[DUCT1_PRESSURE];
-        duct2_pressure_error = duct2_pressure - lSimVarsValue[DUCT2_PRESSURE];
+        const double duct1_temperature_error = duct1_temperature - lSimVarsValue[DUCT1_TEMPERATURE];
+        const double duct2_temperature_error = duct2_temperature - lSimVarsValue[DUCT2_TEMPERATURE];
+        const double duct1_pressure_error = duct1_pressure - lSimVarsValue[DUCT1_PRESSURE];
+        const double duct2_pressure_error = duct2_pressure - lSimVarsValue[DUCT2_PRESSURE];
         
-        lSimVarsValue[DUCT1_TEMPERATURE] += duct1_temp_PID.control();
-        lSimVarsValue[DUCT2_TEMPERATURE] += duct2_temp_PID.control();
-        lSimVarsValue[DUCT1_PRESSURE] += duct1_press_PID.control();
-        lSimVarsValue[DUCT2_PRESSURE] += duct2_press_PID.control();
+        lSimVarsValue[DUCT1_TEMPERATURE] += duct1_temp_PID.control(duct1_temperature_error, currentAbsTime);
+        lSimVarsValue[DUCT2_TEMPERATURE] += duct2_temp_PID.control(duct2_temperature_error, currentAbsTime);
+        lSimVarsValue[DUCT1_PRESSURE] += duct1_press_PID.control(duct1_pressure_error, currentAbsTime);
+        lSimVarsValue[DUCT2_PRESSURE] += duct2_press_PID.control(duct2_pressure_error, currentAbsTime);
     }
 public:
     void init() {
