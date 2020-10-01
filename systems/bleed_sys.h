@@ -141,7 +141,7 @@ public:
             if (ip2_valve_open_pct >= 1) {
                 lSimVarsValue[ENG2_IP_VALVE] = 1;
             }
-            lSimVarsValue[ENG2_HP_VALVE] = 0;
+            lSimVarsValue[ENG2_HP_VALVE] = 0;++6
         }
         if (aSimVarsValue[ENG2_BLEED] && lSimVarsValue[ENG2_BLEED_TEMPERATURE] <= eng_bleed_max_temperature && lSimVarsValue[ENG1_BLEED_PRESSURE] <= eng_bleed_max_pressure) {
             if (eng2_bleed_valve_open_pct < 1) {
@@ -198,8 +198,8 @@ public:
             lSimVarsValue[WING_ANTIICE] = 0;
             execute_calculator_code("0 (&gt;K:TOGGLE_STRUCTURAL_DEICE)", nullptr, nullptr, nullptr)
         }
-        //XBLEED
-        if ((lSimVarsValue[DUCT1] && !(lSimVarsValue[DUCT2])) || lSimVarsValue[DUCT2] && !(lSimVarsValue[DUCT1])) {
+        //XBLEED AUTO OR ON
+        if ((lSimVarsValue[X_BLEED] != 0) && (lSimVarsValue[DUCT1] && !(lSimVarsValue[DUCT2])) || lSimVarsValue[DUCT2] && !(lSimVarsValue[DUCT1])) {
             if (xbleed_valve_open_pct < 1) {
                 xbleed_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
             }
@@ -255,7 +255,7 @@ private:
             return ENG2_BLEED;
         }
         duct1_temperature = aSimVarsValue[AMB_TEMP];
-        duct1_pressure = aSimVarsValue[AMB_PRESS]  * 0.5;       //AMB_PRESS is in inHg, 0.5times gives PSI
+        duct1_pressure = convert_inHgToPSI(aSimVarsValue[AMB_PRESS]);       //AMB_PRESS is in inHg, 0.5times gives PSI
         return 0;
     }
     ENUM updateDuct2() {
@@ -282,7 +282,7 @@ private:
             }
         }
         duct2_temperature = aSimVarsValue[AMB_TEMP];
-        duct2_pressure = aSimVarsValue[AMB_PRESS] * 0.5;
+        duct2_pressure = convert_inHgToPSI(aSimVarsValue[AMB_PRESS]);
         return 0;
     }
     void initPID() {
@@ -309,8 +309,8 @@ public:
         }
         lSimVarsValue[DUCT1_TEMPERATURE] = aSimVarsValue[AMB_TEMP];
         lSimVarsValue[DUCT2_TEMPERATURE] = aSimVarsValue[AMB_TEMP];
-        lSimVarsValue[DUCT1_PRESSURE] = aSimVarsValue[AMB_PRESS] * 0.5;
-        lSimVarsValue[DUCT2_PRESSURE] = aSimVarsValue[AMB_PRESS] * 0.5;
+        lSimVarsValue[DUCT1_PRESSURE] = convert_inHgToPSI(aSimVarsValue[AMB_PRESS]);
+        lSimVarsValue[DUCT2_PRESSURE] = convert_inHgToPSI(aSimVarsValue[AMB_PRESS]);
         initPID();
     }
     void update(const double currentAbsTime) {
@@ -359,7 +359,7 @@ public:
         engUnit.updateSimVars();
         apuUnit.updateSimVars();
         gpuUnit.updateSimVars();
-        ratUnit.updateSimVars();
         valveUnit.updateSimVars();
+        ductUnit.updateSimVars();
     }
 };
