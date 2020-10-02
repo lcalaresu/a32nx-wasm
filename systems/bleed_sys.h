@@ -343,7 +343,6 @@ public:
         engUnit.init();
         apuUnit.init();
         gpuUnit.init();
-        ratUnit.init();
         valveUnit.init();
         ductUnit.init();
     }
