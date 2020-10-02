@@ -613,6 +613,76 @@ public:
     }
 };
 
+class Circuit{
+private:
+    const double offset = CIRCUIT_BREAKER_1XP - CIRCUIT_1XP;    //circuit to circuit breaker offset
+    void initCircuitBreakers() {
+        for (int i = CIRCUIT_BREAKER_1XP; i <= CIRCUIT_BREAKER_704PP; i++) {
+            lSimVarsValue[i] = 1;
+        }
+    }
+    void initCircuits(){
+        for (int i = CIRCUIT_1XP; i <= CIRCUIT_901XP; i++) {
+            lSimVarsValue[i] = 0;
+        }
+    }
+    //bus_circuit_update=> updates boolen state of circuits based on state of its associated source_bus, supply_bus and circuit breaker
+    void bus_circuit_update(const int BUS_ID, const int CIRCUIT_SUPPLY, const bool SUPPLY_IS_CIRCUIT, const int CIRCUIT_START, const int CIRCUIT_END) {
+        if (lSimVarsValue[BUS_ID]) {
+            double breakeroffset = 0;
+            if (SUPPLY_IS_CIRCUIT) {
+                breakeroffset = offset;
+            }
+            if (lSimVarsValue[CIRCUIT_SUPPLY + breakeroffset]) {
+                lSimVarsValue[CIRCUIT_SUPPLY] = 1;
+                for (int i = CIRCUIT_START; i <= CIRCUIT_END; i++) {
+                    if (lSimVarsValue[i + offset]) {
+                        lSimVarsValue[i] = 1;
+                    }
+                    else {
+                        lSimVarsValue[i] = 0;
+                    }
+                }
+            }
+            else {
+                for (int i = CIRCUIT_START; i <= CIRCUIT_END; i++) {
+                    lSimVarsValue[i] = 0;
+                }
+            }
+        }
+    }
+    void updateCircuits() {
+        bus_circuit_update(AC_BUS1, CIRCUIT_1XP, true, CIRCUIT_1XP, CIRCUIT_110XP);
+        bus_circuit_update(AC_BUS2, CIRCUIT_2XP, true, CIRCUIT_2XP, CIRCUIT_231XP);
+        bus_circuit_update(AC_ESS, AC_ESS, false, CIRCUIT_4IWXP, CIRCUIT_431XP);
+        bus_circuit_update(AC_SHED, AC_SHED, false, CIRCUIT_801XP, CIRCUIT_801XP);
+        bus_circuit_update(DC_BAT, CIRCUIT_3PP, true, CIRCUIT_3PP, CIRCUIT_301PP);
+        bus_circuit_update(DC_BUS1, CIRCUIT_1PP, true, CIRCUIT_1PP, CIRCUIT_1IWPP);
+        bus_circuit_update(DC_BUS2, CIRCUIT_2PP, true, CIRCUIT_2PP, CIRCUIT_602PP);
+        bus_circuit_update(DC_ESS, DC_ESS, false, CIRCUIT_401PP, CIRCUIT_4IWPP);
+        bus_circuit_update(DC_SHED, CIRCUIT_8PP, true, CIRCUIT_8PP, CIRCUIT_802PP);
+        bus_circuit_update(HOT_BUS1, HOT_BUS1, false, CIRCUIT_701PP, CIRCUIT_502PP);
+        bus_circuit_update(HOT_BUS2, HOT_BUS2, false, CIRCUIT_702PP, CIRCUIT_704PP);
+    }
+    void updateCircuitBreakers() {
+        //use to trigger any circuit brakers as needed
+    }
+public:
+    void init() {
+        initCircuitBreakers();
+        initCircuits();
+    }
+    void update() {
+        updateCircuitBreakers();
+        updateCircuits();
+    }
+    void updateSimVars() {
+        for (int i = CIRCUIT_1XP; i <= CIRCUIT_BREAKER_704PP; i++) {
+            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
+        }
+    }
+};
+
 /*
 *
 * ================= *
