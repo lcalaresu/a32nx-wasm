@@ -638,16 +638,18 @@ private:
                 for (int i = CIRCUIT_START; i <= CIRCUIT_END; i++) {
                     if (lSimVarsValue[i + offset]) {
                         lSimVarsValue[i] = 1;
-                    }
-                    else {
+                    } else {
                         lSimVarsValue[i] = 0;
                     }
                 }
-            }
-            else {
+            } else {
                 for (int i = CIRCUIT_START; i <= CIRCUIT_END; i++) {
                     lSimVarsValue[i] = 0;
                 }
+            }
+        } else {
+            for (int i = CIRCUIT_START; i <= CIRCUIT_END; i++) {
+                lSimVarsValue[i] = 0;
             }
         }
     }
