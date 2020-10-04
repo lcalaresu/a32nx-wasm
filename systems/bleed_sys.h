@@ -199,7 +199,7 @@ public:
             execute_calculator_code("0 (&gt;K:TOGGLE_STRUCTURAL_DEICE)", nullptr, nullptr, nullptr)
         }
         //XBLEED AUTO OR ON
-        if ((lSimVarsValue[X_BLEED] != 0) && (lSimVarsValue[DUCT1] && !(lSimVarsValue[DUCT2])) || lSimVarsValue[DUCT2] && !(lSimVarsValue[DUCT1])) {
+        if ((lSimVarsValue[X_BLEED] == 1 && lSimVarsValue[APU_BLEED_VALVE] >= 1) || lSimVarsValue[X_BLEED] == 2) {
             if (xbleed_valve_open_pct < 1) {
                 xbleed_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
             }
