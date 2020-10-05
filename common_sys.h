@@ -12,6 +12,8 @@
 #include <vector>
 
 #include "utils/utils.h"
+#include "utils/PID.h"
+#include "utils/bit_oper.h"
 
 #define REFRESH_RATE 500        //update refresh rate in milliseconds
 double lastAbsTime = 0;         //last time the update function was run
