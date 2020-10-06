@@ -1,4 +1,8 @@
 ﻿#pragma once
+#ifndef ELECSYS
+#define ELECSYS
+
+
 #include "../common_sys.h"
 
 /*
@@ -8,12 +12,12 @@
 * ELEC MASTER CLASS
 * Batteries
 * EXTPWR
-* APU => includes start sequence
+* APU
 * Engine
 * RAT => includes start sequence
 * Buses
 * Convertors
-* 
+* Circuits
 */
 
 
@@ -686,7 +690,7 @@ public:
         updateCircuits();
     }
     void updateSimVars() {
-        for (int i = CIRCUIT_1XP; i <= CIRCUIT_BREAKER_704PP; i++) {
+        for (int i = CIRCUIT_1XP; i <= CIRCUIT_704PP; i++) {
             set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
         }
     }
@@ -743,3 +747,4 @@ void updateELECConf() {
 
 }
 
+#endif // !ELECSYS

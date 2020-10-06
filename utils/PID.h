@@ -1,11 +1,13 @@
 #pragma once
+#ifndef PIDDEF
+#define PIDDEF
 
 /*
 * === *
 * PID *
 * === *
 */
-class PID {
+class PIDClass {
 private:
     double _Kp;         //Proportional constant
     double _Ki;         //Integral constant
@@ -66,3 +68,5 @@ public:
         return adjust_var;
     }
 };
+
+#endif // !PIDDEF

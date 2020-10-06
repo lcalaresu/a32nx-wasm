@@ -1,4 +1,8 @@
 ﻿#pragma once
+#ifndef ENGSYS
+#define ENGSYS
+
+
 #include "../common_sys.h"
 
 class Engine {
@@ -64,33 +68,33 @@ private:
                 lSimVarsValue[APU_EGT] = ambient;
             }
             else if (N1 <= 14) {
-                lSimVarsValue[APU_EGT] = round(90 / 6 * N1 - 140 + ambient);
+                lSimVarsValue[APU_EGT] = (90 / 6 * N1 - 140 + ambient);
             }
             else if (N1 <= 20) {
-                lSimVarsValue[APU_EGT] = round((215 / 4 * N1) - 760 + ambient);
+                lSimVarsValue[APU_EGT] = ((215 / 4 * N1) - 760 + ambient);
             }
             else if (N1 <= 32) {
-                lSimVarsValue[APU_EGT] = round((420 / 11 * N1) - 481.8 + ambient);
+                lSimVarsValue[APU_EGT] = ((420 / 11 * N1) - 481.8 + ambient);
             }
             else if (N1 <= 36) {
-                lSimVarsValue[APU_EGT] = round((20 / 3 * N1) + 525 + ambient);
+                lSimVarsValue[APU_EGT] = ((20 / 3 * N1) + 525 + ambient);
             }
             else if (N1 <= 43) {
-                lSimVarsValue[APU_EGT] = round((-15 / 6 * N1) + 888.3 + ambient);
+                lSimVarsValue[APU_EGT] = ((-15 / 6 * N1) + 888.3 + ambient);
             }
             else if (N1 <= 50) {
-                lSimVarsValue[APU_EGT] = round((3 * N1) + 618 + ambient);
+                lSimVarsValue[APU_EGT] = ((3 * N1) + 618 + ambient);
             }
             else if (N1 <= 74) {
-                lSimVarsValue[APU_EGT] = round((-100 / 13 * N1) + 1152.3 + ambient);
+                lSimVarsValue[APU_EGT] = ((-100 / 13 * N1) + 1152.3 + ambient);
             }
             else {
-                lSimVarsValue[APU_EGT] = round((-104 / 10 * N1) + 1430 + ambient - rand() % 2);
+                lSimVarsValue[APU_EGT] = ((-104 / 10 * N1) + 1430 + ambient - rand() % 2);
             }
         }
         else {
             if (lSimVarsValue[APU_EGT] >= ambient) {
-                lSimVarsValue[APU_EGT] = round(lSimVarsValue[APU_EGT] - 2 * (currentAbsTime - lastAbsTime) * 0.001);
+                lSimVarsValue[APU_EGT] = (lSimVarsValue[APU_EGT] - 2 * (currentAbsTime - lastAbsTime) * 0.001);
             }
         }
     }
@@ -159,3 +163,5 @@ class EngSys {
         apuEng.updateSimVars();
     }
 };
+
+#endif // !ENGSYS

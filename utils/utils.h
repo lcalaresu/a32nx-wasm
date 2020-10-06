@@ -1,4 +1,7 @@
 #pragma once
+#ifndef UTILS
+#define UTILS
+
 
 /*
 * ============== *
@@ -14,3 +17,5 @@ double convert_rankineToCelcius(const double rankine) {
 double convert_inHgToPSI(const double inHg) {
     return (inHg * 0.491);
 }
+
+#endif // !UTILS
