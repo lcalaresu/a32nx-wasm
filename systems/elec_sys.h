@@ -615,41 +615,46 @@ public:
 
 class Circuit{
 private:
-    const double offset = CIRCUIT_BREAKER_1XP - CIRCUIT_1XP;    //circuit to circuit breaker offset
     void initCircuitBreakers() {
-        for (int i = CIRCUIT_BREAKER_1XP; i <= CIRCUIT_BREAKER_704PP; i++) {
-            lSimVarsValue[i] = 1;
+        for (int i = CIRCUIT_1XP; i <= CIRCUIT_704PP; i++) {
+            lSimVarsValue[CIRCUIT_BREAKER] = bitOper::clearbit(lSimVarsValue[CIRCUIT_BREAKER], i);
         }
     }
     void initCircuits(){
-        for (int i = CIRCUIT_1XP; i <= CIRCUIT_901XP; i++) {
-            lSimVarsValue[i] = 0;
+        for (int i = CIRCUIT_1XP; i <= CIRCUIT_704PP; i++) {
+            lSimVarsValue[CIRCUIT] = bitOper::clearbit(lSimVarsValue[CIRCUIT], i);
         }
     }
     //bus_circuit_update=> updates boolen state of circuits based on state of its associated source_bus, supply_bus and circuit breaker
     void bus_circuit_update(const int BUS_ID, const int CIRCUIT_SUPPLY, const bool SUPPLY_IS_CIRCUIT, const int CIRCUIT_START, const int CIRCUIT_END) {
         if (lSimVarsValue[BUS_ID]) {
             double breakeroffset = 0;
+            bool supply_active = 0;
             if (SUPPLY_IS_CIRCUIT) {
-                breakeroffset = offset;
+                if (bitOper::getbit(lSimVarsValue[CIRCUIT_BREAKER], CIRCUIT_SUPPLY)) {
+                    lSimVarsValue[CIRCUIT] = bitOper::setbit(lSimVarsValue[CIRCUIT], CIRCUIT_SUPPLY);
+                }
+                supply_active = bitOper::getbit(lSimVarsValue[CIRCUIT], CIRCUIT_SUPPLY);
+            } else {
+                supply_active = lSimVarsValue[CIRCUIT_SUPPLY];
             }
-            if (lSimVarsValue[CIRCUIT_SUPPLY + breakeroffset]) {
+            if (supply_active) {
                 lSimVarsValue[CIRCUIT_SUPPLY] = 1;
                 for (int i = CIRCUIT_START; i <= CIRCUIT_END; i++) {
-                    if (lSimVarsValue[i + offset]) {
-                        lSimVarsValue[i] = 1;
+                    if (bitOper::getbit(lSimVarsValue[CIRCUIT_BREAKER], i)) {
+                        lSimVarsValue[CIRCUIT] = bitOper::setbit(lSimVarsValue[CIRCUIT], i);
                     } else {
-                        lSimVarsValue[i] = 0;
+                        lSimVarsValue[CIRCUIT] = bitOper::clearbit(lSimVarsValue[CIRCUIT], i);
                     }
                 }
             } else {
                 for (int i = CIRCUIT_START; i <= CIRCUIT_END; i++) {
-                    lSimVarsValue[i] = 0;
+                    lSimVarsValue[CIRCUIT] = bitOper::clearbit(lSimVarsValue[CIRCUIT], i);
                 }
             }
         } else {
             for (int i = CIRCUIT_START; i <= CIRCUIT_END; i++) {
-                lSimVarsValue[i] = 0;
+                lSimVarsValue[CIRCUIT] = bitOper::clearbit(lSimVarsValue[CIRCUIT], i);
             }
         }
     }
@@ -671,6 +676,8 @@ private:
     }
 public:
     void init() {
+        lSimVarsValue[CIRCUIT] = 0;
+        lSimVarsValue[CIRCUIT_BREAKER] = 0;
         initCircuitBreakers();
         initCircuits();
     }

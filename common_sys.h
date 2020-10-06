@@ -206,126 +206,21 @@ typedef enum lSimVars {
     * CIRCUITS *
     * ======== *
     *
-    * NOTE: ALL CIRCUITS AND CIRCUIT BREAKERS ARE OF TYPE BOOLEAN
-    * L:CIRCUIT_<CIRCUIT_ID>, Bool
-    * L:CIRCUIT_BREAKER_<CIRCUIT_ID>, Bool
+    * NOTE: ALL CIRCUITS AND CIRCUIT BREAKERS ARE BIT WISE ENCODED INTO UNSIGNED LONG INT  
+    * L:CIRCUIT, FLOAT64 (Note that this should be typecasted to UINT_64)
+    * at bit location(0-63), 0 = circuit offline(no power); 1 = circuit breaker pushed
     */
-    //AC_BUS1
-    CIRCUIT_1XP,
-    CIRCUIT_1IWXP,
-    CIRCUIT_101XP,
-    CIRCUIT_103XP,
-    CIRCUIT_131XP,
-    CIRCUIT_110XP,
-    //AC_BUS2
-    CIRCUIT_2XP,
-    CIRCUIT_2IWXP,
-    CIRCUIT_202XP,
-    CIRCUIT_204XP,
-    CIRCUIT_210XP,
-    CIRCUIT_212XP,
-    CIRCUIT_214XP,
-    CIRCUIT_216XP,
-    CIRCUIT_231XP,
-    //AC_ESS
-    CIRCUIT_4IWXP,
-    CIRCUIT_401XP,
-    CIRCUIT_431XP,
-    //AC_SHED
-    CIRCUIT_801XP,
-    //DC_BAT
-    CIRCUIT_3PP,
-    CIRCUIT_301PP,
-    //DC_BUS1
-    CIRCUIT_1PP,
-    CIRCUIT_101PP,
-    CIRCUIT_103PP,
-    CIRCUIT_1IWPP,
-    //DC_BUS2
-    CIRCUIT_2PP,
-    CIRCUIT_202PP,
-    CIRCUIT_204PP,
-    CIRCUIT_206PP,
-    CIRCUIT_208PP,
-    CIRCUIT_210PP,
-    CIRCUIT_2IWPP,
-    CIRCUIT_602PP,
-    //DC_ESS
-    CIRCUIT_401PP,
-    CIRCUIT_4IWPP,
-    //DC_SHED
-    CIRCUIT_8PP,
-    CIRCUIT_801PP,
-    CIRCUIT_802PP,
-    //HOT_BUS1
-    CIRCUIT_701PP,
-    CIRCUIT_703PP,
-    CIRCUIT_501PP,
-    CIRCUIT_502PP,
-    //HOT_BUS2
-    CIRCUIT_702PP,
-    CIRCUIT_704PP,
+    CIRCUIT,
 
     /*
     * ================ *
-    * CIRCUIT_BREAKERS *    //0 = circuit breaker pulled(disconnects power); 1 = circuit breaker pushed
+    * CIRCUIT_BREAKERS *
     * ================ *
+    * at bit location(0-63), 0 = circuit breaker pulled(disconnects power); 1 = circuit breaker pushed
+    * L:CIRCUIT_BREAKER, FLOAT64 (Note that this should be typecasted to UINT_64)
     */
-    CIRCUIT_BREAKER_1XP,
-    CIRCUIT_BREAKER_1IWXP,
-    CIRCUIT_BREAKER_101XP,
-    CIRCUIT_BREAKER_103XP,
-    CIRCUIT_BREAKER_131XP,
-    CIRCUIT_BREAKER_110XP,
-    //AC_BUS2
-    CIRCUIT_BREAKER_2XP,
-    CIRCUIT_BREAKER_2IWXP,
-    CIRCUIT_BREAKER_202XP,
-    CIRCUIT_BREAKER_204XP,
-    CIRCUIT_BREAKER_210XP,
-    CIRCUIT_BREAKER_212XP,
-    CIRCUIT_BREAKER_214XP,
-    CIRCUIT_BREAKER_216XP,
-    CIRCUIT_BREAKER_231XP,
-    //AC_ESS
-    CIRCUIT_BREAKER_4IWXP,
-    CIRCUIT_BREAKER_401XP,
-    CIRCUIT_BREAKER_431XP,
-    //AC_SHED
-    CIRCUIT_BREAKER_801XP,
-    //DC_BAT
-    CIRCUIT_BREAKER_3PP,
-    CIRCUIT_BREAKER_301PP,
-    //DC_BUS1
-    CIRCUIT_BREAKER_1PP,
-    CIRCUIT_BREAKER_101PP,
-    CIRCUIT_BREAKER_103PP,
-    CIRCUIT_BREAKER_1IWPP,
-    //DC_BUS2
-    CIRCUIT_BREAKER_2PP,
-    CIRCUIT_BREAKER_202PP,
-    CIRCUIT_BREAKER_204PP,
-    CIRCUIT_BREAKER_206PP,
-    CIRCUIT_BREAKER_208PP,
-    CIRCUIT_BREAKER_210PP,
-    CIRCUIT_BREAKER_2IWPP,
-    CIRCUIT_BREAKER_602PP,
-    //DC_ESS
-    CIRCUIT_BREAKER_401PP,
-    CIRCUIT_BREAKER_4IWPP,
-    //DC_SHED
-    CIRCUIT_BREAKER_8PP,
-    CIRCUIT_BREAKER_801PP,
-    CIRCUIT_BREAKER_802PP,
-    //HOT_BUS1
-    CIRCUIT_BREAKER_701PP,
-    CIRCUIT_BREAKER_703PP,
-    CIRCUIT_BREAKER_501PP,
-    CIRCUIT_BREAKER_502PP,
-    //HOT_BUS2
-    CIRCUIT_BREAKER_702PP,
-    CIRCUIT_BREAKER_704PP,
-
+    CIRCUIT_BREAKER,
+    
     /*
     * ========== *
     * XML L VARS *
@@ -489,6 +384,64 @@ typedef enum ElECConf {
     TR2_FAULT,
     TR12_FAULT
 }ELECConf;
+
+typedef enum ELECCircuit {
+    //AC_BUS1
+    CIRCUIT_1XP,    //0
+    CIRCUIT_1IWXP,  //1
+    CIRCUIT_101XP,  //2
+    CIRCUIT_103XP,  //3
+    CIRCUIT_131XP,  //4
+    CIRCUIT_110XP,  //5
+    //AC_BUS2
+    CIRCUIT_2XP,    //6
+    CIRCUIT_2IWXP,  //7
+    CIRCUIT_202XP,  //8
+    CIRCUIT_204XP,  //9
+    CIRCUIT_210XP,  //10
+    CIRCUIT_212XP,  //11
+    CIRCUIT_214XP,  //12
+    CIRCUIT_216XP,  //13
+    CIRCUIT_231XP,  //14
+    //AC_ESS
+    CIRCUIT_4IWXP,  //15
+    CIRCUIT_401XP,  //16
+    CIRCUIT_431XP,  //17
+    //AC_SHED
+    CIRCUIT_801XP,  //18
+    //DC_BAT
+    CIRCUIT_3PP,    //19
+    CIRCUIT_301PP,  //20
+    //DC_BUS1
+    CIRCUIT_1PP,    //21
+    CIRCUIT_101PP,  //22
+    CIRCUIT_103PP,  //23
+    CIRCUIT_1IWPP,  //24
+    //DC_BUS2
+    CIRCUIT_2PP,    //25
+    CIRCUIT_202PP,  //26
+    CIRCUIT_204PP,  //27
+    CIRCUIT_206PP,  //28
+    CIRCUIT_208PP,  //29
+    CIRCUIT_210PP,  //30
+    CIRCUIT_2IWPP,  //31
+    CIRCUIT_602PP,  //32
+    //DC_ESS
+    CIRCUIT_401PP,  //33
+    CIRCUIT_4IWPP,  //34
+    //DC_SHED
+    CIRCUIT_8PP,    //35
+    CIRCUIT_801PP,  //36
+    CIRCUIT_802PP,  //37
+    //HOT_BUS1
+    CIRCUIT_701PP,  //38
+    CIRCUIT_703PP,  //39
+    CIRCUIT_501PP,  //40
+    CIRCUIT_502PP,  //41
+    //HOT_BUS2
+    CIRCUIT_702PP,  //42
+    CIRCUIT_704PP,  //43
+}eleccircuits;
 
 /*pcstring_<type> holds string inputs required by simconnect function
 Ensure that their indices match their corresponding enum definitions.*/
