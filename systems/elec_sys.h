@@ -615,7 +615,6 @@ public:
 
 class Circuit{
 private:
-    const double offset = CIRCUIT_BREAKER_1XP - CIRCUIT_1XP;    //circuit to circuit breaker offset
     void initCircuitBreakers() {
         for (int i = CIRCUIT_1XP; i <= CIRCUIT_704PP; i++) {
             lSimVarsValue[CIRCUIT_BREAKER] = bitOper::clearbit(lSimVarsValue[CIRCUIT_BREAKER], i);
