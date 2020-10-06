@@ -12,7 +12,7 @@
 class bitOper {
 private:
 public:
-    static bool getbit(UINT64 num, const int bit_loc) {
+    static bool getbit(uint64_t num, const int bit_loc) {
         /*
         return(((num & (1 << bit_loc)) << 63 - bit_loc) >> 63);
         */
