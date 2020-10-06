@@ -1,4 +1,7 @@
 #pragma once
+#ifndef BLEEDSYS
+#define BLEEDSYS
+
 #include "../common_sys.h"
 
 class EngineBleed {
@@ -73,7 +76,7 @@ private:
     const double apu_max_temperature = 200;
     const double gpu_max_pressure = 40;
     const double gpu_max_temperature = 200;
-    const double eng_bleed_max_temeperature = 260;
+    const double eng_bleed_max_temperature = 260;
     const double eng_bleed_max_pressure = 40;
 
 public:
@@ -107,7 +110,7 @@ public:
             }
             lSimVarsValue[ENG1_HP_VALVE] = 0;
         }
-        if (aSimVarsValue[ENG1_BLEED] && lSimVarsValue[ENG1_BLEED_TEMPERATURE] <= eng_bleed_max_temperature && lSimVarsValue[ENG1_BLEED_PRESSURE] <= eng_bleed_max_pressure) {
+        if (aSimVarsValue[ENG1_BLEED_SW] && lSimVarsValue[ENG1_BLEED_TEMPERATURE] <= eng_bleed_max_temperature && lSimVarsValue[ENG1_BLEED_PRESSURE] <= eng_bleed_max_pressure) {
             if (eng1_bleed_valve_open_pct < 1) {
                 eng1_bleed_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
             }
@@ -141,9 +144,9 @@ public:
             if (ip2_valve_open_pct >= 1) {
                 lSimVarsValue[ENG2_IP_VALVE] = 1;
             }
-            lSimVarsValue[ENG2_HP_VALVE] = 0;++6
+            lSimVarsValue[ENG2_HP_VALVE] = 0;
         }
-        if (aSimVarsValue[ENG2_BLEED] && lSimVarsValue[ENG2_BLEED_TEMPERATURE] <= eng_bleed_max_temperature && lSimVarsValue[ENG1_BLEED_PRESSURE] <= eng_bleed_max_pressure) {
+        if (aSimVarsValue[ENG2_BLEED_SW] && lSimVarsValue[ENG2_BLEED_TEMPERATURE] <= eng_bleed_max_temperature && lSimVarsValue[ENG1_BLEED_PRESSURE] <= eng_bleed_max_pressure) {
             if (eng2_bleed_valve_open_pct < 1) {
                 eng2_bleed_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
             }
@@ -161,7 +164,7 @@ public:
         }
 
         //APU
-        if (aSimVarsValue[APU_BLEED] && lSimVarsValue[APU_N1] >= 95 && lSimVarsValue[APU_BLEED_PRESSURE] <= apu_max_pressure && lSimVarsValue[APU_BLEED_TEMPERATURE] <= apu_max_temperature) {
+        if (aSimVarsValue[APU_BLEED_SW] && lSimVarsValue[APU_N1] >= 95 && lSimVarsValue[APU_BLEED_PRESSURE] <= apu_max_pressure && lSimVarsValue[APU_BLEED_TEMPERATURE] <= apu_max_temperature) {
             if (apu_valve_open_pct < 1) {
                 apu_valve_open_pct += (currentAbsTime - lastAbsTime) * 0.001 * valveOpenRate;
             }
@@ -192,11 +195,11 @@ public:
             }
             if (anti_ice_valve_open_pct >= 1) {
                 lSimVarsValue[WING_ANTIICE] = 1;
-                execute_calculator_code("1 (&gt;K:TOGGLE_STRUCTURAL_DEICE)", nullptr, nullptr, nullptr)
+                execute_calculator_code("1 (&gt;K:TOGGLE_STRUCTURAL_DEICE)", nullptr, nullptr, nullptr);
             }
         } else {
             lSimVarsValue[WING_ANTIICE] = 0;
-            execute_calculator_code("0 (&gt;K:TOGGLE_STRUCTURAL_DEICE)", nullptr, nullptr, nullptr)
+            execute_calculator_code("0 (&gt;K:TOGGLE_STRUCTURAL_DEICE)", nullptr, nullptr, nullptr);
         }
         //XBLEED AUTO OR ON
         if ((lSimVarsValue[X_BLEED] == 1 && lSimVarsValue[APU_BLEED_VALVE] >= 1) || lSimVarsValue[X_BLEED] == 2) {
@@ -219,7 +222,7 @@ public:
 
 class Ducts {
 private:
-    bool init = 0;
+    bool initialized = 0;
     bool duct1 = 0;
     bool duct2 = 0;
     double duct1_temperature = 0;
@@ -228,10 +231,10 @@ private:
     double duct2_pressure = 0;
     const double DUCT_HEATING_COEF = 1.4;
     const double DUCT_COOLING_COEF = 0.1;
-    PID duct1_temp_PID;
-    PID duct2_temp_PID;
-    PID duct1_press_PID;
-    PID duct2_press_PID;
+    PIDClass duct1_temp_PID;
+    PIDClass duct2_temp_PID;
+    PIDClass duct1_press_PID;
+    PIDClass duct2_press_PID;
     
     ENUM updateDuct1() {
         if (lSimVarsValue[GPU_BLEED_VALVE]) {
@@ -304,7 +307,7 @@ private:
     }
 public:
     void init() {
-        for (int i = DUCT1, i <= DUCT2_PRESSURE; i++) {
+        for (int i = DUCT1; i <= DUCT2_PRESSURE; i++) {
             lSimVarsValue[i] = 0;
         }
         lSimVarsValue[DUCT1_TEMPERATURE] = aSimVarsValue[AMB_TEMP];
@@ -362,3 +365,5 @@ public:
         ductUnit.updateSimVars();
     }
 };
+
+#endif // !BLEEDSYS

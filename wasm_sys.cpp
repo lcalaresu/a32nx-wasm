@@ -4,6 +4,7 @@
 #include "systems/press_sys.h"
 #include "systems/eng_sys.h"
 
+#include "common_sys.h"
 #include <SimConnect.h>
 #include <ratio>
 #include <chrono>
@@ -32,7 +33,7 @@ class WasmSys {
 
             ELEC_SYSTEM.update(currentAbsTime);
             PACK_SYSTEM.update();
-            BLEED_SYSTEM.update();
+            BLEED_SYSTEM.update(currentAbsTime);
             PRESS_SYSTEM.update();
             ENG_SYSTEM.update(currentAbsTime);
 

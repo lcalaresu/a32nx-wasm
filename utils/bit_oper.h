@@ -1,13 +1,12 @@
 #pragma once
-
-#include <stdint.h>
+#ifndef BITOPS
+#define BITOPS
 
 /*
 * ============== *
 * Bit Operations *
 * ============== *
 */
-
 
 class bitOper {
 private:
@@ -34,3 +33,5 @@ public:
         return (num | UINT64_MAX);
     }
 };
+
+#endif // !BITOPS
