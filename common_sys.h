@@ -207,15 +207,17 @@ typedef enum lSimVars {
     * ======== *
     *
     * NOTE: ALL CIRCUITS AND CIRCUIT BREAKERS ARE BIT WISE ENCODED INTO UNSIGNED LONG INT  
-    * L:CIRCUIT, FLOAT64
-    * L:CIRCUIT_BREAKER, FLOAT64
+    * L:CIRCUIT, FLOAT64 (Note that this should be typecasted to UINT_64)
+    * at bit location(0-63), 0 = circuit offline(no power); 1 = circuit breaker pushed
     */
     CIRCUIT,
 
     /*
     * ================ *
-    * CIRCUIT_BREAKERS *    //0 = circuit breaker pulled(disconnects power); 1 = circuit breaker pushed
+    * CIRCUIT_BREAKERS *
     * ================ *
+    * at bit location(0-63), 0 = circuit breaker pulled(disconnects power); 1 = circuit breaker pushed
+    * L:CIRCUIT_BREAKER, FLOAT64 (Note that this should be typecasted to UINT_64)
     */
     CIRCUIT_BREAKER,
     
