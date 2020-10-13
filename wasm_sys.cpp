@@ -92,7 +92,7 @@ public:
 // Callbacks
 extern "C" {
 
-    MSFS_CALLBACK bool wasm_sys_callback(FsContext ctx, int service_id, void* pData)
+    MSFS_CALLBACK bool wasm_sys_gauge_callback(FsContext ctx, int service_id, void* pData)
     {
         printf("MSFS_CALLBACK initiated...\n wasm_sys fn call successful\n");
         if(service.handleSimConnect(ctx, service_id, pData)){
