@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <vector>
 
+#include "data_enums.h"
+#include "data_strings.h"
+
 /*
 * =============== *
 * DATA CRUD STUFF *

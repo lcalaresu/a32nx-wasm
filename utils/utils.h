@@ -2,6 +2,8 @@
 #ifndef UTILS
 #define UTILS
 
+#include "PID.h"
+#include "bit_oper.h"
 
 /*
 * ============== *

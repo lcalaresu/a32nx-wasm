@@ -632,7 +632,6 @@ private:
     //bus_circuit_update=> updates boolen state of circuits based on state of its associated source_bus, supply_bus and circuit breaker
     void bus_circuit_update(const int BUS_ID, const int CIRCUIT_SUPPLY, const bool SUPPLY_IS_CIRCUIT, const int CIRCUIT_START, const int CIRCUIT_END) {
         if (lSimVarsValue[BUS_ID]) {
-            double breakeroffset = 0;
             bool supply_active = 0;
             if (SUPPLY_IS_CIRCUIT) {
                 if (bitOper::getbit(lSimVarsValue[CIRCUIT_BREAKER], CIRCUIT_SUPPLY)) {
@@ -713,6 +712,7 @@ private:
     RATGen emerUnit;
     Buses  busUnit;
     Convertors convertorUnit;
+    Circuit circuitUnit;
 public:
     void init() {
         battUnit.init();
@@ -722,6 +722,7 @@ public:
         emerUnit.init();
         busUnit.init();
         convertorUnit.init();
+        circuitUnit.init();
     }
     void update(const double currentAbsTime) {
         battUnit.update(currentAbsTime);
@@ -731,6 +732,7 @@ public:
         emerUnit.update(currentAbsTime);
         busUnit.update(currentAbsTime);
         convertorUnit.update(currentAbsTime);
+        circuitUnit.update();
     }
     void updateSimVars() {
         battUnit.updateSimVars();
@@ -740,6 +742,7 @@ public:
         emerUnit.updateSimVars();
         busUnit.updateSimVars();
         convertorUnit.updateSimVars();
+        circuitUnit.updateSimVars();
     }
 };
 //TODO

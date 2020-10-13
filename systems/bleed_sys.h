@@ -222,15 +222,11 @@ public:
 
 class Ducts {
 private:
-    bool initialized = 0;
-    bool duct1 = 0;
-    bool duct2 = 0;
     double duct1_temperature = 0;
     double duct2_temperature = 0;
     double duct1_pressure = 0;
     double duct2_pressure = 0;
-    const double DUCT_HEATING_COEF = 1.4;
-    const double DUCT_COOLING_COEF = 0.1;
+
     PIDClass duct1_temp_PID;
     PIDClass duct2_temp_PID;
     PIDClass duct1_press_PID;
@@ -333,7 +329,7 @@ public:
         }
     }
 };
-
+ 
 class BleedSys {
 private:
     EngineBleed engUnit;

@@ -94,8 +94,9 @@ extern "C" {
 
     MSFS_CALLBACK bool wasm_sys_callback(FsContext ctx, int service_id, void* pData)
     {
+        printf("MSFS_CALLBACK initiated...\n wasm_sys fn call successful\n");
         if(service.handleSimConnect(ctx, service_id, pData)){
-            
+            printf("Service handled simconnect open with status: SUCCESS\n");
             bool initialized = false;
             bool kill = false;
             struct timeval time;
@@ -105,21 +106,27 @@ extern "C" {
                 const double currentAbsTime = time.tv_usec * 1000;
                 
                 if (!(initialized)) {
+                    printf("WASM_SYS initialized\n");
                     lastAbsTime = currentAbsTime;
                     WASM_SYS.init();
                     initialized = true;
                 } else {
                     const double lastRefresh = currentAbsTime - lastAbsTime;
+                    printf("WASM_SYS waiting till %dms to update\n", REFRESH_RATE - lastRefresh);
                     if (lastRefresh >= REFRESH_RATE) {
+                        printf("WASM_SYS now updating...\n");
                         WASM_SYS.update(currentAbsTime);
+                        printf("WASM_SYS updated completed.\n");
                     }
                 }
                 kill = service.simStopCheck();
                 if (kill) {
+                    printf("Service handle received KILL trigger...\n");
                     service.handleSimDisconnect();
                 }
             }
         }
-        return true;
+        printf("Service handled simconnect with status: FAILED/EXIT");
+        return false;
     }
 }
