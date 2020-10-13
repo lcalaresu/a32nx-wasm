@@ -14,11 +14,7 @@
 #include <time.h>
 
 #include "utils/utils.h"
-#include "utils/PID.h"
-#include "utils/bit_oper.h"
 
-#include "data/data_enums.h"
-#include "data/data_strings.h"
 #include "data/data.h"
 
 #define REFRESH_RATE 500        //update refresh rate in milliseconds
