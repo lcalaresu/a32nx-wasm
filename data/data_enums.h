@@ -15,7 +15,8 @@ typedef enum unitsEnum {
     enumUnitsCount
 }unitsEnum;
 
-typedef enum aSimVars {
+
+const enum aSimVars {
     EXT_AVAIL,              //"EXTERNAL POWER AVAILABLE","Bool"
     EXT_POWER,              //"EXTERNAL POWER ON", "Bool"
     APU_MASTER,             //"FUELSYSTEM VALVE SWITCH:8", "Bool"
@@ -44,16 +45,13 @@ typedef enum aSimVars {
 
 
     aSimVarsCount
-}aSimVars;
+};
 
+const enum notificationGroupID {
+    SDK_CONTROL
+};
 
-typedef enum keyEventTrigger {
-    APU_START_TRIGGER,              //KEY_APU_STARTER
-
-    keyEventTriggerCount
-}keyEventTrigger;
-
-typedef enum lSimVars {
+const enum lSimVars {
     /*============================================================================*/
     /*                                   ELEC                                     */
     /*============================================================================*/
@@ -304,10 +302,10 @@ APU_EGT,                //"L:APU_EGT","celcius"
 APU_EGT_WARN,           //"L:APU_EGT_WARN","celcius"
 
 totalLVarsCount
-}lSimVars;
+};
 
 
-typedef enum powerSource {
+const enum powerSource {
     NOPOWER,                //0 = No Power
 
     //AC
@@ -326,9 +324,9 @@ typedef enum powerSource {
     BATT2,                  //11 = BATT2
     BATT12                  //12 = BATT12
 
-}powerSource;
+};
 
-typedef enum bleedSource {
+const enum bleedSource {
     NOBLEED,
 
     GPU_BLEED,
@@ -336,9 +334,9 @@ typedef enum bleedSource {
     ENG1_BLEED,
     ENG2_BLEED,
     RAT_BLEED
-}bleedSource;
+};
 
-typedef enum ElECConf {
+const enum ElECConf {
     NORM_CONF,
     ONE_GEN_INOP,
     PRE_RAT_EMER_CONF,
@@ -348,9 +346,9 @@ typedef enum ElECConf {
     TR1_FAULT,
     TR2_FAULT,
     TR12_FAULT
-}ELECConf;
+};
 
-typedef enum ELECCircuit {
+const enum ELECCircuit {
     //AC_BUS1
     CIRCUIT_1XP,    //0
     CIRCUIT_1IWXP,  //1
@@ -406,6 +404,6 @@ typedef enum ELECCircuit {
     //HOT_BUS2
     CIRCUIT_702PP,  //42
     CIRCUIT_704PP  //43
-}eleccircuits;
+};
 
 #endif // !DATAENUMS
