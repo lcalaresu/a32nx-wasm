@@ -22,3 +22,10 @@ Core systems implementation for flybywire_A32NX as wasm module.
 - Thread support is currently unavailable so expect sync delay issues with update function(worst case should be no more than one update cycle desync).
 - Once thread support is available all the functions can then run async.
     
+## SDK Third party interaction
+- Third party interaction can be achieved through transmitting events for timebeing, client data space interaction maybe added in the future.
+  - EventIDs for L: Vars needs to be set as follows `THIRD_PARTY_EVENT_ID_MIN /*(hex value for this is 0x00011000)*/ + <lSimVars_enum>`, lSimVars enum can be found under `data/data_enums.h` 
+  - `SimConnect_MapClientEventToSimEvent` to register event.
+  - `SimConnect_TransmitClientEvent` to transmit event with value of type `DWORD`(double) specified for dwData parameter.
+  - refer to simconnect SDK for more details on these functions.
+

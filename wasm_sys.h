@@ -1,6 +1,8 @@
 #pragma once
 
-//currently not in use will be used at a later stage for file structure improvements and mainly with in-process wasmmodule integration
+#ifndef WASMSYS
+#define WASMSYS
+/*currently not in use will be used at a later stage for file structure improvements and mainly with in-process wasmmodule integration
 #ifndef __INTELLISENSE__
 #	define MODULE_EXPORT __attribute__( ( visibility( "default" ) ) )
 #	define MODULE_WASM_MODNAME(mod) __attribute__((import_module(mod)))
@@ -9,4 +11,53 @@
 #	define MODULE_WASM_MODNAME(mod)
 #	define __attribute__(x)
 #	define __restrict__
+#endif*/
+#include "systems/elec_sys.h"
+#include "systems/packs_sys.h"
+#include "systems/bleed_sys.h"
+#include "systems/press_sys.h"
+#include "systems/eng_sys.h"
+
+
+class WasmSys {
+private:
+    ElecSys ELEC_SYSTEM;
+    PacksSys PACK_SYSTEM;
+    BleedSys BLEED_SYSTEM;
+    PressSys PRESS_SYSTEM;
+    EngSys ENG_SYSTEM;
+public:
+    void init() {
+        initUnitEnums();
+        initLocalSimVarsIDs();
+        srand(time(nullptr));
+        ELEC_SYSTEM.init();
+        PACK_SYSTEM.init();
+        BLEED_SYSTEM.init();
+        PRESS_SYSTEM.init();
+        ENG_SYSTEM.init();
+    }
+    void update(double const currentAbsTime) {
+        updateASimVars();
+
+        ELEC_SYSTEM.update(currentAbsTime);
+        PACK_SYSTEM.update();
+        BLEED_SYSTEM.update(currentAbsTime);
+        PRESS_SYSTEM.update();
+        ENG_SYSTEM.update(currentAbsTime);
+
+        ELEC_SYSTEM.updateSimVars();
+        PACK_SYSTEM.updateSimVars();
+        BLEED_SYSTEM.updateSimVars();
+        PRESS_SYSTEM.updateSimVars();
+        ENG_SYSTEM.updateSimVars();
+
+        lastAbsTime = currentAbsTime;
+    }
+    void destroy() {
+        unregister_all_named_vars();
+        free(ENUM_UNITS);
+        free(ID_LSIMVAR);
+    }
+};
 #endif
