@@ -10,6 +10,9 @@
     <Filter Include="data">
       <UniqueIdentifier>{5e9202cd-e809-4bd5-917a-f077702c7e6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="simconnect">
+      <UniqueIdentifier>{84acbfbb-dfa0-451c-baaf-68b0ef661295}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common_sys.h" />
@@ -47,6 +50,9 @@
       <Filter>data</Filter>
     </ClInclude>
     <ClInclude Include="wasm_sys.h" />
+    <ClInclude Include="simconnect\ServiceDef.h">
+      <Filter>simconnect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="wasm_sys.cpp" />

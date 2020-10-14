@@ -15,6 +15,7 @@
     <ClInclude Include="data\data.h" />
     <ClInclude Include="data\data_enums.h" />
     <ClInclude Include="data\data_strings.h" />
+    <ClInclude Include="simconnect\ServiceDef.h" />
     <ClInclude Include="wasm_sys.h" />
     <ClInclude Include="systems\bleed_sys.h" />
     <ClInclude Include="systems\elec_sys.h" />
