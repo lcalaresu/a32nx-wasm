@@ -11,9 +11,6 @@ public:
     void update() {
 
     }
-    void updateSimVars() {
-
-    }
 };
 
 class Cabin {
@@ -23,9 +20,6 @@ public:
 
     }
     void update() {
-
-    }
-    void updateSimVars() {
 
     }
 };
@@ -43,9 +37,5 @@ public:
     void update() {
         packsUnit.update();
         cabinUnit.update();
-    }
-    void updateSimVars() {
-        packsUnit.updateSimVars();
-        cabinUnit.updateSimVars();
     }
 };

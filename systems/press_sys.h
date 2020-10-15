@@ -11,7 +11,4 @@ public:
     void update() {
 
     }
-    void updateSimVars() {
-
-    }
 };

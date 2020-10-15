@@ -46,11 +46,7 @@ public:
         PRESS_SYSTEM.update();
         ENG_SYSTEM.update(currentAbsTime);
 
-        ELEC_SYSTEM.updateSimVars();
-        PACK_SYSTEM.updateSimVars();
-        BLEED_SYSTEM.updateSimVars();
-        PRESS_SYSTEM.updateSimVars();
-        ENG_SYSTEM.updateSimVars();
+        updateLocalSimVars();
 
         lastAbsTime = currentAbsTime;
     }
