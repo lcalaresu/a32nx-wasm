@@ -5,6 +5,9 @@
 #include "PID.h"
 #include "bit_oper.h"
 
+#ifndef DEBUG
+#define DEBUG
+#endif // !DEBUG
 /*
 * ============== *
 * UTIL FUNCTIONS *
@@ -20,4 +23,9 @@ double convert_inHgToPSI(const double inHg) {
     return (inHg * 0.491);
 }
 
+void debug_print(const char* message) {
+    #ifdef DEBUG
+    printf("%s\n", message);
+    #endif
+}
 #endif // !UTILS
