@@ -12,7 +12,7 @@ private:
     SIMCONNECT_DATA_REQUEST_ID  RequestID;
 
     static void executeEventRequest(ENUM eventID, DWORD data) {
-        lSimVarsValue[eventID] = data;
+        lSimVarsValue[eventID - THIRD_PARTY_EVENT_ID_MIN] = data;
     }
     static void CALLBACK DispatchProc(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext) {
         switch (pData->dwID) {
@@ -20,6 +20,10 @@ private:
                 SIMCONNECT_RECV_EVENT* evt = (SIMCONNECT_RECV_EVENT*)pData;
                 executeEventRequest((ENUM)evt->uEventID, evt->dwData);
             }
+            /*
+            case SIMCONNECT_RECV_ID_SYSTEM_STATE: {
+                //add kill here? but stop trigger is sent while navigating/console so probably not a good idea?
+            }*/
             default: {
                 break;
             }
@@ -47,7 +51,7 @@ public:
         //all third party applications should refer to events by adding THIRD_PARTY_EVENT_ID_MIN to the enum definitions provided under data.h for lVars
         for (int i = BATT1_ONLINE; i < totalLVarsCount; i++) {
             HRESULT add_client = SimConnect_AddClientEventToNotificationGroup(hSimConnect, SDK_CONTROL, THIRD_PARTY_EVENT_ID_MIN + i, 1);
-            if (SUCCEEDED(add_client)) {
+            if (FAILED(add_client)) {
                 return false;
             }
         }
@@ -62,12 +66,15 @@ public:
         SimConnect_CallDispatch(hSimConnect, DispatchProc, nullptr);
     }
 
-    bool simStopCheck() {
-        HRESULT kill = SimConnect_RequestSystemState(hSimConnect, RequestID, stopState);
-        if (SUCCEEDED(kill)) {
-            return true;
+    bool simStopCheck(int service_id) {
+        switch (service_id)
+        {
+            case PANEL_SERVICE_PRE_KILL: {
+                return true;
+            }
+            default:
+                return false;
         }
-        return false;
     }
 
     bool handleSimDisconnect() {
