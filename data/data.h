@@ -36,12 +36,13 @@ void initUnitEnums() {
 void initLocalSimVarsIDs() {
     ID_LSIMVAR = (ID*)malloc(sizeof(ID) * totalLVarsCount);
     for (int i = 0; i < totalLVarsCount; i++) {
+        lastLVarsValue[i] = -1;
         ID_LSIMVAR[i] = register_named_variable(pcstring_lSimVars[i]);
     }
 }
 void updateLocalSimVars() {
     //check for dirtyLVars
-    for (int i = BATT1_ONLINE; i < totalLVarsCount; i++) {
+    for (int i = 0; i < totalLVarsCount; i++) {
         if (lastLVarsValue[i] != lSimVarsValue[i]) {
             dirtylSimVars.push_back(i);
         }
