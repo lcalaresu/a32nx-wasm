@@ -33,12 +33,12 @@ public:
                 if (SUCCEEDED(hr)) {
                     return true;
                 }
-                return false;
+
             }
-            default: {
-                return true;
-            }
+            default:
+                break;
         }
+        return false;
     }
 
     bool registerToEvents() {

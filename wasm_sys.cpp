@@ -19,12 +19,12 @@ extern "C" {
         if (!(initialized)) {
             if (service.handleSimConnect(ctx, service_id, pData)) {
                 debug_print("Service handled simconnect open with status: SUCCESS");
+                lastAbsTime = currentAbsTime;
+                WASM_SYS.init();
+                //service.registerToEvents();
+                initialized = true;
+                debug_print("WASM_SYS initialized");
             }
-            debug_print("WASM_SYS initialized");
-            lastAbsTime = currentAbsTime;
-            WASM_SYS.init();
-            //service.registerToEvents();
-            initialized = true;
         } else {
             const double lastRefresh = currentAbsTime - lastAbsTime;
             #ifdef DEBUG
