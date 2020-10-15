@@ -45,17 +45,14 @@ public:
         //this listens to the event, masks the event after receiving it
         //a single notification group can at max hold 1000events
         //all third party applications should refer to events by adding THIRD_PARTY_EVENT_ID_MIN to the enum definitions provided under data.h for lVars
-        HRESULT Result = 1;
         for (int i = BATT1_ONLINE; i < totalLVarsCount; i++) {
-            HRESULT hr = SUCCEEDED(SimConnect_AddClientEventToNotificationGroup(hSimConnect, SDK_CONTROL, THIRD_PARTY_EVENT_ID_MIN + i, 1));
-            
-            Result &= hr;
-            if (!(Result)) {
+            HRESULT add_client = SimConnect_AddClientEventToNotificationGroup(hSimConnect, SDK_CONTROL, THIRD_PARTY_EVENT_ID_MIN + i, 1);
+            if (SUCCEEDED(add_client)) {
                 return false;
             }
         }
-        HRESULT hr = SUCCEEDED(SimConnect_SetNotificationGroupPriority(hSimConnect, SDK_CONTROL, SIMCONNECT_GROUP_PRIORITY_HIGHEST));
-        if(hr){
+        HRESULT group_priority = SimConnect_SetNotificationGroupPriority(hSimConnect, SDK_CONTROL, SIMCONNECT_GROUP_PRIORITY_HIGHEST);
+        if(SUCCEEDED(group_priority)){
             return true;
         }
         return false;
