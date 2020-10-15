@@ -14,10 +14,8 @@ private:
     static void executeEventRequest(ENUM eventID, DWORD data) {
         lSimVarsValue[eventID] = data;
     }
-    static void CALLBACK DispatchProc(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext)
-    {
-        switch (pData->dwID)
-        {
+    static void CALLBACK DispatchProc(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext) {
+        switch (pData->dwID) {
             case SIMCONNECT_RECV_ID_EVENT: {
                 SIMCONNECT_RECV_EVENT* evt = (SIMCONNECT_RECV_EVENT*)pData;
                 executeEventRequest((ENUM)evt->uEventID, evt->dwData);
@@ -29,17 +27,17 @@ private:
     }
 public:
     bool handleSimConnect(FsContext ctx, int service_id, void* pData) {
-        switch (service_id)
-        {
-        case PANEL_SERVICE_PRE_INSTALL: {
-            HRESULT hr = SimConnect_Open(&hSimConnect, "A32NX_wasm_sys", nullptr, 0, 0, 0);
-            if (SUCCEEDED(hr)) {
+        switch (service_id) {
+            case PANEL_SERVICE_PRE_INSTALL: {
+                HRESULT hr = SimConnect_Open(&hSimConnect, "A32NX_wasm_sys", nullptr, 0, 0, 0);
+                if (SUCCEEDED(hr)) {
+                    return true;
+                }
+                return false;
+            }
+            default: {
                 return true;
             }
-            return false;
-        }
-        default:
-            return true;
         }
     }
 
@@ -47,15 +45,17 @@ public:
         //this listens to the event, masks the event after receiving it
         //a single notification group can at max hold 1000events
         //all third party applications should refer to events by adding THIRD_PARTY_EVENT_ID_MIN to the enum definitions provided under data.h for lVars
-        HRESULT Result = 1;
         for (int i = BATT1_ONLINE; i < totalLVarsCount; i++) {
-            HRESULT hr = SimConnect_AddClientEventToNotificationGroup(hSimConnect, SDK_CONTROL, THIRD_PARTY_EVENT_ID_MIN + i, 1);
-            Result &= hr;
-            if (!(Result)) {
+            HRESULT add_client = SimConnect_AddClientEventToNotificationGroup(hSimConnect, SDK_CONTROL, THIRD_PARTY_EVENT_ID_MIN + i, 1);
+            if (SUCCEEDED(add_client)) {
                 return false;
             }
         }
-        return true;
+        HRESULT group_priority = SimConnect_SetNotificationGroupPriority(hSimConnect, SDK_CONTROL, SIMCONNECT_GROUP_PRIORITY_HIGHEST);
+        if(SUCCEEDED(group_priority)){
+            return true;
+        }
+        return false;
     }
 
     void handleSimDispatch() {
@@ -78,5 +78,4 @@ public:
         return false;
     }
 };
-
 #endif

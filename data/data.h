@@ -1,9 +1,7 @@
 #ifndef DATA
 #define DATA
 
-#include <MSFS/Legacy/gauges.h>
-#include <stdlib.h>
-#include <vector>
+#include "../common_sys.h"
 
 #include "data_enums.h"
 #include "data_strings.h"
@@ -24,6 +22,8 @@ ENUM* keyEventID;
 
 FLOAT64 aSimVarsValue[aSimVarsCount];
 FLOAT64 lSimVarsValue[totalLVarsCount];
+FLOAT64 lastLVarsValue[totalLVarsCount];
+
 std::vector<int> dirtylSimVars;
 
 void initUnitEnums() {
@@ -40,8 +40,17 @@ void initLocalSimVarsIDs() {
     }
 }
 void updateLocalSimVars() {
+    //check for dirtyLVars
     for (int i = BATT1_ONLINE; i < totalLVarsCount; i++) {
-        set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
+        if (lastLVarsValue[i] != lSimVarsValue[i]) {
+            dirtylSimVars.push_back(i);
+        }
+        lastLVarsValue[i] = lSimVarsValue[i];
+    }
+    //update only dirtyLVars
+    for (auto i = dirtylSimVars.end(); i != dirtylSimVars.begin(); --i) {
+        set_named_variable_value(ID_LSIMVAR[*i], lSimVarsValue[*i]);
+        dirtylSimVars.pop_back();
     }
 }
 

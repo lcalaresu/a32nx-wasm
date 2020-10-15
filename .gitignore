@@ -1,4 +1,4 @@
 *.git
-/MSFS/Debug
+/MSFS
 /.vs
 /CppProperties.json

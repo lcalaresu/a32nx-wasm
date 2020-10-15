@@ -11,7 +11,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <time.h>
+#include <sys/time.h>
+#include <ratio>
+#include <chrono>
+#include <vector>
 
 #include "utils/utils.h"
 
@@ -19,5 +22,7 @@
 
 #define REFRESH_RATE 500        //update refresh rate in milliseconds
 double lastAbsTime = 0;         //last time the update function was run
+
+#define DEBUG
 
 #endif
