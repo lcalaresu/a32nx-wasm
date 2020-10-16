@@ -8,8 +8,6 @@
 class ServiceDef {
 private:
     HANDLE hSimConnect = 0;
-    const char* stopState = "SimStop";
-    SIMCONNECT_DATA_REQUEST_ID  RequestID;
 
     static void executeEventRequest(ENUM eventID, DWORD data) {
         lSimVarsValue[eventID - THIRD_PARTY_EVENT_ID_MIN] = data;
@@ -30,7 +28,7 @@ private:
         }
     }
 public:
-    bool handleSimConnect(FsContext ctx, int service_id, void* pData) {
+    bool handleSimConnect(int service_id) {
         switch (service_id) {
             case PANEL_SERVICE_PRE_INSTALL: {
                 HRESULT hr = SimConnect_Open(&hSimConnect, "A32NX_wasm_sys", nullptr, 0, 0, 0);
