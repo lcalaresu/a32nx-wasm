@@ -12,6 +12,8 @@
 #	define __attribute__(x)
 #	define __restrict__
 #endif*/
+#include "common_sys.h"
+
 #include "systems/elec_sys.h"
 #include "systems/packs_sys.h"
 #include "systems/bleed_sys.h"
@@ -46,11 +48,7 @@ public:
         PRESS_SYSTEM.update();
         ENG_SYSTEM.update(currentAbsTime);
 
-        ELEC_SYSTEM.updateSimVars();
-        PACK_SYSTEM.updateSimVars();
-        BLEED_SYSTEM.updateSimVars();
-        PRESS_SYSTEM.updateSimVars();
-        ENG_SYSTEM.updateSimVars();
+        updateLSimVars();
 
         lastAbsTime = currentAbsTime;
     }

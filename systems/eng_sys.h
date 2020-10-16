@@ -14,9 +14,6 @@ public:
     void update() {
 
     }
-    void updateSimVars() {
-
-    }
 };
 
 class APUEngine {
@@ -134,11 +131,6 @@ public:
         }
         updateEGTWarn();
     }
-    void updateSimVars() {
-        for (int i = APU_FLAP_OPEN; i <= APU_EGT_WARN; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
-    }
 };
 
 class EngSys {
@@ -156,11 +148,6 @@ class EngSys {
         eng1.update();
         eng2.update();
         apuEng.update(currentAbsTime);
-    }
-    void updateSimVars() {
-        eng1.updateSimVars();
-        eng2.updateSimVars();
-        apuEng.updateSimVars();
     }
 };
 

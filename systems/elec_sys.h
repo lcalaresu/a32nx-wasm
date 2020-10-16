@@ -119,12 +119,6 @@ public:
         else {
             BATDischarging(currentAbsTime);
         }
-        updateSimVars();
-    }
-    void updateSimVars() {
-        for (int i = BATT1_ONLINE; i <= BATT2_AMPERAGE; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
     }
 };
 
@@ -152,11 +146,6 @@ public:
             lSimVarsValue[EXT_GEN_VOLTAGE] = 0;
             lSimVarsValue[EXT_GEN_AMPERAGE] = 0;
             lSimVarsValue[EXT_GEN_FREQ] = 0;
-        }
-    }
-    void updateSimVars() {
-        for (int i = EXT_GEN_VOLTAGE; i <= EXT_GEN_FREQ; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
         }
     }
 };
@@ -191,11 +180,6 @@ public:
             lSimVarsValue[APU_GEN_FREQ] = 0;
         }
 
-    }
-    void updateSimVars() {
-        for (int i = APU_GEN_ONLINE; i <= APU_LOAD_PERCENT; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
     }
 };
 
@@ -297,11 +281,6 @@ public:
         updateGen1(currentAbsTime, ambient);
         updateGen2(currentAbsTime, ambient);
     }
-    void updateSimVars() {
-        for (int i = GEN1_ONLINE; i <= GEN2_IDG; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
-    }
 };
 
 /*
@@ -337,11 +316,6 @@ public:
                 lSimVarsValue[EMER_AMPERAGE] = 0; //15kVA RAT
                 lSimVarsValue[EMER_FREQ] = 0;
             }
-        }
-    }
-    void updateSimVars() {
-        for (int i = EMER_ONLINE; i <= EMER_FREQ; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
         }
     }
 };
@@ -510,11 +484,6 @@ public:
         updateACBuses();
         updateDCBuses();
     }
-    void updateSimVars() {
-        for (int i = AC_BUS1; i <= HOT_BUS2; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
-    }
 };
 
 /*
@@ -610,11 +579,6 @@ public:
         updateTRESS();
         updateSTATINV();
     }
-    void updateSimVars() {
-        for (int i = TR1_ONLINE; i <= STATICINV_FREQ; i++) {
-            set_named_variable_value(ID_LSIMVAR[i],lSimVarsValue[i]);
-        }
-    }
 };
 
 class Circuit{
@@ -688,11 +652,6 @@ public:
         updateCircuitBreakers();
         updateCircuits();
     }
-    void updateSimVars() {
-        for (int i = CIRCUIT_1XP; i <= CIRCUIT_704PP; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
-    }
 };
 
 /*
@@ -733,16 +692,6 @@ public:
         busUnit.update(currentAbsTime);
         convertorUnit.update(currentAbsTime);
         circuitUnit.update();
-    }
-    void updateSimVars() {
-        battUnit.updateSimVars();
-        gpuUnit.updateSimVars();
-        apuUnit.updateSimVars();
-        engUnit.updateSimVars();
-        emerUnit.updateSimVars();
-        busUnit.updateSimVars();
-        convertorUnit.updateSimVars();
-        circuitUnit.updateSimVars();
     }
 };
 //TODO

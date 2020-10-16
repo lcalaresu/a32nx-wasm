@@ -15,11 +15,6 @@ public:
     void update(const double currentAbsTime) {
         //TODO
     }
-    void updateSimVars() {
-        for (int i = ENG1_BLEED_PRESSURE; i <= ENG2_BLEED_TEMPERATURE; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
-    }
 };
 
 class APUBleed {
@@ -33,11 +28,6 @@ public:
     void update(const double currentAbsTime) {
         //TODO
     }
-    void updateSimVars() {
-        for (int i = APU_BLEED_PRESSURE; i <= APU_BLEED_TEMPERATURE; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
-    }
 };
 
 class GPUBleed {
@@ -50,11 +40,6 @@ public:
     }
     void update(const double currentAbsTime) {
         //TODO
-    }
-    void updateSimVars() {
-        for (int i = GPU_BLEED_PRESSURE; i <= GPU_BLEED_TEMPERATURE; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
     }
 };
 
@@ -213,11 +198,6 @@ public:
             lSimVarsValue[X_BLEED_VALVE] = 0;
         }
     }
-    void updateSimVars() {
-        for (int i = ENG1_IP_VALVE; i <= X_BLEED_VALVE; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
-    }
 };
 
 class Ducts {
@@ -323,11 +303,6 @@ public:
             execute_calculator_code("0 (&gt;K:APU_BLEED_AIR_SOURCE_TOGGLE)", nullptr, nullptr, nullptr);            //all bleed starter engines require APU_BLEED SOURCE internally
         }
     }
-    void updateSimVars() {
-        for (int i = DUCT1; i <= DUCT2_PRESSURE; i++) {
-            set_named_variable_value(ID_LSIMVAR[i], lSimVarsValue[i]);
-        }
-    }
 };
  
 class BleedSys {
@@ -352,13 +327,6 @@ public:
         valveUnit.update(currentAbsTime);
         ductUnit.update(currentAbsTime);
 
-    }
-    void updateSimVars() {
-        engUnit.updateSimVars();
-        apuUnit.updateSimVars();
-        gpuUnit.updateSimVars();
-        valveUnit.updateSimVars();
-        ductUnit.updateSimVars();
     }
 };
 

@@ -25,23 +25,19 @@ extern "C" {
                 initialized = true;
                 debug_print("WASM_SYS initialized");
             }
-        } else {
+        } else if (!kill){
             const double lastRefresh = currentAbsTime - lastAbsTime;
             #ifdef DEBUG
             printf("WASM_SYS waiting till %fms to update\n", REFRESH_RATE - lastRefresh);
             #endif
             if (lastRefresh >= REFRESH_RATE) {
-
                 debug_print("WASM_SYS now updating...");
-
                 //service.handleSimDispatch();
                 WASM_SYS.update(currentAbsTime);
-
                 debug_print("WASM_SYS update completed.");
-
             }
         }
-        kill = service.simStopCheck();
+        kill = service.simStopCheck(service_id);
         if (kill) {
             debug_print("Service handle received KILL trigger...");
             WASM_SYS.destroy();
