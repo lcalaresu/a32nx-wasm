@@ -16,7 +16,7 @@ typedef enum unitsEnum {
 }unitsEnum;
 
 
-const enum aSimVars {
+enum aSimVars {
     EXT_AVAIL,              //"EXTERNAL POWER AVAILABLE","Bool"
     EXT_POWER,              //"EXTERNAL POWER ON", "Bool"
     APU_MASTER,             //"FUELSYSTEM VALVE SWITCH:8", "Bool"
@@ -34,24 +34,29 @@ const enum aSimVars {
     IAS,                    //"AIRSPEED INDICATED","Knots"
     GEN1_SW,                //A:GENERAL ENG MASTER ALTERNATOR:1
     GEN2_SW,                //A:GENERAL ENG MASTER ALTERNATOR:2
-    ENG1_BLEED_SW,             //(A:BLEED AIR ENGINE:#ID#, Bool)
-    ENG2_BLEED_SW,             //(A:BLEED AIR ENGINE:#ID#, Bool)
-    APU_BLEED_SW,              //"BLEED AIR APU","Bool"
+    ENG1_BLEED_SW,          //(A:BLEED AIR ENGINE:#ID#, Bool)
+    ENG2_BLEED_SW,          //(A:BLEED AIR ENGINE:#ID#, Bool)
+    APU_BLEED_SW,           //"BLEED AIR APU","Bool"
     ENG1_STARTER,           //(A:GENERAL ENG STARTER:1, Bool)
     ENG2_STARTER,           //(A:GENERAL ENG STARTER:2, Bool)
     STRUCT_ANTI_ICE,        //A:STRUCTURAL DEICE SWITCH, Bool
-    ENG1_EGT,                //A:ENG EXHAUST GAS TEMPERATURE:1, Rankine
-    ENG2_EGT,                //A:ENG EXHAUST GAS TEMPERATURE:2, Rankine
-
+    ENG1_EGT,               //A:ENG EXHAUST GAS TEMPERATURE:1, Rankine
+    ENG2_EGT,               //A:ENG EXHAUST GAS TEMPERATURE:2, Rankine
+    ON_GROUND,              //A:SIM ON GROUND, Bool
+    SURFACE_ALTITUDE,       //A:GROUND ALTITUDE, Meters
+    ALTITUDE,               //A:PLANE ALTITUDE, Feet
+    ALTITUDE_ABV_GND,       //A:PLANE ALT ABOVE GROUND, Feet
+    ENG1_THROTTLE,          //A:GENERAL ENG THROTTLE LEVER POSITION: 1, Percent //CLIMB = 89, FLEX = 95, TOGA = 100
+    ENG2_THROTTLE,          //A:GENERAL ENG THROTTLE LEVER POSITION: 2, Percent //CLIMB = 89, FLEX = 95, TOGA = 100
 
     aSimVarsCount
 };
 
-const enum notificationGroupID {
+enum notificationGroupID {
     SDK_CONTROL
 };
 
-const enum lSimVars {
+enum lSimVars {
     /*============================================================================*/
     /*                                   ELEC                                     */
     /*============================================================================*/
@@ -255,7 +260,7 @@ const enum lSimVars {
     * XML L VARS *
     * ========== *
     */
-    X_BLEED,            //TODO
+    X_BLEED,                //L:A32NX_KNOB_OVHD_AIRCOND_XBLEED_Position  SHUT = 0, AUTO = 1, OPEN = 2
 
 /*============================================================================*/
 /*                                   PACKS                                    */
@@ -287,25 +292,56 @@ const enum lSimVars {
     CKPT_TEMP_KNOB,         //L : A320_Neo_AIRCOND_LVL_1
     FWD_TEMP_KNOB,          //L : A320_Neo_AIRCOND_LVL_2
     AFT_TEMP_KNOB,          //L : A320_Neo_AIRCOND_LVL_3
-    HOT_AIR,                //TODO
-    PACK1_VALVE,            //TODO
-    PACK2_VALVE,            //TODO
-    PACK_FLOW_CONTROLLER,   //TODO
+    HOT_AIR,                //L:A32NX_AIRCOND_HOTAIR_TOGGLE, Bool
+    PACK1_VALVE,            //L:A32NX_AIRCOND_PACK1_TOGGLE, Bool
+    PACK2_VALVE,            //L:A32NX_AIRCOND_PACK2_TOGGLE, Bool
+    PACK_FLOW_CONTROLLER,   //L:A32NX_KNOB_OVHD_AIRCOND_PACKFLOW_POSITION       LO = 0, NORM = 1, HI = 2
 
 /*============================================================================*/
 /*                                   ENGINES                                  */
 /*============================================================================*/
 
-APU_FLAP_OPEN,          //"L:APU_FLAP_OPEN", "Percent"
-APU_N1,                 //"L:APU_N1","Percent"
-APU_EGT,                //"L:APU_EGT","celcius"
-APU_EGT_WARN,           //"L:APU_EGT_WARN","celcius"
+    APU_FLAP_OPEN,          //"L:APU_FLAP_OPEN", "Percent"
+    APU_N1,                 //"L:APU_N1","Percent"
+    APU_EGT,                //"L:APU_EGT","celcius"
+    APU_EGT_WARN,           //"L:APU_EGT_WARN","celcius"
 
-totalLVarsCount
+/*============================================================================*/
+/*                                     PRESS                                  */
+/*============================================================================*/
+    /*
+    * ====== *
+    * Valves *
+    * ====== *
+    */
+    OUTFLOW_VALVE,          //"L:OUTFLOW_VALVE_PCT", "Percent"
+    SAFETY_1,               //"L:SAFETY_VALVE_1", "Bool"
+    SAFETY_2,               //"L:SAFETY_VALVE_2", "Bool"
+
+    CABIN_ALTITUDE,         //"L:CABIN_ALTITUDE", "Feet"
+    CABIN_ALTITUDE_GOAL,    //"L:CABIN_ALTITUDE_GOAL", "Feet"
+    CABIN_ALTITUDE_RATE,    //"L:CABIN_ALTITUDE_RATE", "Feet per second"
+    DELTA_PRESSURE,         //"L:DELTA_PRESSURE", "PSI"
+    LDG_ELEV_MODE,          //"L:LANDING_ELEV_MODE", "Bool"
+    LDG_ELEV,               //"L:LANDING_ELEV", "Feet"
+
+    CPC_SYS1,               //"L:CPC_SYS1","Bool"
+    CPC_SYS2,               //"L:CPC_SYS2","Bool"
+    /*
+    * ======== *
+    * XML VARS *
+    * ======== *
+    */
+    MAN_LAND_ELEV,          //L:A32NX_LANDING_ELEVATION, feet
+    MAN_CAB_PRESS,          //L:A32NX_CAB_PRESS_MODE_MAN, bool
+    MAN_VS_CTRL,            //L:A32NX_MAN_VS_CONTROL            up = 0, off = 1, dn = 2
+    DITCH,                  //L:A32NX_DITCHING, Bool    
+
+    totalLVarsCount
 };
 
 
-const enum powerSource {
+enum powerSource {
     NOPOWER,                //0 = No Power
 
     //AC
@@ -326,7 +362,7 @@ const enum powerSource {
 
 };
 
-const enum bleedSource {
+enum bleedSource {
     NOBLEED,
 
     GPU_BLEED,
@@ -336,7 +372,7 @@ const enum bleedSource {
     RAT_BLEED
 };
 
-const enum ElECConf {
+enum ElECConf {
     NORM_CONF,
     ONE_GEN_INOP,
     PRE_RAT_EMER_CONF,

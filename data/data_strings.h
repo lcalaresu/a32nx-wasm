@@ -36,13 +36,19 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "GENERAL ENG MASTER ALTERNATOR : 1, Bool",
     "GENERAL ENG MASTER ALTERNATOR : 2, Bool",
     "BLEED AIR ENGINE : 1, Bool",
-    "BLEED AIR ENGINE : 2, Bool"
+    "BLEED AIR ENGINE : 2, Bool",
     "BLEED AIR APU, Bool",
     "GENERAL ENG STARTER:1, Bool",
     "GENERAL ENG STARTER:2, Bool",
     "STRUCTURAL DEICE SWITCH, Bool",
     "ENG EXHAUST GAS TEMPERATURE:1, Rankine",
-    "ENG EXHAUST GAS TEMPERATURE:2, Rankine"
+    "ENG EXHAUST GAS TEMPERATURE:2, Rankine",
+    "SIM ON GROUND, Bool",
+    "GROUND ALTITUDE, Meters",
+    "PLANE ALTITUDE, Feet",
+    "PLANE ALT ABOVE GROUND, Feet",
+    "GENERAL ENG THROTTLE LEVER POSITION: 1, Percent",
+    "GENERAL ENG THROTTLE LEVER POSITION: 2, Percent"
 };
 
 const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
@@ -147,7 +153,7 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
         "DUCT2_TEMPERATURE",
         "DUCT1_PRESSURE",
         "DUCT2_PRESSURE",
-        "TODO",
+        "A32NX_KNOB_OVHD_AIRCOND_XBLEED_Position",
         //==============================PACKS============================
         "PACK1_OUTLET_TEMP",
         "PACK2_OUTLET_TEMP",
@@ -159,15 +165,31 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
         "A320_Neo_AIRCOND_LVL_1",
         "A320_Neo_AIRCOND_LVL_2",
         "A320_Neo_AIRCOND_LVL_3",
-        "TODO",
-        "TODO",
-        "TODO",
-        "TODO",
+        "A32NX_AIRCOND_HOTAIR_TOGGLE",
+        "A32NX_AIRCOND_PACK1_TOGGLE",
+        "A32NX_AIRCOND_PACK2_TOGGLE",
+        "A32NX_KNOB_OVHD_AIRCOND_PACKFLOW_POSITION",
         //=============================ENGINES============================
         "APU_FLAP_OPEN",
         "APU_N1",
         "APU_EGT",
-        "APU_EGT_WARN"
+        "APU_EGT_WARN",
+        //=============================PRESS==============================
+        "OUTFLOW_VAVLE_PCT",
+        "SAFETY_VAVLE_1",
+        "SAFETY_VALVE_2",
+        "CABIN_ALTITUDE",
+        "CABIN_ALTITUDE_GOAL",
+        "CABIN_ALTITUDE_RATE",
+        "DELTA_PRESSURE",
+        "LANDING_ELEV_MODE",
+        "LANDING_ELEV",
+        "CPC_SYS1",
+        "CPC_SYS2",
+        "A32NX_LANDING_ELEVATION",
+        "A32NX_CAB_PRESS_MODE_MAN",
+        "A32NX_MAN_VS_CONTROL",
+        "A32NX_DITCHING"
 };
 
 #endif // !DATASTRINGS

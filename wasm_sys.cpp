@@ -17,7 +17,7 @@ extern "C" {
         gettimeofday(&timestruct, 0);
         const double currentAbsTime = timestruct.tv_usec * 1000;
         if (!(initialized)) {
-            if (service.handleSimConnect(ctx, service_id, pData)) {
+            if (service.handleSimConnect(service_id)) {
                 debug_print("Service handled simconnect open with status: SUCCESS");
                 lastAbsTime = currentAbsTime;
                 WASM_SYS.init();
@@ -44,6 +44,6 @@ extern "C" {
             service.handleSimDisconnect();
         }
         debug_print("Service handled simconnect with status: FAILED/EXIT");
-        return false;
+        return !kill;
     }
 }

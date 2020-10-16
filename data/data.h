@@ -13,12 +13,12 @@
 */
 void initUnitEnums();
 void initLocalSimVarsIDs();
-void updateLSimVars();
+void updateGetLSimVars();
+void updateSetLSimVars();
 void updateASimVars();
 
 ENUM* ENUM_UNITS;
 ID* ID_LSIMVAR;
-ENUM* keyEventID;
 
 FLOAT64 aSimVarsValue[aSimVarsCount];
 FLOAT64 lSimVarsValue[totalLVarsCount];
@@ -40,7 +40,14 @@ void initLocalSimVarsIDs() {
         ID_LSIMVAR[i] = register_named_variable(pcstring_lSimVars[i]);
     }
 }
-void updateLSimVars() {
+
+void updateGetLSimVars() {
+    for (int i = 0; i < totalLVarsCount; i++) {
+        lSimVarsValue[i] = get_named_variable_value(ID_LSIMVAR[i]);
+    }
+}
+
+void updateSetLSimVars() {
     //check for dirtyLVars
     for (int i = 0; i < totalLVarsCount; i++) {
         if (lastLVarsValue[i] != lSimVarsValue[i]) {
