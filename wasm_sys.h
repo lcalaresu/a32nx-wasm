@@ -41,6 +41,7 @@ public:
     }
     void update(double const currentAbsTime) {
         updateASimVars();
+        updateGetLSimVars();
 
         ELEC_SYSTEM.update(currentAbsTime);
         PACK_SYSTEM.update();
@@ -48,7 +49,7 @@ public:
         PRESS_SYSTEM.update();
         ENG_SYSTEM.update(currentAbsTime);
 
-        updateLSimVars();
+        updateSetLSimVars();
 
         lastAbsTime = currentAbsTime;
     }
