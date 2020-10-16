@@ -13,7 +13,7 @@
 */
 void initUnitEnums();
 void initLocalSimVarsIDs();
-void updateLocalSimVars();
+void updateLSimVars();
 void updateASimVars();
 
 ENUM* ENUM_UNITS;
@@ -40,7 +40,7 @@ void initLocalSimVarsIDs() {
         ID_LSIMVAR[i] = register_named_variable(pcstring_lSimVars[i]);
     }
 }
-void updateLocalSimVars() {
+void updateLSimVars() {
     //check for dirtyLVars
     for (int i = 0; i < totalLVarsCount; i++) {
         if (lastLVarsValue[i] != lSimVarsValue[i]) {
