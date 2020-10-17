@@ -89,7 +89,10 @@ private:
         if (lSimVarsValue[DELTA_PRESSURE] >= 8.6 || lSimVarsValue[DELTA_PRESSURE] < -0.5) {
             safety_outflow = lSimVarsValue[DELTA_PRESSURE] * 2.755;
             lSimVarsValue[SAFETY_1] = 1;
-            lSimVarsValue[SAFETY_2] = 2;
+            lSimVarsValue[SAFETY_2] = 1;
+        } else {
+            lSimVarsValue[SAFETY_1] = 0;
+            lSimVarsValue[SAFETY_2] = 0;
         }
         const int max_outFlow = lSimVarsValue[DELTA_PRESSURE] * max_packflow;
         out_flow = lSimVarsValue[OUTFLOW_VALVE] * ditching * max_outFlow + safety_outflow;
