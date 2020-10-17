@@ -21,7 +21,8 @@
 #include "data/data.h"
 
 #define REFRESH_RATE 500        //update refresh rate in milliseconds
-double lastAbsTime = 0;         //last time the update function was run
+uint64_t lastAbsTime = 0;         //last time the update function was run
+uint64_t deltaT = 0;
 
 #define DEBUG
 
