@@ -387,7 +387,7 @@ enum ElECConf {
     TR12_FAULT
 };
 
-const enum ELECCircuit {
+enum ELECCircuit {
     //AC_BUS1
     CIRCUIT_1XP,    //0
     CIRCUIT_1IWXP,  //1

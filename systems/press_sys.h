@@ -131,8 +131,8 @@ private:
             return (-0.4 - lSimVarsValue[DELTA_PRESSURE]);
         }
         if ((aSimVarsValue[ENG1_THROTTLE] >= 95 || aSimVarsValue[ENG2_THROTTLE] >= 95) && aSimVarsValue[ON_GROUND]) {
-            return (toga_ldg_delta - lSimVarsValue[DELTA_PRESSURE]);
             landing_timer = 0;
+            return (toga_ldg_delta - lSimVarsValue[DELTA_PRESSURE]);
         }
         if (aSimVarsValue[ON_GROUND] && !landed) {
             landed = true;
@@ -141,9 +141,10 @@ private:
             landing_timer += deltaT * 0.001;
             return toga_ldg_delta - lSimVarsValue[DELTA_PRESSURE];
         }
-        if (aSimVarsValue[CURRENT_VSPEED] > 50 || aSimVarsValue[CURRENT_VSPEED]) {
+        if (aSimVarsValue[CURRENT_VSPEED] > 50 || aSimVarsValue[CURRENT_VSPEED] < 50) {
             return cabin_vs_target - lSimVarsValue[CABIN_ALTITUDE_RATE];
         }
+        return lSimVarsValue[CABIN_ALTITUDE_GOAL] - lSimVarsValue[CABIN_ALTITUDE];
     }
 
 public:
