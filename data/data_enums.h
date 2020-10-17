@@ -48,6 +48,8 @@ enum aSimVars {
     ALTITUDE_ABV_GND,       //A:PLANE ALT ABOVE GROUND, Feet
     ENG1_THROTTLE,          //A:GENERAL ENG THROTTLE LEVER POSITION: 1, Percent //CLIMB = 89, FLEX = 95, TOGA = 100
     ENG2_THROTTLE,          //A:GENERAL ENG THROTTLE LEVER POSITION: 2, Percent //CLIMB = 89, FLEX = 95, TOGA = 100
+    CURRENT_VSPEED,         //A:VERTICAL SPEED, Feet per second
+    GEAR_POS,               //A:GEAR POSITION, enum             unknown = 0, up = 1, dn = 2
 
     aSimVarsCount
 };
