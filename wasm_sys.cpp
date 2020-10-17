@@ -7,15 +7,17 @@ ServiceDef service;
 
 bool initialized = false;
 bool kill = false;
-struct timeval timestruct;
+//struct timeval timestruct;
+
 
 // Callbacks
 extern "C" {
     MSFS_CALLBACK bool wasm_sys_gauge_callback(FsContext ctx, int service_id, void* pData)
     {
         debug_print("MSFS_CALLBACK initiated...");
-        gettimeofday(&timestruct, 0);
-        const double currentAbsTime = timestruct.tv_usec * 1000;
+        //gettimeofday(&timestruct, 0);
+        uint64_t currentAbsTime = timeSinceEpoch();
+        //const uint64_t currentAbsTime = (timestruct.tv_sec * (uint64_t)1000000 + timestruct.tv_usec) * 0.001;
         if (!(initialized)) {
             if (service.handleSimConnect(service_id)) {
                 debug_print("Service handled simconnect open with status: SUCCESS");
@@ -26,11 +28,12 @@ extern "C" {
                 debug_print("WASM_SYS initialized");
             }
         } else if (!kill){
-            const double lastRefresh = currentAbsTime - lastAbsTime;
+            uint64_t lastRefresh = currentAbsTime - lastAbsTime;
             #ifdef DEBUG
-            printf("WASM_SYS waiting till %fms to update\n", REFRESH_RATE - lastRefresh);
+            printf("WASM_SYS waiting till %lldms to update\n", REFRESH_RATE - lastRefresh);
             #endif
             if (lastRefresh >= REFRESH_RATE) {
+                deltaT = currentAbsTime - lastAbsTime;
                 debug_print("WASM_SYS now updating...");
                 //service.handleSimDispatch();
                 WASM_SYS.update(currentAbsTime);
@@ -42,8 +45,8 @@ extern "C" {
             debug_print("Service handle received KILL trigger...");
             WASM_SYS.destroy();
             service.handleSimDisconnect();
+            debug_print("Service handled simconnect with status: FAILED/EXIT");
         }
-        debug_print("Service handled simconnect with status: FAILED/EXIT");
         return !kill;
     }
 }

@@ -48,7 +48,9 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "PLANE ALTITUDE, Feet",
     "PLANE ALT ABOVE GROUND, Feet",
     "GENERAL ENG THROTTLE LEVER POSITION: 1, Percent",
-    "GENERAL ENG THROTTLE LEVER POSITION: 2, Percent"
+    "GENERAL ENG THROTTLE LEVER POSITION: 2, Percent",
+    "VERTICAL SPEED, Feet per second",
+    "A:GEAR POSITION, enum"
 };
 
 const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
