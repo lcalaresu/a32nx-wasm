@@ -85,8 +85,14 @@ private:
     void calculateOutFlow() {
         const int ditching  = !lSimVarsValue[DITCH];
         const int max_packflow = 2.755;
+        int safety_outflow = 0;
+        if (lSimVarsValue[DELTA_PRESSURE] >= 8.6 || lSimVarsValue[DELTA_PRESSURE] < -0.5) {
+            safety_outflow = lSimVarsValue[DELTA_PRESSURE] * 2.755;
+            lSimVarsValue[SAFETY_1] = 1;
+            lSimVarsValue[SAFETY_2] = 2;
+        }
         const int max_outFlow = lSimVarsValue[DELTA_PRESSURE] * max_packflow;
-        out_flow = lSimVarsValue[OUTFLOW_VALVE] * ditching * max_outFlow;
+        out_flow = lSimVarsValue[OUTFLOW_VALVE] * ditching * max_outFlow + safety_outflow;
     }
 
     void pressureToCabVS() {
