@@ -14,11 +14,17 @@
 * UTIL FUNCTIONS *
 * ============== *
 */
+uint64_t timeSinceEpoch();
 double convert_rankineToCelcius(const double rankine);
 double convert_inHgToPSI(const double inHg);
 double convert_PaToPSI(const double Pa);
 double convert_feetToMeters(const double feet);
 double convert_metersToFeet(const double meters);
+
+uint64_t timeSinceEpoch() {
+    using namespace std::chrono;
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
 
 double convert_rankineToCelcius(const double rankine) {
     return ((rankine - 491.67) * (0.5556));
