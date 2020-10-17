@@ -50,7 +50,6 @@ enum aSimVars {
     ENG2_THROTTLE,          //A:GENERAL ENG THROTTLE LEVER POSITION: 2, Percent //CLIMB = 89, FLEX = 95, TOGA = 100
     CURRENT_VSPEED,         //A:VERTICAL SPEED, Feet per second
     GEAR_POS,               //A:GEAR POSITION, enum             unknown = 0, up = 1, dn = 2
-    MAN_LDG_ELEV_PCT,        //I:XMLVAR_KNOB_OVHD_CABINPRESS_LDGELEV
     
     aSimVarsCount
 };
@@ -336,10 +335,11 @@ enum lSimVars {
     * ======== *
     */
     MAN_LAND_ELEV,          //L:A32NX_LANDING_ELEVATION, feet
+    MAN_LDG_ELEV_PCT,       //L:XMLVAR_KNOB_OVHD_CABINPRESS_LDGELEV, Percent
     MAN_CAB_PRESS,          //L:A32NX_CAB_PRESS_MODE_MAN, bool
     MAN_VS_CTRL,            //L:A32NX_MAN_VS_CONTROL            up = 0, off = 1, dn = 2
     DITCH,                  //L:A32NX_DITCHING, Bool    
-
+        
     totalLVarsCount
 };
 

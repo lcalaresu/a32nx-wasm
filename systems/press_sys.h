@@ -103,7 +103,7 @@ private:
     void incCabinVS() {
         cabin_vs_target += inc_dec_rate * deltaT * 0.001;
     }
-    void decCabinVS(const double currentAbsTime){
+    void decCabinVS(){
         cabin_vs_target -= inc_dec_rate * deltaT * 0.001;
     }
     void setLDGELEV(double alt) {
@@ -182,17 +182,21 @@ public:
                 default:
                     break;
             }
+            autoSetCabinVS();
         }
         
         setMaxVS();
         
-        if (aSimVarsValue[MAN_LDG_ELEV_PCT] == 0) {
+        if (lSimVarsValue[MAN_LDG_ELEV_PCT] == 0) {
             autoSetCabinAltTarget();
         } else {
             setCabinAlt(lSimVarsValue[MAN_LAND_ELEV]);
         }
-        
-        autoSetCabinVS();
+        if (lSimVarsValue[MAN_VS_CTRL] == 0) {
+            incCabinVS();
+        } else if (lSimVarsValue[MAN_VS_CTRL] == 2) {
+            decCabinVS();
+        }
         
         calculatedeltaP();
         
