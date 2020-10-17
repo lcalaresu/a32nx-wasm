@@ -50,7 +50,8 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "GENERAL ENG THROTTLE LEVER POSITION: 1, Percent",
     "GENERAL ENG THROTTLE LEVER POSITION: 2, Percent",
     "VERTICAL SPEED, Feet per second",
-    "A:GEAR POSITION, enum"
+    "GEAR POSITION, enum",
+    "I:XMLVAR_KNOB_OVHD_CABINPRESS_LDGELEV, Percent"
 };
 
 const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {

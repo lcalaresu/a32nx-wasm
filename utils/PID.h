@@ -27,14 +27,14 @@ private:
         return false;
     }
     void updateError(const double currentError, const double currentTime) {
-        const double deltaT = currentTime - lastUpdateTime;
+        const double _deltaT = currentTime - lastUpdateTime;
         Ep = currentError;
         if (crossZero()) {
             Ei = 0;                 //predicted(integral) error is reset to 0 when Ep(currentError) crosses zero.
         }
-        Ei += (Ep * deltaT);
-        if (deltaT != 0) {
-            Ed = (Ep - lastEp) / deltaT;
+        Ei += (Ep * _deltaT);
+        if (_deltaT != 0) {
+            Ed = (Ep - lastEp) / _deltaT;
         }
         lastEp = Ep;
         lastUpdateTime = currentTime;
