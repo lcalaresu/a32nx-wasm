@@ -50,7 +50,7 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "GENERAL ENG THROTTLE LEVER POSITION: 1, Percent",
     "GENERAL ENG THROTTLE LEVER POSITION: 2, Percent",
     "VERTICAL SPEED, Feet per second",
-    "A:GEAR POSITION, enum"
+    "GEAR POSITION, enum"
 };
 
 const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
@@ -189,6 +189,7 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
         "CPC_SYS1",
         "CPC_SYS2",
         "A32NX_LANDING_ELEVATION",
+        "XMLVAR_KNOB_OVHD_CABINPRESS_LDGELEV"
         "A32NX_CAB_PRESS_MODE_MAN",
         "A32NX_MAN_VS_CONTROL",
         "A32NX_DITCHING"
