@@ -169,6 +169,12 @@ private:
         return calculatedeltaP(lSimVarsValue[CABIN_ALTITUDE_GOAL]) - lSimVarsValue[DELTA_PRESSURE];
     }
 
+    void closeOutflow() {
+        if (lSimVarsValue[OUTFLOW_VALVE] > 0) {
+            lSimVarsValue[OUTFLOW_VALVE] -= ofv_dec_rate;
+        }
+    }
+
 public:
     void init() {
         for (int i = OUTFLOW_VALVE; i <= CPC_SYS2; i++) {
@@ -232,7 +238,9 @@ public:
                 lSimVarsValue[OUTFLOW_VALVE] = outflow_control;
             }
         }
-
+        if (lSimVarsValue[CABIN_ALTITUDE] >= 15000) {
+            closeOutflow();
+        }
         calculatePackFlow();
         calculateOutFlow();
         cabin_air_mass += (pack_flow - out_flow) * deltaT * 0.001;
