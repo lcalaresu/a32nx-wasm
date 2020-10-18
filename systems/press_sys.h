@@ -15,18 +15,17 @@ private:
     const int outflow_max_alt = 15000;
     const int ldg_max_cabin_vs = 750;
     const int norm_max_cabin_vs = 2000;
-    const int inc_dec_rate = 50;                    //(+-50fpm/s)
-    const int ofv_inc_dec_rate = 2;                 //%opening ^results in the above vs rate
-    const int atm_air_moles_per_mass = 34.518;       //moles/kg
+    const int ofv_inc_dec_rate = 20;                //20%/s
+    const double atm_air_moles_per_mass = 34.518;   //moles/kg
     
-    const int toga_ldg_delta = 0.1;         //+0.1 deltaP
+    const double toga_ldg_delta = 0.1;         //+0.1 deltaP
     double cabin_vs_target;
     double pack_flow;
     double out_flow;
-    int max_cabin_vs;
-    int active_CPC;                 //0 = SYS1, 1 = SYS2
+    double max_cabin_vs;
+    int active_CPC;                         //0 = SYS1, 1 = SYS2
 
-    const int fuselage_volume = 192;    //CKPT = 9, CABIN = 139, CARGO = 15.5, 28 cubic meters
+    const double fuselage_volume = 192;     //CKPT = 9, CABIN = 139, CARGO = 15.5, 28 cubic meters
     double cabin_air_mass;
     double cabin_pressure;
     double last_cabin_pressure;
@@ -43,8 +42,8 @@ private:
                         //CKPT  0.069+0.065     kg/s
                         //CABIN 0.582+0.548
                         //CARGO 0.088+0.132
-                        const int fresh_flow = 0.651;
-                        const int recirc_flow = 0.833;
+                        const double fresh_flow = 0.651;
+                        const double recirc_flow = 0.833;
                         pack_flow = fresh_flow + recirc_flow;
                         break;
                     }
@@ -52,8 +51,8 @@ private:
                         //CKPT  0.086+0.062     kg/s
                         //CABIN 0.722+0.522
                         //CARGO 0.088+0.132
-                        const int fresh_flow = 0.808;
-                        const int recirc_flow = 0.804;
+                        const double fresh_flow = 0.808;
+                        const double recirc_flow = 0.804;
                         pack_flow = fresh_flow + recirc_flow;
                         break;
                     }
@@ -61,8 +60,8 @@ private:
                         //CKPT  0.103+0.059     kg/s
                         //CABIN 0.872+1.501
                         //CARGO 0.088+0.132
-                        const int fresh_flow = 0.975;
-                        const int recirc_flow = 1.78;
+                        const double fresh_flow = 0.975;
+                        const double recirc_flow = 1.78;
                         pack_flow = fresh_flow + recirc_flow;
                         break;
                     }
@@ -74,8 +73,8 @@ private:
             //CKPT  0.050+0.067
             //CABIN 0.437+0.577
             //CARGO 0.088+0.132
-            const int fresh_flow = 0.487;
-            const int recirc_flow = 0.864;
+            const double fresh_flow = 0.487;
+            const double recirc_flow = 0.864;
             pack_flow = fresh_flow + recirc_flow;
         } else {
             pack_flow = 0;
@@ -83,9 +82,9 @@ private:
     }
 
     void calculateOutFlow() {
-        const int ditching  = !lSimVarsValue[DITCH];
-        const int max_packflow = 2.755;
-        int safety_outflow = 0;
+        const double ditching  = !lSimVarsValue[DITCH];
+        const double max_packflow = 2.755;
+        double safety_outflow = 0;
         if (lSimVarsValue[DELTA_PRESSURE] >= 8.6 || lSimVarsValue[DELTA_PRESSURE] < -0.5) {
             safety_outflow = lSimVarsValue[DELTA_PRESSURE] * 2.755;
             lSimVarsValue[SAFETY_1] = 1;
@@ -94,30 +93,28 @@ private:
             lSimVarsValue[SAFETY_1] = 0;
             lSimVarsValue[SAFETY_2] = 0;
         }
-        const int max_outFlow = lSimVarsValue[DELTA_PRESSURE] * max_packflow;
-        out_flow = lSimVarsValue[OUTFLOW_VALVE] * ditching * max_outFlow + safety_outflow;
-    }
-
-    void pressureToCabVS() {
-        lSimVarsValue[CABIN_ALTITUDE_RATE] = (altitude_AtPressure(cabin_pressure) - altitude_AtPressure(last_cabin_pressure)) / (60 * deltaT * 0.001);
-    }
-
-    void calculatedeltaP() {
-        lSimVarsValue[DELTA_PRESSURE] = pressure_AtAltitude(lSimVarsValue[CABIN_ALTITUDE]) - aSimVarsValue[AMB_PRESS];
+        const double max_outFlow = lSimVarsValue[DELTA_PRESSURE] * max_packflow;
+        out_flow = (lSimVarsValue[OUTFLOW_VALVE]/100) * ditching * max_outFlow + safety_outflow;
     }
 
     void setCabinAlt(double alt) {
         lSimVarsValue[CABIN_ALTITUDE_GOAL] = alt;
     }
+
     void incCabinVS() {
-        cabin_vs_target += inc_dec_rate * deltaT * 0.001;
+        //to increase cabin VS the outflow valve close
+        lSimVarsValue[OUTFLOW_VALVE] += ofv_inc_dec_rate * deltaT * 0.001;
     }
+
     void decCabinVS(){
-        cabin_vs_target -= inc_dec_rate * deltaT * 0.001;
+        //to decrease cabin VS the outflow valve opens
+        lSimVarsValue[OUTFLOW_VALVE] -= ofv_inc_dec_rate * deltaT * 0.001;
     }
+
     void setLDGELEV(double alt) {
     //need to get feild elev from cdu f-pln
     }
+
     void setMaxVS() {
         if ((aSimVarsValue[GEAR_POS] == 2 || aSimVarsValue[ALTITUDE_ABV_GND] <= 5000) && aSimVarsValue[CURRENT_VSPEED] < 0) {
             max_cabin_vs = ldg_max_cabin_vs;
@@ -128,9 +125,24 @@ private:
     void autoSetCabinAltTarget() {
         lSimVarsValue[CABIN_ALTITUDE_GOAL] = ((aSimVarsValue[ALTITUDE] + aSimVarsValue[CURRENT_VSPEED]) * max_normal_cabin_alt/max_operating_alt);
     }
+
     void autoSetCabinVS() {
         cabin_vs_target = max_cabin_vs * (lSimVarsValue[CABIN_ALTITUDE_GOAL] - lSimVarsValue[CABIN_ALTITUDE]) / max_normal_cabin_alt;
     }
+
+    void pressureToCabVS() {
+        lSimVarsValue[CABIN_ALTITUDE_RATE] = (altitude_AtPressure(cabin_pressure) - altitude_AtPressure(last_cabin_pressure)) / (60 * deltaT * 0.001);
+    }
+
+    double cabVSToTargetDeltaP(const double cabVS) {
+        //gives rate of presssure change/s required from cabvs demand 
+        return pressure_AtAltitude((lSimVarsValue[CABIN_ALTITUDE] + cabVS)) - aSimVarsValue[AMB_PRESS];
+    }
+
+    double calculatedeltaP(const double cab_altitude) {
+        return pressure_AtAltitude(cab_altitude) - aSimVarsValue[AMB_PRESS];
+    }
+
     double outflow_control_Error() {
         //uses different parameters based on current state
         if (lSimVarsValue[DELTA_PRESSURE] >= 8) {
@@ -151,9 +163,9 @@ private:
             return toga_ldg_delta - lSimVarsValue[DELTA_PRESSURE];
         }
         if (aSimVarsValue[CURRENT_VSPEED] > 50 || aSimVarsValue[CURRENT_VSPEED] < 50) {
-            return cabin_vs_target - lSimVarsValue[CABIN_ALTITUDE_RATE];
+            return cabVSToTargetDeltaP(cabin_vs_target) - lSimVarsValue[CABIN_ALTITUDE_RATE];
         }
-        return lSimVarsValue[CABIN_ALTITUDE_GOAL] - lSimVarsValue[CABIN_ALTITUDE];
+        return calculatedeltaP(lSimVarsValue[CABIN_ALTITUDE_GOAL]) - lSimVarsValue[DELTA_PRESSURE];
     }
 
 public:
@@ -174,6 +186,9 @@ public:
         man_auto_timer = 0;
     }
     void update(const double currentAbsTime) {
+        
+        setMaxVS();
+        //switching of the CPC_SYS
         if (lSimVarsValue[MAN_CAB_PRESS] && man_auto_timer <= 10) {
             man_auto_timer += deltaT*0.001;
             lSimVarsValue[CPC_SYS1] = 0;
@@ -188,26 +203,26 @@ public:
                     break;
                 case 1:
                     lSimVarsValue[CPC_SYS2] = 1;
+                    break;
                 default:
                     break;
             }
             autoSetCabinVS();
         }
         
-        setMaxVS();
-        
         if (lSimVarsValue[MAN_LDG_ELEV_PCT] == 0) {
             autoSetCabinAltTarget();
         } else {
             setCabinAlt(lSimVarsValue[MAN_LAND_ELEV]);
         }
+
         if (lSimVarsValue[MAN_VS_CTRL] == 0) {
             incCabinVS();
         } else if (lSimVarsValue[MAN_VS_CTRL] == 2) {
             decCabinVS();
         }
         
-        calculatedeltaP();
+        lSimVarsValue[DELTA_PRESSURE] = calculatedeltaP(lSimVarsValue[CABIN_ALTITUDE]);
         
         if (lSimVarsValue[CPC_SYS1] || lSimVarsValue[CPC_SYS2]) {
             const double error = outflow_control_Error();
@@ -216,6 +231,7 @@ public:
                 lSimVarsValue[OUTFLOW_VALVE] = outflow_control;
             }
         }
+
         calculatePackFlow();
         calculateOutFlow();
         cabin_air_mass += (pack_flow - out_flow) * deltaT * 0.001;
