@@ -2,7 +2,7 @@
 Core systems implementation for flybywire_A32NX as wasm module.
 
 ## Documentation
-- Simconnect documentation and gauge documentation available with the SDK is self sufficient.
+- Simconnect documentation and gauge documentation available with the MSFS SDK is self sufficient.
 
 ## Steps to add new system
 - Create all your system implementation(as classes) in its own header file with a master class so that you don't flood `wasm_sys.cpp`
@@ -27,5 +27,5 @@ Core systems implementation for flybywire_A32NX as wasm module.
   - EventIDs for L: Vars needs to be set as follows `THIRD_PARTY_EVENT_ID_MIN /*(hex value for this is 0x00011000)*/ + <lSimVars_enum>`, lSimVars enum can be found under `data/data_enums.h` 
   - `SimConnect_MapClientEventToSimEvent` to register event.
   - `SimConnect_TransmitClientEvent` to transmit event with value of type `DWORD`(double) specified for dwData parameter.
-  - refer to simconnect SDK for more details on these functions.
+  - refer to MSFS simconnect SDK for more details on these functions.
 
