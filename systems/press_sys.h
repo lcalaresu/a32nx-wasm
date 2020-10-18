@@ -15,7 +15,8 @@ private:
     const int outflow_max_alt = 15000;
     const int ldg_max_cabin_vs = 750;
     const int norm_max_cabin_vs = 2000;
-    const int ofv_inc_dec_rate = 20;                //20%/s
+    const double ofv_inc_rate = 3.33;                //3.33%/s
+    const double ofv_dec_rate = -3.33;
     const double atm_air_moles_per_mass = 34.518;   //moles/kg
     
     const double toga_ldg_delta = 0.1;         //+0.1 deltaP
@@ -103,12 +104,12 @@ private:
 
     void incCabinVS() {
         //to increase cabin VS the outflow valve close
-        lSimVarsValue[OUTFLOW_VALVE] += ofv_inc_dec_rate * deltaT * 0.001;
+        lSimVarsValue[OUTFLOW_VALVE] += ofv_inc_rate * deltaT * 0.001;
     }
 
     void decCabinVS(){
         //to decrease cabin VS the outflow valve opens
-        lSimVarsValue[OUTFLOW_VALVE] -= ofv_inc_dec_rate * deltaT * 0.001;
+        lSimVarsValue[OUTFLOW_VALVE] -= ofv_dec_rate * deltaT * 0.001;
     }
 
     void setLDGELEV(double alt) {
@@ -134,7 +135,7 @@ private:
         lSimVarsValue[CABIN_ALTITUDE_RATE] = (altitude_AtPressure(cabin_pressure) - altitude_AtPressure(last_cabin_pressure)) / (60 * deltaT * 0.001);
     }
 
-    double cabVSToTargetDeltaP(const double cabVS) {
+    double cabVSToDeltaP(const double cabVS) {
         //gives rate of presssure change/s required from cabvs demand 
         return pressure_AtAltitude((lSimVarsValue[CABIN_ALTITUDE] + cabVS)) - aSimVarsValue[AMB_PRESS];
     }
@@ -163,7 +164,7 @@ private:
             return toga_ldg_delta - lSimVarsValue[DELTA_PRESSURE];
         }
         if (aSimVarsValue[CURRENT_VSPEED] > 50 || aSimVarsValue[CURRENT_VSPEED] < 50) {
-            return cabVSToTargetDeltaP(cabin_vs_target) - lSimVarsValue[CABIN_ALTITUDE_RATE];
+            return cabVSToDeltaP(cabin_vs_target) - cabVSToDeltaP(lSimVarsValue[CABIN_ALTITUDE_RATE]);
         }
         return calculatedeltaP(lSimVarsValue[CABIN_ALTITUDE_GOAL]) - lSimVarsValue[DELTA_PRESSURE];
     }
@@ -182,7 +183,7 @@ public:
         lSimVarsValue[CABIN_ALTITUDE_GOAL] = aSimVarsValue[ALTITUDE];
         cabin_pressure = pressure_AtAltitude(lSimVarsValue[CABIN_ALTITUDE]);
         cabin_air_mass = atm_air_moles_per_mass * idealGasMoles(cabin_pressure, fuselage_volume, lSimVarsValue[FWD_TEMP]+273.15);
-        outflow_controller.init(0.05, 0.001, 0.0001, lastAbsTime, 15, -15);
+        outflow_controller.init(0.05, 0.001, 0.01, lastAbsTime, ofv_inc_rate, ofv_dec_rate);
         man_auto_timer = 0;
     }
     void update(const double currentAbsTime) {
