@@ -62,8 +62,8 @@ double pressure_AtAltitude(const double target_alt) {
      * constant = 0.0341626203            -0.0104129422
      * h = target_alt
     */ 
-    const int barometeric_constant = -0.0104129422;
-    const int ref_pressure = 14.696;
+    const double barometeric_constant = -0.0104129422;
+    const double ref_pressure = 14.696;
     return (ref_pressure * exp(target_alt * barometeric_constant));
 }
 
@@ -78,18 +78,18 @@ double altitude_AtPressure(const double pressure) {
      * constant = 0.0341626203            -0.0104129422
      * h = target_alt
     */
-    const int barometric_constant_inv = -96.0343369619;
-    const int ref_pressure = 14.696;
+    const double barometric_constant_inv = -96.0343369619;
+    const double ref_pressure = 14.696;
     return   (log(pressure / ref_pressure) * barometric_constant_inv);
 }
 
 double idealGasPressure(const double volume, const double temp, const double moles) {
-    const int ideal_gas_constant = 8.314462618;
+    const double ideal_gas_constant = 8.314462618;
     return (moles*temp*ideal_gas_constant/volume);
 }
 
 double idealGasMoles(const double pressure, const double volume, const double temp) {
-    const int ideal_gas_constant = 8.314462618;
+    const double ideal_gas_constant = 8.314462618;
     return (pressure * volume / (temp * ideal_gas_constant));
 }
 
