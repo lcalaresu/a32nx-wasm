@@ -200,8 +200,7 @@ private:
     void updateGen1(const double currentAbsTime, const double ambient) {
         if (aSimVarsValue[ENG1_N2] >= 59.5 && timeElapsedGen1 < stableTime) {
             timeElapsedGen1 += (currentAbsTime - lastAbsTime) * 0.001;
-        }
-        else if (aSimVarsValue[ENG1_N2] <= 56 && timeElapsedGen1 > 0) {
+        } else if (aSimVarsValue[ENG1_N2] <= 56 && timeElapsedGen1 > 0) {
             timeElapsedGen1 -= (currentAbsTime - lastAbsTime) * 0.001;
         }
 
@@ -210,8 +209,7 @@ private:
             lSimVarsValue[GEN1_VOLTAGE] = 115;
             lSimVarsValue[GEN1_AMPERAGE] = 782.60;
             lSimVarsValue[GEN1_FREQ] = 400;
-        }
-        else {
+        } else {
             lSimVarsValue[GEN1_ONLINE] = 0;
             lSimVarsValue[GEN1_VOLTAGE] = 0;
             lSimVarsValue[GEN1_AMPERAGE] = 0;
@@ -223,8 +221,7 @@ private:
     void updateGen2(const double currentAbsTime, const double ambient) {
         if (aSimVarsValue[ENG2_N2] >= 59.5 && timeElapsedGen2 < stableTime) {
             timeElapsedGen2 += (currentAbsTime - lastAbsTime) * 0.001;
-        }
-        else if (aSimVarsValue[ENG2_N2] <= 56.3 && timeElapsedGen1 > 0) {
+        } else if (aSimVarsValue[ENG2_N2] <= 56.3 && timeElapsedGen1 > 0) {
             timeElapsedGen2 -= (currentAbsTime - lastAbsTime) * 0.001;
         }
         if (timeElapsedGen1 >= stableTime && aSimVarsValue[GEN2_SW] && !(lSimVarsValue[IDG2_DISC_SW]) && !(lSimVarsValue[IDG2_FAULT])) {
@@ -232,8 +229,7 @@ private:
             lSimVarsValue[GEN2_VOLTAGE] = 115;
             lSimVarsValue[GEN2_AMPERAGE] = 782.60;
             lSimVarsValue[GEN2_FREQ] = 400;
-        }
-        else {
+        } else {
             lSimVarsValue[GEN2_ONLINE] = 0;
             lSimVarsValue[GEN2_VOLTAGE] = 0;
             lSimVarsValue[GEN2_AMPERAGE] = 0;
@@ -249,8 +245,7 @@ private:
             if (maxIDG > 115) {
                 maxIDG = 114 + rand()%2;
             }
-        }
-        else {
+        } else {
             maxIDG -= ambient;
             if (maxIDG < 70) {
                 maxIDG = 70 - rand()%1;
@@ -498,8 +493,7 @@ private:
             lSimVarsValue[TR1_ONLINE] = 1;
             lSimVarsValue[TR1_VOLTAGE] = round(28.4 + rand() % 5 / 10);
             lSimVarsValue[TR1_AMPERAGE] = round(33 + rand() % 8);
-        }
-        else {
+        } else {
             lSimVarsValue[TR1_ONLINE] = 0;
             lSimVarsValue[TR1_VOLTAGE] = 0;
             lSimVarsValue[TR1_AMPERAGE] = 0;
@@ -511,12 +505,10 @@ private:
             lSimVarsValue[TR2_VOLTAGE] = round(28.4 + rand() % 5 / 10);
             if (lSimVarsValue[TR1_ONLINE]) {
                 lSimVarsValue[TR2_AMPERAGE] = round(25 + rand() % 8);
-            }
-            else {
+            } else {
                 lSimVarsValue[TR2_AMPERAGE] = round(33 + rand() % 8);
             }
-        }
-        else {
+        } else {
             lSimVarsValue[TR2_ONLINE] = 0;
             lSimVarsValue[TR2_VOLTAGE] = 0;
             lSimVarsValue[TR2_AMPERAGE] = 0;
@@ -527,8 +519,7 @@ private:
             lSimVarsValue[TRESS_ONLINE] = 1;
             lSimVarsValue[TRESS_VOLTAGE] = round(28.4 + rand() % 5 / 10);
             lSimVarsValue[TRESS_AMPERAGE] = 10 + rand() % 5;
-        }
-        else {
+        } else {
             lSimVarsValue[TRESS_ONLINE] = 0;
             lSimVarsValue[TRESS_VOLTAGE] = 0;
             lSimVarsValue[TRESS_AMPERAGE] = 0;
@@ -540,8 +531,7 @@ private:
             lSimVarsValue[STATICINV_VOLTAGE] = 115;
             lSimVarsValue[STATICINV_AMPERAGE] = 70 + rand() % 5;
             lSimVarsValue[STATICINV_FREQ] = 400;
-        }
-        else {
+        } else {
             lSimVarsValue[STATICINV_ONLINE] = 0;
         }
         if(!(lSimVarsValue[STATICINV_ONLINE]) || lSimVarsValue[AC_ESS] != STATINV) {
