@@ -50,7 +50,10 @@ enum aSimVars {
     ENG2_THROTTLE,          //A:GENERAL ENG THROTTLE LEVER POSITION: 2, Percent //CLIMB = 89, FLEX = 95, TOGA = 100
     CURRENT_VSPEED,         //A:VERTICAL SPEED, Feet per second
     GEAR_POS,               //A:GEAR POSITION, enum             unknown = 0, up = 1, dn = 2
-    
+    CABIN_DOOR,             //INTERACTIVE POINT OPEN:0, percent
+    CATER_DOOR,             //INTERACTIVE POINT OPEN:3, percent
+    FWD_CARGO,              //INTERACTIVE POINT OPEN:5, percent
+
     aSimVarsCount
 };
 
