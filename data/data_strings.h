@@ -53,7 +53,8 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "(A:GEAR POSITION, enum)",
     "(A:INTERACTIVE POINT OPEN:0, percent)",
     "(A:INTERACTIVE POINT OPEN:3, percent)",
-    "(A:INTERACTIVE POINT OPEN:5, percent)"
+    "(A:INTERACTIVE POINT OPEN:5, percent)",
+    "(C:fs9gps:FlightPlanDestinationAltitude, Feet)"
 };
 
 const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {

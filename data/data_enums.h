@@ -53,7 +53,8 @@ enum aSimVars {
     CABIN_DOOR,             //INTERACTIVE POINT OPEN:0, percent
     CATER_DOOR,             //INTERACTIVE POINT OPEN:3, percent
     FWD_CARGO,              //INTERACTIVE POINT OPEN:5, percent
-
+    DEST_ALT,               //C:fs9gps:FlightPlanDestinationAltitude, Feet
+    
     aSimVarsCount
 };
 
