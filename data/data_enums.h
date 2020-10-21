@@ -29,6 +29,7 @@ enum aSimVars {
     BATT1_SW,               //A:ELECTRICAL MASTER BATTERY:#ID#, Bool
     BATT2_SW,               //A:ELECTRICAL MASTER BATTERY:#ID#, Bool
     AMB_TEMP,               //"AMBIENT TEMPERATURE", "celsius"
+    TAT_TEMP,               //TOTAL AIR TEMPERATURE, Celcius
     AMB_PRESS,              //AMBIENT PRESSURE, inHg
     TAS,                    //"AIRSPEED TRUE","Knots"
     IAS,                    //"AIRSPEED INDICATED","Knots"
@@ -132,7 +133,7 @@ enum lSimVars {
 
     /*
     * ===== *
-    * BUSES *
+    * BUSES *               //REFER TO ELEC SOURCE ENUMS BELOW
     * ===== *               //PRIORITY                  0               1               2               3               4                   5
     */
     AC_BUS1,                //"L:AC_BUS1","Enum"        0 = No power,   1 = gen1,       3 = ext,        4 = apu,        2 = gen 2
@@ -202,8 +203,8 @@ enum lSimVars {
     */
     APU_START,              //L : A32NX_APU_START_ACTIVATED , "Bool"
     IDG1_FAULT,             //L : A32NX_ELEC_IDG1_FAULT
-    IDG1_DISC_SW,           //L : A32NX_ELEC_IDG1_TOGGLE
     IDG2_FAULT,             //L : A32NX_ELEC_IDG2_FAULT
+    IDG1_DISC_SW,           //L : A32NX_ELEC_IDG1_TOGGLE
     IDG2_DISC_SW,           //L : A32NX_ELEC_IDG2_TOGGLE
     BUSTIE_AUTO,            //L : A32NX_ELEC_BUSTIE_TOGGLE
     ACESS_FEED_FAULT,       //L : A32NX_ELEC_ACESSFEED_FAULT
@@ -252,7 +253,7 @@ enum lSimVars {
     /*
     * ========== *
     * BLEED DUCT *
-    * ========== *
+    * ========== *          //REFER TO THE BLEED ENUM VALUES BELOW
     */                      //PIORITY       0       1       2       3       4       5
     DUCT1,                  //L:DUCT1   NOBLEED     GPU     APU     ENG1    DUCT2   RAT
     DUCT2,                  //L:DUCT2   NOBLEED     ENG2    DUCT1
@@ -302,11 +303,17 @@ enum lSimVars {
     PACK1_VALVE,            //L:A32NX_AIRCOND_PACK1_TOGGLE, Bool
     PACK2_VALVE,            //L:A32NX_AIRCOND_PACK2_TOGGLE, Bool
     PACK_FLOW_CONTROLLER,   //L:A32NX_KNOB_OVHD_AIRCOND_PACKFLOW_POSITION       LO = 0, NORM = 1, HI = 2
-
+    CAB_FANS,               //L:A32NX_VENTILATION_CABFANS_TOGGLE, Bool
+    VENT_BLOWER,            //L:A32NX_VENTILATION_BLOWER_TOGGLE, Bool
+    VENT_EXTRACT,           //L:A32NX_VENTILATION_EXTRACT_TOGGLE, Bool
 /*============================================================================*/
 /*                                   ENGINES                                  */
 /*============================================================================*/
-
+    FIRE_TEST_ENG1,         //L:FIRE_TEST_ENG1, Bool
+    FIRE_TEST_ENG2,         //L:FIRE_TEST_ENG2, Bool
+    FIRE_TEST_APU,         //L:FIRE_TEST_APU, Bool
+    ENG1_FIRE_PUSH,         //L:FIRE_BUTTON_ENG1, Bool
+    ENG2_FIRE_PUSH,         //L:FIRE_BUTTON_ENG2, Bool
     APU_FLAP_OPEN,          //"L:APU_FLAP_OPEN", "Percent"
     APU_N1,                 //"L:APU_N1","Percent"
     APU_EGT,                //"L:APU_EGT","celcius"
@@ -323,6 +330,8 @@ enum lSimVars {
     OUTFLOW_VALVE,          //"L:OUTFLOW_VALVE_PCT", "Percent"
     SAFETY_1,               //"L:SAFETY_VALVE_1", "Bool"
     SAFETY_2,               //"L:SAFETY_VALVE_2", "Bool"
+    VENT_INLET,             //"L:VENT_INLET_VALVE", Percent
+    VENT_OUTLET,            //"L:VENT_OUTLET_VALVE", Percent
 
     CABIN_ALTITUDE,         //"L:CABIN_ALTITUDE", "Feet"
     CABIN_ALTITUDE_GOAL,    //"L:CABIN_ALTITUDE_GOAL", "Feet"
@@ -343,7 +352,24 @@ enum lSimVars {
     MAN_CAB_PRESS,          //L:A32NX_CAB_PRESS_MODE_MAN, bool
     MAN_VS_CTRL,            //L:A32NX_MAN_VS_CONTROL            up = 0, off = 1, dn = 2
     DITCH,                  //L:A32NX_DITCHING, Bool    
-        
+    
+    /*
+    =========================================================================
+    * ===================================================================== *
+    * ALL LVARS THAT WILL BE SET AND SHARED WITH MSFS NEED TO GO ABOVE THIS *
+    * ===================================================================== *
+    =========================================================================
+    */
+    totalRealLVarsCount,
+    /*
+    *======================================================================
+    * =================================================================== *
+    * ALL LVARS THAT WILL BE SHARED ONLY ACROSS WASM MODULE GO BELOW THIS *
+    * =================================================================== *
+    *======================================================================
+    */
+    APU_BLEED_TOGGLE_OFF,      //Bool, used for APU cool and shutdown procedure
+
     totalLVarsCount
 };
 

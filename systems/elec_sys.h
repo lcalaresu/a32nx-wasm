@@ -203,8 +203,11 @@ private:
         } else if (aSimVarsValue[ENG1_N2] <= 56 && timeElapsedGen1 > 0) {
             timeElapsedGen1 -= (currentAbsTime - lastAbsTime) * 0.001;
         }
+        if (lSimVarsValue[ENG1_FIRE_PUSH]) {
+            lSimVarsValue[IDG1_FAULT] = 1;
+        }
 
-        if (timeElapsedGen1 >= stableTime && aSimVarsValue[GEN2_SW] && !(lSimVarsValue[IDG1_DISC_SW]) && !(lSimVarsValue[IDG1_FAULT])) {
+        if ((timeElapsedGen1 >= stableTime && aSimVarsValue[GEN2_SW] && !(lSimVarsValue[IDG1_DISC_SW] || lSimVarsValue[IDG1_FAULT] || lSimVarsValue[ENG1_FIRE_PUSH]))) {
             lSimVarsValue[GEN1_ONLINE] = 1;
             lSimVarsValue[GEN1_VOLTAGE] = 115;
             lSimVarsValue[GEN1_AMPERAGE] = 782.60;
@@ -224,7 +227,10 @@ private:
         } else if (aSimVarsValue[ENG2_N2] <= 56.3 && timeElapsedGen1 > 0) {
             timeElapsedGen2 -= (currentAbsTime - lastAbsTime) * 0.001;
         }
-        if (timeElapsedGen1 >= stableTime && aSimVarsValue[GEN2_SW] && !(lSimVarsValue[IDG2_DISC_SW]) && !(lSimVarsValue[IDG2_FAULT])) {
+        if (lSimVarsValue[ENG2_FIRE_PUSH]) {
+            lSimVarsValue[IDG2_FAULT] = 1;
+        }
+        if ((timeElapsedGen1 >= stableTime && aSimVarsValue[GEN2_SW] && !(lSimVarsValue[IDG2_DISC_SW] || lSimVarsValue[IDG2_FAULT] || lSimVarsValue[ENG2_FIRE_PUSH]))) {   //382195253261631488 random memory corrouption?
             lSimVarsValue[GEN2_ONLINE] = 1;
             lSimVarsValue[GEN2_VOLTAGE] = 115;
             lSimVarsValue[GEN2_AMPERAGE] = 782.60;

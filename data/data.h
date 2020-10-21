@@ -34,22 +34,22 @@ void initUnitEnums() {
 }
 
 void initLocalSimVarsIDs() {
-    ID_LSIMVAR = (ID*)malloc(sizeof(ID) * totalLVarsCount);
-    for (int i = 0; i < totalLVarsCount; i++) {
+    ID_LSIMVAR = (ID*)malloc(sizeof(ID) * totalRealLVarsCount);
+    for (int i = 0; i < totalRealLVarsCount; i++) {
         lastLVarsValue[i] = -1;
         ID_LSIMVAR[i] = register_named_variable(pcstring_lSimVars[i]);
     }
 }
 
 void updateGetLSimVars() {
-    for (int i = 0; i < totalLVarsCount; i++) {
+    for (int i = 0; i < totalRealLVarsCount; i++) {
         lSimVarsValue[i] = get_named_variable_value(ID_LSIMVAR[i]);
     }
 }
 
 void updateSetLSimVars() {
     //check for dirtyLVars
-    for (int i = 0; i < totalLVarsCount; i++) {
+    for (int i = 0; i < totalRealLVarsCount; i++) {
         if (lastLVarsValue[i] != lSimVarsValue[i]) {
             dirtylSimVars.push_back(i);
         }

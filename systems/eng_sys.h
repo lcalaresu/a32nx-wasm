@@ -9,10 +9,10 @@ class Engine {
 private:
 public:
     void init() {
-
+        //TODO
     }
     void update() {
-
+        //TODO
     }
 };
 
@@ -20,81 +20,84 @@ class APUEngine {
 private:
     const int apu_flap_delay = 3 + rand() % 14;
     const int bleed_pressure_drop = 2 + rand() % 2;
+    const double apu_cooling_coef = 2;          //2 degrees per sec
+    const double apu_spool_down_coef = 3;       //3% per sec
+    const double apu_N1_const = -1.8325;
+    const double apu_N1_x = 2.2833;
+    const double apu_N1_x2 = 0.058;
+    const double apu_N1_x3 = -0.0084;
+    const double apu_N1_x4 = 0.0003;
+    const double apu_N1_x5 = -0.000002;
+    const double apu_n1_temp_const = -105.565;
+    const double apu_n1_temp_x = 28.571;
+    const double apu_n1_temp_x2 = 0.0884;
+    const double apu_n1_temp_x3 = -0.0081;
+    const double apu_n1_temp_x4 = 0.00005;
+
+    double start_time;
+    double stop_time;
+    double shutdown_bleed_cooldown_timer;
 
     void openFlap(const double currentAbsTime) {
-        if (lSimVarsValue[APU_FLAP_OPEN] < 100) {
-            lSimVarsValue[APU_FLAP_OPEN] += 100 * ((currentAbsTime - lastAbsTime) * 0.001) / apu_flap_delay;	//pct time finished for opening flap
+        if (lSimVarsValue[APU_FLAP_OPEN] <= 100) {
+            lSimVarsValue[APU_FLAP_OPEN] += 100 * (deltaT * 0.001 / apu_flap_delay);	//pct time finished for opening flap
         }
     }
+    
     void closeFlap(const double currentAbsTime) {
-        if (lSimVarsValue[APU_FLAP_OPEN] > 0) {
-            lSimVarsValue[APU_FLAP_OPEN] -= 100 * ((currentAbsTime - lastAbsTime) * 0.001) / apu_flap_delay;	//pct time finished for opening flap
+        if (lSimVarsValue[APU_FLAP_OPEN] >= 0) {
+            lSimVarsValue[APU_FLAP_OPEN] -= 100 * (deltaT * 0.001 / apu_flap_delay);	//pct time finished for closing flap
         }
     }
+    
     void startup(const double currentAbsTime) {
         trigger_key_event(KEY_APU_STARTER, 1);      //activate apu starter only after full flap opening
-        if (lSimVarsValue[APU_N1] <= 12) {
-            lSimVarsValue[APU_N1] += ((currentAbsTime - lastAbsTime) * 0.001) * 3;
+        if (start_time == -1) {
+            start_time = currentAbsTime;
         }
-        else if (lSimVarsValue[APU_N1] <= 60) {
-            lSimVarsValue[APU_N1] += ((currentAbsTime - lastAbsTime) * 0.001) * 1.92;
-        }
-        else if (lSimVarsValue[APU_N1] < 100) {
-            lSimVarsValue[APU_N1] += ((currentAbsTime - lastAbsTime) * 0.001) * 2.85;
-        }
-        if (lSimVarsValue[APU_N1] >= 87) {
-            lSimVarsValue[APU_BLEED_PRESSURE] = 35 - rand() % 1;
-        }
-        if (lSimVarsValue[APU_N1] <= 95) {
-            lSimVarsValue[APU_BLEED_PRESSURE] = 35 - rand() % 1;
+        if (start_time != -1) {
+            if (lSimVarsValue[APU_N1] < 100) {
+                const double time_since_start = currentAbsTime - start_time * 0.001;
+                lSimVarsValue[APU_N1] = (apu_N1_x5 * pow(time_since_start, 5)) + (apu_N1_x4 * pow(time_since_start, 4)) - (apu_N1_x3 * pow(time_since_start, 3)) + (apu_N1_x2 * pow(time_since_start, 2)) + (apu_N1_x * time_since_start) - apu_N1_const;
+            }
         }
         updateEGT(true, currentAbsTime);
     }
+    
     void shutdown(const double currentAbsTime) {
-        trigger_key_event(KEY_APU_OFF_SWITCH, 1);
-        if (lSimVarsValue[APU_N1] > 0) {
-            lSimVarsValue[APU_N1] -= ((currentAbsTime - lastAbsTime) * 0.001) * 5;
+        if (shutdown_bleed_cooldown_timer <= 0) {
+            start_time = -1;
+            trigger_key_event(KEY_APU_OFF_SWITCH, 1);   //do we even need this anymore?
+            if (lSimVarsValue[APU_N1] > 0) {
+                lSimVarsValue[APU_N1] -= apu_spool_down_coef * deltaT * 0.001;
+            }
+            updateEGT(false, currentAbsTime);
         }
-        updateEGT(false, currentAbsTime);
     }
+    
     void updateEGT(bool startup, const double currentAbsTime) {
         const double N1 = lSimVarsValue[APU_N1];
         const double ambient = aSimVarsValue[AMB_TEMP];
         if (startup) {
-            if (N1 < 10) {
-                lSimVarsValue[APU_EGT] = ambient;
+            double apu_egt = (apu_n1_temp_x4 * pow(N1, 4)) + (apu_n1_temp_x3 * pow(N1, 3)) + (apu_n1_temp_x2 * pow(N1, 2)) + (apu_n1_temp_x * N1) + apu_n1_temp_const;
+            if (apu_egt > 500) {
+                apu_egt = 495 + rand() % 3;
             }
-            else if (N1 <= 14) {
-                lSimVarsValue[APU_EGT] = (90 / 6 * N1 - 140 + ambient);
-            }
-            else if (N1 <= 20) {
-                lSimVarsValue[APU_EGT] = ((215 / 4 * N1) - 760 + ambient);
-            }
-            else if (N1 <= 32) {
-                lSimVarsValue[APU_EGT] = ((420 / 11 * N1) - 481.8 + ambient);
-            }
-            else if (N1 <= 36) {
-                lSimVarsValue[APU_EGT] = ((20 / 3 * N1) + 525 + ambient);
-            }
-            else if (N1 <= 43) {
-                lSimVarsValue[APU_EGT] = ((-15 / 6 * N1) + 888.3 + ambient);
-            }
-            else if (N1 <= 50) {
-                lSimVarsValue[APU_EGT] = ((3 * N1) + 618 + ambient);
-            }
-            else if (N1 <= 74) {
-                lSimVarsValue[APU_EGT] = ((-100 / 13 * N1) + 1152.3 + ambient);
-            }
-            else {
-                lSimVarsValue[APU_EGT] = ((-104 / 10 * N1) + 1430 + ambient - rand() % 2);
+            lSimVarsValue[APU_EGT] = max(ambient, apu_egt);
+            if (lSimVarsValue[APU_EGT] > 500) {
+                lSimVarsValue[APU_EGT] -= 0.4 * deltaT * 0.001;
             }
         }
         else {
-            if (lSimVarsValue[APU_EGT] >= ambient) {
-                lSimVarsValue[APU_EGT] = (lSimVarsValue[APU_EGT] - 2 * (currentAbsTime - lastAbsTime) * 0.001);
+            if (shutdown_bleed_cooldown_timer > 0 && lSimVarsValue[APU_EGT] > 300) {
+                lSimVarsValue[APU_EGT] -= apu_cooling_coef * deltaT * 0.001;
+            }
+            else if (lSimVarsValue[APU_EGT] >= ambient) {
+                lSimVarsValue[APU_EGT] -= apu_cooling_coef * deltaT * 0.001;
             }
         }
     }
+    
     void updateEGTWarn() {
         const double n = lSimVarsValue[APU_N1];
         if (n < 11) {
@@ -110,40 +113,54 @@ private:
             lSimVarsValue[APU_EGT_WARN] = (-30 / 7 * n) + 1128.6;
         }//ōīṇḥūiūṇō => I somehow managed to type this while I was asleep on the keyboard, any explanation would be nice.
     }
+
 public:
+    
     void init() {
         for (int i = APU_FLAP_OPEN; i <= APU_EGT_WARN; i++) {
             lSimVarsValue[i] = 0;
         }
+        start_time = -1;
+        stop_time = -1;
+        shutdown_bleed_cooldown_timer = 0;
     }
+    
     void update(const double currentAbsTime) {
         if (aSimVarsValue[APU_MASTER]) {
             openFlap(currentAbsTime);
-            if (lSimVarsValue[APU_FLAP_OPEN] == 100 && lSimVarsValue[APU_START]) {
+            if (lSimVarsValue[APU_FLAP_OPEN] >= 100 && lSimVarsValue[APU_START]) {
                 startup(currentAbsTime);
+            } else if (lSimVarsValue[APU_GEN_ONLINE] && lSimVarsValue[APU_FLAP_OPEN] <= 95) {
+                shutdown(currentAbsTime);
             }
         }
         else {
-            closeFlap(currentAbsTime);
-            if (lSimVarsValue[APU_FLAP_OPEN] < 100) {
-                shutdown(currentAbsTime);
+            if (lSimVarsValue[APU_BLEED_VALVE] == 0 && lSimVarsValue[APU_BLEED_TOGGLE_OFF]) {
+                shutdown_bleed_cooldown_timer = 120;
             }
+            if (shutdown_bleed_cooldown_timer >= 0) {
+                shutdown_bleed_cooldown_timer -= deltaT * 0.001;
+            }
+            closeFlap(currentAbsTime);
+            shutdown(currentAbsTime);
         }
         updateEGTWarn();
     }
 };
 
 class EngSys {
-    private:
-        Engine eng1;
-        Engine eng2;
-        APUEngine apuEng;
-    public:
+private:
+    Engine eng1;
+    Engine eng2;
+    APUEngine apuEng;
+public:
+    
     void init() {
         eng1.init();
         eng2.init();
         apuEng.init();
     }
+    
     void update(double const currentAbsTime) {
         eng1.update();
         eng2.update();

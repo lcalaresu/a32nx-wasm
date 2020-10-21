@@ -33,6 +33,7 @@ private:
     int active_CPC;                                 //0 = SYS1, 1 = SYS2
     double cabin_air_mass;
     double cabin_pressure;
+    double ventilation_pulse_timer;
 
     PIDClass outflow_controller;
 
@@ -49,7 +50,12 @@ private:
                         const double fresh_flow = 0.761;
                         const double recirc_flow = 0.723;
                         packin_flow = fresh_flow;
-                        packout_flow = recirc_flow;
+                        if (lSimVarsValue[CAB_FANS]) {
+                            packout_flow = recirc_flow;
+                            packin_flow += recirc_flow;
+                        } else {
+                            packout_flow = 0;
+                        }
                         break;
                     }
                     case 1: {
@@ -59,7 +65,12 @@ private:
                         const double fresh_flow = 0.918;
                         const double recirc_flow = 0.694;
                         packin_flow = fresh_flow;
-                        packout_flow = recirc_flow;
+                        if (lSimVarsValue[CAB_FANS]) {
+                            packout_flow = recirc_flow;
+                            packin_flow += recirc_flow;
+                        } else {
+                            packout_flow = 0;
+                        }
                         break;
                     }
                     case 2: {
@@ -69,7 +80,12 @@ private:
                         const double fresh_flow = 1.085;
                         const double recirc_flow = 1.67;
                         packin_flow = fresh_flow;
-                        packout_flow = recirc_flow;
+                        if (lSimVarsValue[CAB_FANS]) {
+                            packout_flow = recirc_flow;
+                            packin_flow += recirc_flow;
+                        } else {
+                            packout_flow = 0;
+                        }
                         break;
                     }
                     default:
@@ -84,7 +100,11 @@ private:
                 const double fresh_flow = 0.597;
                 const double recirc_flow = 0.754;
                 packin_flow = fresh_flow;
-                packout_flow = recirc_flow;
+                if (lSimVarsValue[CAB_FANS]) {
+                    packout_flow = recirc_flow;
+                } else {
+                    packout_flow = 0;
+                }
             }
         }
     }
@@ -251,7 +271,38 @@ private:
         const double cabin_temp = lSimVarsValue[FWD_TEMP] + 273.15;
         cabin_pressure = idealGasPressure(fuselage_volume, cabin_temp, cabin_air_moles);
     }
-
+    
+    void updateAvionicsVentilation() {
+        const int flight_phase = flightPhase();
+        if (flight_phase == 0) {
+            if (aSimVarsValue[AMB_TEMP] < 10) {
+                lSimVarsValue[VENT_INLET] = 0;
+                lSimVarsValue[VENT_OUTLET] = 0;
+            } else {
+                if (ventilation_pulse_timer > 5) {
+                    ventilation_pulse_timer = 0;
+                    lSimVarsValue[VENT_INLET] = (int)(0 + (rand() % 20) / 10);
+                    lSimVarsValue[VENT_OUTLET] = (int)(0 + (rand() % 20) / 10);
+                }
+            }
+        } else {
+            if (aSimVarsValue[TAT_TEMP] > 34) {
+                lSimVarsValue[VENT_INLET] = 0;
+                lSimVarsValue[VENT_OUTLET] = 0.5;
+            } else {
+                lSimVarsValue[VENT_INLET] = 0;
+                lSimVarsValue[VENT_OUTLET] = 0;
+            }
+        }
+        if (lSimVarsValue[VENT_BLOWER] && lSimVarsValue[VENT_EXTRACT]) {
+            lSimVarsValue[VENT_INLET] = 0;
+            lSimVarsValue[VENT_OUTLET] = 0.5;
+        }
+        else if (lSimVarsValue[VENT_BLOWER] && lSimVarsValue[VENT_EXTRACT]) {
+            lSimVarsValue[VENT_INLET] = 0;
+            lSimVarsValue[VENT_OUTLET] = 0;
+        }
+    }
 public:
     void init() {
         for (int i = OUTFLOW_VALVE; i <= CPC_SYS2; i++) {
@@ -259,6 +310,7 @@ public:
         }
         takeoff = false;
         landed = false;
+        ventilation_pulse_timer = 0;
         lSimVarsValue[OUTFLOW_VALVE] = 100;
         lSimVarsValue[CPC_SYS1] = 0;
         lSimVarsValue[CPC_SYS2] = 0;
@@ -269,7 +321,7 @@ public:
         outflow_controller.init(0.01, 0.001, 0.05, lastAbsTime, ofv_inc_rate, ofv_dec_rate);
         man_auto_timer = manpress_sys_switch_timer;
     }
-    
+
     void update(const double currentAbsTime) {
 
         setLDGELEV();
@@ -325,6 +377,7 @@ public:
         }
         
         updateCabinPressure();
+        updateAvionicsVentilation();
         
         lSimVarsValue[CABIN_ALTITUDE] = altitude_AtPressure(cabin_pressure);
     }
