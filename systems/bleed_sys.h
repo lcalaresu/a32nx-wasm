@@ -275,7 +275,8 @@ private:
         engBleedMonitor(1, currentAbsTime);
         engBleedMonitor(2, currentAbsTime);
         //APU
-        if (aSimVarsValue[APU_MASTER] && aSimVarsValue[APU_BLEED_SW] && lSimVarsValue[APU_BLEED_PRESSURE] <= apu_max_pressure && lSimVarsValue[APU_BLEED_TEMPERATURE] <= apu_max_temperature && !(lSimVarsValue[FIRE_TEST_APU])) {
+        const bool apu_safety_check = ((lSimVarsValue[APU_BLEED_PRESSURE] <= apu_max_pressure) && (lSimVarsValue[APU_BLEED_TEMPERATURE] <= apu_max_temperature) && !lSimVarsValue[FIRE_TEST_APU]);
+        if (aSimVarsValue[APU_MASTER] && aSimVarsValue[APU_BLEED_SW] && apu_safety_check) {
             lSimVarsValue[APU_BLEED_TOGGLE_OFF] = 0;
             if (apu_valve_open_pct < 100) {
                 apu_valve_open_pct += deltaT * 0.001 * valveOpenRate;
@@ -296,7 +297,8 @@ private:
             lSimVarsValue[APU_BLEED_TOGGLE_OFF] = 1;
         }
         //GPU
-        if (aSimVarsValue[EXT_POWER] && lSimVarsValue[GPU_BLEED_PRESSURE] <= gpu_max_pressure && lSimVarsValue[GPU_BLEED_TEMPERATURE] <= gpu_max_temperature) {
+        const bool gpu_safety_check = ((lSimVarsValue[GPU_BLEED_PRESSURE] <= gpu_max_pressure) && (lSimVarsValue[GPU_BLEED_TEMPERATURE] <= gpu_max_temperature));
+        if (aSimVarsValue[EXT_POWER] && gpu_safety_check) {
             if (gpu_valve_open_pct < 100) {
                 gpu_valve_open_pct += deltaT * 0.001 * valveOpenRate;
             }

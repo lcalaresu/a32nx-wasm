@@ -206,8 +206,8 @@ private:
         if (lSimVarsValue[ENG1_FIRE_PUSH + gen_ID]) {
             lSimVarsValue[IDG1_FAULT + gen_ID] = 1;
         }
-
-        if ((timeElapsedGen[gen_ID] >= stableTime && aSimVarsValue[GEN1_SW + gen_ID] && !(lSimVarsValue[IDG1_DISC_SW + gen_ID] || lSimVarsValue[IDG1_FAULT + gen_ID] || lSimVarsValue[GEN1_FAULT + gen_ID] || lSimVarsValue[ENG1_FIRE_PUSH + gen_ID]))) {
+        const bool safety_check = !(lSimVarsValue[IDG1_DISC_SW + gen_ID] || lSimVarsValue[IDG1_FAULT + gen_ID] || lSimVarsValue[GEN1_FAULT + gen_ID] || lSimVarsValue[ENG1_FIRE_PUSH + gen_ID]);
+        if ((timeElapsedGen[gen_ID] >= stableTime) && aSimVarsValue[GEN1_SW + gen_ID] && safety_check) {
             lSimVarsValue[GEN1_FAULT + gen_ID] = 0; 
             lSimVarsValue[GEN1_ONLINE + gen_ID] = 1;
             lSimVarsValue[GEN1_VOLTAGE + gen_ID] = 115;
