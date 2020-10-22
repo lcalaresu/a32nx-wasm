@@ -21,7 +21,7 @@ private:
     const int apu_flap_delay = 3 + rand() % 14;
     const int bleed_pressure_drop = 2 + rand() % 2;
     const double apu_cooling_coef = 2;          //2 degrees per sec
-    const double apu_spool_down_coef = 3;       //3% per sec
+    const double apu_spool_down_coef = 2;       //3% per sec
     const double apu_N1_const = 0;
     const double apu_N1_x = 2.375010484;
     const double apu_N1_x2 = 0.034236847;
@@ -57,7 +57,7 @@ private:
         }
         if (start_time != -1) {
             if (lSimVarsValue[APU_N1] < 100) {
-                const double time_since_start = currentAbsTime - start_time * 0.001;
+                const double time_since_start = (currentAbsTime - start_time) * 0.001;
                 lSimVarsValue[APU_N1] = (apu_N1_x5 * pow(time_since_start, 5)) + (apu_N1_x4 * pow(time_since_start, 4)) + (apu_N1_x3 * pow(time_since_start, 3)) + (apu_N1_x2 * pow(time_since_start, 2)) + (apu_N1_x * time_since_start) + apu_N1_const;
             }
         }
@@ -130,7 +130,7 @@ public:
             openFlap(currentAbsTime);
             if (lSimVarsValue[APU_FLAP_OPEN] >= 100 && lSimVarsValue[APU_START]) {
                 startup(currentAbsTime);
-            } else if (lSimVarsValue[APU_GEN_ONLINE] && lSimVarsValue[APU_FLAP_OPEN] <= 95) {
+            } else {
                 shutdown(currentAbsTime);
             }
         }
