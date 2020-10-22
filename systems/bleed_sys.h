@@ -150,8 +150,6 @@ private:
     double xbleed_valve_open_pct = 0;
     double anti_ice_valve_open_pct = 0;
 
-    bool apu_bleed_toggle_off = false;
-
     PIDClass *fan_valve[2];
  
     void updateEngValve(const int engine_ID, const double currentAbsTime) {
