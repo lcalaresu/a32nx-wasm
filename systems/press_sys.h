@@ -334,7 +334,7 @@ public:
                     break;
             }
             if (lSimVarsValue[MAN_LDG_ELEV_PCT] == 0) {
-                const int flight_phase = flightPhase();
+                const int flight_phase = lSimVarsValue[FLIGHT_PHASE];
                 autoSetCabinAltTarget(flight_phase);
             }
             autoSetCabinVS();
