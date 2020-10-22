@@ -26,4 +26,33 @@ uint64_t deltaT;
 
 #define DEBUG
 
+
+int flightPhase() {
+    // 0 = ON_GROUND, 1 = TAKEOFF, 2 = CLIMB, 3 = CRUISE, 4 = DESCENT 5 = APPROACH/LANDING, 6 = JUSTLANDED
+    if ((aSimVarsValue[ENG1_THROTTLE] >= 95 || aSimVarsValue[ENG2_THROTTLE] >= 95) && aSimVarsValue[ON_GROUND]) {
+        return 1;
+    } else if (aSimVarsValue[ON_GROUND]) {
+        return 0;
+    } else {
+        lSimVarsValue[LANDED] = 0;
+    }
+    if ((aSimVarsValue[GEAR_POS] == 2 || aSimVarsValue[ALTITUDE_ABV_GND] <= 6000) && aSimVarsValue[CURRENT_VSPEED] < 0) {
+        return 5;
+    }
+    if (aSimVarsValue[CURRENT_VSPEED] > 200) {
+        return 2;
+    }
+    if(aSimVarsValue[CURRENT_VSPEED] < -200) {
+        return 4;
+    }
+    if (aSimVarsValue[ALTITUDE_ABV_GND] > 0) {
+        return 3;
+    }
+    if (aSimVarsValue[ON_GROUND] && !lSimVarsValue[LANDED]) {
+        lSimVarsValue[LANDED] = 1;
+        return 6;
+    }
+    return 0;
+}
+
 #endif

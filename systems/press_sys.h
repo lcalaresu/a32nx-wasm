@@ -21,8 +21,6 @@ private:
     const double landing_depres_time = 55;          //55s of depressurisation post landing
     const double manpress_sys_switch_timer = 10;    //10s of man press on and then back to auto switches the active CPC system
 
-    bool takeoff;
-    bool landed;
     double landing_timer;
     double man_auto_timer;
     double cabin_vs_target;
@@ -165,20 +163,6 @@ private:
             max_cabin_vs = norm_max_cabin_vs;
         }
     }
-    
-    int flightPhase() {
-        // 0 = ON_GROUND, 1 = TAKEOFF, 2 = APPROACH/LANDING, 3 = IN_FLIGHT
-        if ((aSimVarsValue[ENG1_THROTTLE] >= 95 || aSimVarsValue[ENG2_THROTTLE] >= 95) && aSimVarsValue[ON_GROUND]) {
-            return 1;
-        }
-        if ((aSimVarsValue[GEAR_POS] == 2 || aSimVarsValue[ALTITUDE_ABV_GND] <= 6000) && aSimVarsValue[CURRENT_VSPEED] < 0) {
-            return 2;
-        }
-        if (aSimVarsValue[ALTITUDE_ABV_GND] > 0) {
-            return 3;
-        }
-        return 0;
-    }
 
     void autoSetCabinAltTarget(int flightPhase) {
         switch (flightPhase)
@@ -193,14 +177,17 @@ private:
                 lSimVarsValue[CABIN_ALTITUDE_GOAL] = takeoff_cab_alt;
                 break;
             }
-            case 2: {
+            case 2:
+            case 3:
+            case 4: {
+                lSimVarsValue[CABIN_ALTITUDE_GOAL] = ((aSimVarsValue[ALTITUDE] + aSimVarsValue[CURRENT_VSPEED]) * max_normal_cabin_alt / max_operating_alt);
+                break;
+            }
+            case 5: {
                 const double ldg_pressure = pressure_AtAltitude(lSimVarsValue[LDG_ELEV]) + toga_ldg_delta;
                 const double landing_cab_alt = altitude_AtPressure(ldg_pressure);
                 lSimVarsValue[CABIN_ALTITUDE_GOAL] = landing_cab_alt;
                 break;
-            }
-            case 3: {
-                lSimVarsValue[CABIN_ALTITUDE_GOAL] = ((aSimVarsValue[ALTITUDE] + aSimVarsValue[CURRENT_VSPEED]) * max_normal_cabin_alt / max_operating_alt);
             }
             default:
                 break;
@@ -235,34 +222,28 @@ private:
         }
 
         //post landing depress
-        if (aSimVarsValue[ON_GROUND]) {
-            if (!landed) {
-                landed = true;
-                landing_timer = landing_depres_time;
-            }
-            if (landing_timer > 0) {
-                landing_timer -= deltaT * 0.001;
-                return lSimVarsValue[DELTA_PRESSURE];
-            }
-        } else {
-            landed = false;
+        if (lSimVarsValue[LANDED]) {
+            landing_timer = landing_depres_time;
         }
-
+        if (landing_timer > 0) {
+            landing_timer -= deltaT * 0.001;
+            return lSimVarsValue[DELTA_PRESSURE];
+        }
         return calculatedeltaP(lSimVarsValue[CABIN_ALTITUDE_GOAL]) - lSimVarsValue[DELTA_PRESSURE];
     }
-    
+
     void openOutFlow() {
         if (lSimVarsValue[OUTFLOW_VALVE] < 100) {
             lSimVarsValue[OUTFLOW_VALVE] += ofv_dec_rate * deltaT * 0.001;
         }
     }
-    
+
     void closeOutFlow() {
         if (lSimVarsValue[OUTFLOW_VALVE] > 0) {
             lSimVarsValue[OUTFLOW_VALVE] -= ofv_dec_rate * deltaT * 0.001;
         }
     }
-    
+
     void updateCabinPressure() {
         calculatePackFlow();
         calculateOutFlow();
@@ -271,7 +252,7 @@ private:
         const double cabin_temp = lSimVarsValue[FWD_TEMP] + 273.15;
         cabin_pressure = idealGasPressure(fuselage_volume, cabin_temp, cabin_air_moles);
     }
-    
+
     void updateAvionicsVentilation() {
         const int flight_phase = flightPhase();
         if (flight_phase == 0) {
@@ -308,8 +289,6 @@ public:
         for (int i = OUTFLOW_VALVE; i <= CPC_SYS2; i++) {
             lSimVarsValue[i] = 0;
         }
-        takeoff = false;
-        landed = false;
         ventilation_pulse_timer = 0;
         lSimVarsValue[OUTFLOW_VALVE] = 100;
         lSimVarsValue[CPC_SYS1] = 0;

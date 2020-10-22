@@ -373,6 +373,7 @@ enum lSimVars {
     *======================================================================
     */
     APU_BLEED_TOGGLE_OFF,      //Bool, used for APU cool and shutdown procedure
+    LANDED,                    //set to 1 on touchdown and 0 when in air
 
     totalLVarsCount
 };
