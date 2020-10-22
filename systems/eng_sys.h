@@ -22,12 +22,12 @@ private:
     const int bleed_pressure_drop = 2 + rand() % 2;
     const double apu_cooling_coef = 2;          //2 degrees per sec
     const double apu_spool_down_coef = 3;       //3% per sec
-    const double apu_N1_const = -1.8325;
-    const double apu_N1_x = 2.2833;
-    const double apu_N1_x2 = 0.058;
-    const double apu_N1_x3 = -0.0084;
-    const double apu_N1_x4 = 0.0003;
-    const double apu_N1_x5 = -0.000002;
+    const double apu_N1_const = 0;
+    const double apu_N1_x = 2.375010484;
+    const double apu_N1_x2 = 0.034236847;
+    const double apu_N1_x3 = -0.007404136;
+    const double apu_N1_x4 = 0.000268;
+    const double apu_N1_x5 = -0.000002438;
     const double apu_n1_temp_const = -105.565;
     const double apu_n1_temp_x = 28.571;
     const double apu_n1_temp_x2 = 0.0884;
@@ -58,7 +58,7 @@ private:
         if (start_time != -1) {
             if (lSimVarsValue[APU_N1] < 100) {
                 const double time_since_start = currentAbsTime - start_time * 0.001;
-                lSimVarsValue[APU_N1] = (apu_N1_x5 * pow(time_since_start, 5)) + (apu_N1_x4 * pow(time_since_start, 4)) - (apu_N1_x3 * pow(time_since_start, 3)) + (apu_N1_x2 * pow(time_since_start, 2)) + (apu_N1_x * time_since_start) - apu_N1_const;
+                lSimVarsValue[APU_N1] = (apu_N1_x5 * pow(time_since_start, 5)) + (apu_N1_x4 * pow(time_since_start, 4)) + (apu_N1_x3 * pow(time_since_start, 3)) + (apu_N1_x2 * pow(time_since_start, 2)) + (apu_N1_x * time_since_start) + apu_N1_const;
             }
         }
         updateEGT(true, currentAbsTime);
