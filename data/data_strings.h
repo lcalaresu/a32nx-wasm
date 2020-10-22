@@ -36,6 +36,7 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "(A:AIRSPEED INDICATED, Knots)",
     "(A:GENERAL ENG MASTER ALTERNATOR:1, Bool)",
     "(A:GENERAL ENG MASTER ALTERNATOR:2, Bool)",
+    "(A:APU GENERATOR SWITCH:1, Bool)",
     "(A:BLEED AIR ENGINE:1, Bool)",
     "(A:BLEED AIR ENGINE:2, Bool)",
     "(A:BLEED AIR APU, Bool)",

@@ -35,6 +35,7 @@ enum aSimVars {
     IAS,                    //"AIRSPEED INDICATED","Knots"
     GEN1_SW,                //A:GENERAL ENG MASTER ALTERNATOR:1
     GEN2_SW,                //A:GENERAL ENG MASTER ALTERNATOR:2
+    APU_GEN_SW,             //A:APU GENERATOR SWITCH:1, Bool
     ENG1_BLEED_SW,          //(A:BLEED AIR ENGINE:#ID#, Bool)
     ENG2_BLEED_SW,          //(A:BLEED AIR ENGINE:#ID#, Bool)
     APU_BLEED_SW,           //"BLEED AIR APU","Bool"

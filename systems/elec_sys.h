@@ -166,7 +166,7 @@ public:
         }
     }
     void update(const double currentAbsTime) {
-        if (lSimVarsValue[APU_N1] >= 87) {
+        if (lSimVarsValue[APU_N1] >= 87 && aSimVarsValue[APU_GEN_SW]) {
             lSimVarsValue[APU_GEN_VOLTAGE] = round(114.3 + (rand() % 10 / 10));
             lSimVarsValue[APU_GEN_AMPERAGE] = 150;
             lSimVarsValue[APU_GEN_FREQ] = round(4.46 * lSimVarsValue[APU_N1] - 46 + rand() % 1);
