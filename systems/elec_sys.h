@@ -72,8 +72,8 @@ private:
         }
     }
     void BATDischarging(const double currentAbsTime) {
-        float batt1_load = 0;
-        float batt2_load = 0;
+        double batt1_load = 0;
+        double batt2_load = 0;
         if (lSimVarsValue[BATT1_ONLINE] && lSimVarsValue[BATT2_ONLINE]) {
             batt1_load = lSimVarsValue[BATT_BUS_LOAD] / 2;
             batt2_load = lSimVarsValue[BATT_BUS_LOAD] / 2;
@@ -192,59 +192,39 @@ public:
 class EngineGen {
 private:
     const double stableTime = 0.5;
-    double timeElapsedGen1;
-    double timeElapsedGen2;
+    double timeElapsedGen[2] = {0,0};
     const double IDGHeatingCoeff = 1.4;
     const double IDGCoolingCoeff = 0.4;
 
-    void updateGen1(const double currentAbsTime, const double ambient) {
-        if (aSimVarsValue[ENG1_N2] >= 59.5 && timeElapsedGen1 < stableTime) {
-            timeElapsedGen1 += (currentAbsTime - lastAbsTime) * 0.001;
-        } else if (aSimVarsValue[ENG1_N2] <= 56 && timeElapsedGen1 > 0) {
-            timeElapsedGen1 -= (currentAbsTime - lastAbsTime) * 0.001;
+    void updateGen(const int engine_ID, const double currentAbsTime, const double ambient) {
+        const int gen_ID = engine_ID - 1;
+        if (aSimVarsValue[ENG1_N2 + gen_ID] >= 59.5 && timeElapsedGen[gen_ID] < stableTime) {
+            timeElapsedGen[gen_ID] += deltaT * 0.001;
+        } else if (aSimVarsValue[ENG1_N2 + gen_ID] <= 56 && timeElapsedGen[gen_ID] > 0) {
+            timeElapsedGen[gen_ID] -= deltaT * 0.001;
         }
-        if (lSimVarsValue[ENG1_FIRE_PUSH]) {
-            lSimVarsValue[IDG1_FAULT] = 1;
-        }
-
-        if ((timeElapsedGen1 >= stableTime && aSimVarsValue[GEN2_SW] && !(lSimVarsValue[IDG1_DISC_SW] || lSimVarsValue[IDG1_FAULT] || lSimVarsValue[ENG1_FIRE_PUSH]))) {
-            lSimVarsValue[GEN1_ONLINE] = 1;
-            lSimVarsValue[GEN1_VOLTAGE] = 115;
-            lSimVarsValue[GEN1_AMPERAGE] = 782.60;
-            lSimVarsValue[GEN1_FREQ] = 400;
-        } else {
-            lSimVarsValue[GEN1_ONLINE] = 0;
-            lSimVarsValue[GEN1_VOLTAGE] = 0;
-            lSimVarsValue[GEN1_AMPERAGE] = 0;
-            lSimVarsValue[GEN1_FREQ] = 0;
+        if (lSimVarsValue[ENG1_FIRE_PUSH + gen_ID]) {
+            lSimVarsValue[IDG1_FAULT + gen_ID] = 1;
         }
 
-        updateIDGTEMP(ENG1_N2, GEN1_IDG, IDG1_DISC_SW, ambient, currentAbsTime);
-    }
-    void updateGen2(const double currentAbsTime, const double ambient) {
-        if (aSimVarsValue[ENG2_N2] >= 59.5 && timeElapsedGen2 < stableTime) {
-            timeElapsedGen2 += (currentAbsTime - lastAbsTime) * 0.001;
-        } else if (aSimVarsValue[ENG2_N2] <= 56.3 && timeElapsedGen1 > 0) {
-            timeElapsedGen2 -= (currentAbsTime - lastAbsTime) * 0.001;
-        }
-        if (lSimVarsValue[ENG2_FIRE_PUSH]) {
-            lSimVarsValue[IDG2_FAULT] = 1;
-        }
-        if ((timeElapsedGen1 >= stableTime && aSimVarsValue[GEN2_SW] && !(lSimVarsValue[IDG2_DISC_SW] || lSimVarsValue[IDG2_FAULT] || lSimVarsValue[ENG2_FIRE_PUSH]))) {   //382195253261631488 random memory corrouption?
-            lSimVarsValue[GEN2_ONLINE] = 1;
-            lSimVarsValue[GEN2_VOLTAGE] = 115;
-            lSimVarsValue[GEN2_AMPERAGE] = 782.60;
-            lSimVarsValue[GEN2_FREQ] = 400;
+        if ((timeElapsedGen[gen_ID] >= stableTime && aSimVarsValue[GEN1_SW + gen_ID] && !(lSimVarsValue[IDG1_DISC_SW + gen_ID] || lSimVarsValue[IDG1_FAULT + gen_ID] || lSimVarsValue[GEN1_FAULT + gen_ID] || lSimVarsValue[ENG1_FIRE_PUSH + gen_ID]))) {
+            lSimVarsValue[GEN1_FAULT + gen_ID] = 0; 
+            lSimVarsValue[GEN1_ONLINE + gen_ID] = 1;
+            lSimVarsValue[GEN1_VOLTAGE + gen_ID] = 115;
+            lSimVarsValue[GEN1_AMPERAGE + gen_ID] = 782.60;
+            lSimVarsValue[GEN1_FREQ + gen_ID] = 400;
         } else {
-            lSimVarsValue[GEN2_ONLINE] = 0;
-            lSimVarsValue[GEN2_VOLTAGE] = 0;
-            lSimVarsValue[GEN2_AMPERAGE] = 0;
-            lSimVarsValue[GEN2_FREQ] = 0;
+            lSimVarsValue[GEN1_FAULT + gen_ID] = 1;
+            lSimVarsValue[GEN1_ONLINE + gen_ID] = 0;
+            lSimVarsValue[GEN1_VOLTAGE + gen_ID] = 0;
+            lSimVarsValue[GEN1_AMPERAGE + gen_ID] = 0;
+            lSimVarsValue[GEN1_FREQ + gen_ID] = 0;
         }
-        updateIDGTEMP(ENG2_N2, GEN2_IDG, IDG2_DISC_SW, ambient, currentAbsTime);
+
+        updateIDGTEMP(ENG1_N2 + gen_ID, GEN1_IDG + gen_ID, IDG1_DISC_SW + gen_ID, ambient, currentAbsTime);
     }
+    
     void updateIDGTEMP(ENUM ENG_N2, ENUM GEN_IDG, ENUM IDG_DISC, const double ambient, const double currentAbsTime) {
-
         double maxIDG = aSimVarsValue[ENG_N2] * 1.8;
         if (ambient > 0) {
             maxIDG += ambient;
@@ -271,16 +251,14 @@ public:
     void init() {
         lSimVarsValue[GEN1_IDG] = aSimVarsValue[AMB_TEMP];
         lSimVarsValue[GEN2_IDG] = aSimVarsValue[AMB_TEMP];
-        timeElapsedGen1 = 0;
-        timeElapsedGen2 = 0;
         for (int i = GEN1_ONLINE; i <= GEN2_FREQ; i++) {
             lSimVarsValue[i] = 0;
         }
     }
     void update(const double currentAbsTime) {
         const double ambient = aSimVarsValue[AMB_TEMP];
-        updateGen1(currentAbsTime, ambient);
-        updateGen2(currentAbsTime, ambient);
+        updateGen(1, currentAbsTime, ambient);
+        updateGen(2, currentAbsTime, ambient);
     }
 };
 
