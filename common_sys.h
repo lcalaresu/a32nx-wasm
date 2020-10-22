@@ -29,9 +29,14 @@ uint64_t deltaT;
 
 int flightPhase() {
     // 0 = ON_GROUND, 1 = TAKEOFF, 2 = CLIMB, 3 = CRUISE, 4 = DESCENT 5 = APPROACH/LANDING, 6 = JUSTLANDED
+    //this can be further improved / moved to LGCIU and other computer modules later on
     if ((aSimVarsValue[ENG1_THROTTLE] >= 95 || aSimVarsValue[ENG2_THROTTLE] >= 95) && aSimVarsValue[ON_GROUND]) {
         return 1;
     } else if (aSimVarsValue[ON_GROUND]) {
+        if (!lSimVarsValue[LANDED]) {
+            lSimVarsValue[LANDED] = 1;
+            return 6;
+        }
         return 0;
     } else {
         lSimVarsValue[LANDED] = 0;
@@ -47,10 +52,6 @@ int flightPhase() {
     }
     if (aSimVarsValue[ALTITUDE_ABV_GND] > 0) {
         return 3;
-    }
-    if (aSimVarsValue[ON_GROUND] && !lSimVarsValue[LANDED]) {
-        lSimVarsValue[LANDED] = 1;
-        return 6;
     }
     return 0;
 }
