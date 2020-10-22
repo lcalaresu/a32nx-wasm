@@ -261,7 +261,7 @@ private:
              over_press = false;
         }
         //BMC_PRV_SAFETY_ISOLATION
-        if (aSimVarsValue[ENG1_BLEED_SW + eng_ID] && !(over_press || over_temp || (lSimVarsValue[DUCT1 + eng_ID] == APU_BLEED) || lSimVarsValue[ENG1_FIRE_PUSH + eng_ID])) {
+        if (aSimVarsValue[ENG1_BLEED_SW + eng_ID] && !(over_press || over_temp || (lSimVarsValue[DUCT1 + eng_ID] == APU_BLEED) || lSimVarsValue[FIRE_ENG1_PUSH + eng_ID])) {
             lSimVarsValue[ENG1_BLEED_VALVE + eng_ID] = 1;
             if (eng_ID == 1 && lSimVarsValue[DUCT1] == APU_BLEED) {
                 lSimVarsValue[ENG1_BLEED_VALVE + eng_ID] = 0;
