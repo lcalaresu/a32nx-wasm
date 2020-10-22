@@ -312,11 +312,12 @@ enum lSimVars {
 /*============================================================================*/
 /*                                   ENGINES                                  */
 /*============================================================================*/
-    FIRE_TEST_ENG1,         //L:FIRE_TEST_ENG1, Bool
-    FIRE_TEST_ENG2,         //L:FIRE_TEST_ENG2, Bool
-    FIRE_TEST_APU,         //L:FIRE_TEST_APU, Bool
-    ENG1_FIRE_PUSH,         //L:FIRE_BUTTON_ENG1, Bool
-    ENG2_FIRE_PUSH,         //L:FIRE_BUTTON_ENG2, Bool
+    FIRE_TEST_ENG1,         //L:A32NX_FIRE_TEST_PUSH_FIRE_ENG1_TEST, Bool
+    FIRE_TEST_ENG2,         //L:A32NX_FIRE_TEST_PUSH_FIRE_ENG2_TEST, Bool
+    FIRE_TEST_APU,          //L:A32NX_FIRE_TEST_PUSH_FIRE_APU_TEST, Bool
+    FIRE_ENG1_PUSH,         //L:A32NX_FIRE_BUTTON_PUSH_OVHD_FIRE_ENG1, Bool
+    FIRE_ENG2_PUSH,         //L:A32NX_FIRE_BUTTON_PUSH_OVHD_FIRE_ENG2, Bool
+    FIRE_APU_PUSH,          //L:A32NX_FIRE_BUTTON_PUSH_OVHD_FIRE_APU
     APU_FLAP_OPEN,          //"L:APU_FLAP_OPEN", "Percent"
     APU_N1,                 //"L:APU_N1","Percent"
     APU_EGT,                //"L:APU_EGT","celcius"

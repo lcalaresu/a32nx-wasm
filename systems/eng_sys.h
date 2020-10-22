@@ -12,7 +12,7 @@ public:
         //TODO
     }
     void update() {
-        //TODO
+        
     }
 };
 
@@ -128,7 +128,7 @@ public:
     void update(const double currentAbsTime) {
         if (aSimVarsValue[APU_MASTER]) {
             openFlap(currentAbsTime);
-            if (lSimVarsValue[APU_FLAP_OPEN] >= 100 && lSimVarsValue[APU_START]) {
+            if (lSimVarsValue[APU_FLAP_OPEN] >= 100 && lSimVarsValue[APU_START] && !(lSimVarsValue[FIRE_APU_PUSH])) {
                 startup(currentAbsTime);
             } else {
                 shutdown(currentAbsTime);

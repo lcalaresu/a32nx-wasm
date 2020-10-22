@@ -171,7 +171,7 @@ public:
             lSimVarsValue[APU_GEN_AMPERAGE] = 150;
             lSimVarsValue[APU_GEN_FREQ] = round(4.46 * lSimVarsValue[APU_N1] - 46 + rand() % 1);
         }
-        if (lSimVarsValue[APU_GEN_FREQ] > 390 && lSimVarsValue[APU_GEN_FREQ] < 410) {
+        if (lSimVarsValue[APU_GEN_FREQ] > 390 && lSimVarsValue[APU_GEN_FREQ] < 410 && !(lSimVarsValue[FIRE_APU_PUSH])) {
             lSimVarsValue[APU_GEN_ONLINE] = 1;
         } else {
             lSimVarsValue[APU_GEN_ONLINE] = 0;
@@ -179,7 +179,6 @@ public:
             lSimVarsValue[APU_GEN_AMPERAGE] = 0;
             lSimVarsValue[APU_GEN_FREQ] = 0;
         }
-
     }
 };
 
@@ -203,10 +202,8 @@ private:
         } else if (aSimVarsValue[ENG1_N2 + gen_ID] <= 56 && timeElapsedGen[gen_ID] > 0) {
             timeElapsedGen[gen_ID] -= deltaT * 0.001;
         }
-        if (lSimVarsValue[ENG1_FIRE_PUSH + gen_ID]) {
-            lSimVarsValue[IDG1_FAULT + gen_ID] = 1;
-        }
-        const bool safety_check = !(lSimVarsValue[IDG1_DISC_SW + gen_ID] || lSimVarsValue[IDG1_FAULT + gen_ID] || lSimVarsValue[GEN1_FAULT + gen_ID] || lSimVarsValue[ENG1_FIRE_PUSH + gen_ID]);
+
+        const bool safety_check = !(lSimVarsValue[IDG1_DISC_SW + gen_ID] || lSimVarsValue[IDG1_FAULT + gen_ID] || lSimVarsValue[GEN1_FAULT + gen_ID] || lSimVarsValue[FIRE_ENG1_PUSH + gen_ID]);
         if ((timeElapsedGen[gen_ID] >= stableTime) && aSimVarsValue[GEN1_SW + gen_ID] && safety_check) {
             lSimVarsValue[GEN1_FAULT + gen_ID] = 0; 
             lSimVarsValue[GEN1_ONLINE + gen_ID] = 1;
