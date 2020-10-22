@@ -277,7 +277,7 @@ private:
         engBleedMonitor(1, currentAbsTime);
         engBleedMonitor(2, currentAbsTime);
         //APU
-        if (aSimVarsValue[APU_BLEED_SW] && lSimVarsValue[APU_BLEED_PRESSURE] <= apu_max_pressure && lSimVarsValue[APU_BLEED_TEMPERATURE] <= apu_max_temperature && !(lSimVarsValue[FIRE_TEST_APU])) {
+        if (aSimVarsValue[APU_MASTER] && aSimVarsValue[APU_BLEED_SW] && lSimVarsValue[APU_BLEED_PRESSURE] <= apu_max_pressure && lSimVarsValue[APU_BLEED_TEMPERATURE] <= apu_max_temperature && !(lSimVarsValue[FIRE_TEST_APU])) {
             lSimVarsValue[APU_BLEED_TOGGLE_OFF] = 0;
             if (apu_valve_open_pct < 100) {
                 apu_valve_open_pct += deltaT * 0.001 * valveOpenRate;
