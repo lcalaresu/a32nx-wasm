@@ -122,6 +122,8 @@ const PCSTRINGZ pcstring_lSimVars[totalLVarsCount] = {
         "CIRCUIT",
         "CIRCUIT_BREAKER",
         "A32NX_APU_START_ACTIVATED",
+        "A32NX_ELEC_GEN1_FAULT",
+        "A32NX_ELEC_GEN2_FAULT",
         "A32NX_ELEC_IDG1_FAULT",
         "A32NX_ELEC_IDG2_FAULT",
         "A32NX_ELEC_IDG1_TOGGLE",

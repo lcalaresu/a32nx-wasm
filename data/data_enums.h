@@ -202,6 +202,8 @@ enum lSimVars {
     * ========== *
     */
     APU_START,              //L : A32NX_APU_START_ACTIVATED , "Bool"
+    GEN1_FAULT,             //L : A32NX_ELEC_GEN1_FAULT
+    GEN2_FAULT,             //L : A32NX_ELEC_GEN2_FAULT
     IDG1_FAULT,             //L : A32NX_ELEC_IDG1_FAULT
     IDG2_FAULT,             //L : A32NX_ELEC_IDG2_FAULT
     IDG1_DISC_SW,           //L : A32NX_ELEC_IDG1_TOGGLE
