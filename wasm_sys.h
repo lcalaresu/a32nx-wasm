@@ -38,6 +38,7 @@ public:
         BLEED_SYSTEM.init();
         PRESS_SYSTEM.init();
         ENG_SYSTEM.init();
+        updateSetLSimVars();
     }
     void update(double const currentAbsTime) {
         updateASimVars();
