@@ -29,8 +29,8 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "(A:APU SWITCH, Bool)",
     "(A:ELECTRICAL MASTER BATTERY:1, Bool)",
     "(A:ELECTRICAL MASTER BATTERY:2, Bool)",
-    "(A:AMBIENT TEMPERATURE, celsius)",
-    "(A:TOTAL AIR TEMPERATURE, Celcius)",
+    "(A:AMBIENT TEMPERATURE, Celsius)",
+    "(A:TOTAL AIR TEMPERATURE, Celsius)",
     "(A:AMBIENT PRESSURE, inHg)",
     "(A:AIRSPEED TRUE, Knots)",
     "(A:AIRSPEED INDICATED, Knots)",
@@ -53,9 +53,9 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "(A:GENERAL ENG THROTTLE LEVER POSITION:2, Percent)",
     "(A:VERTICAL SPEED, Feet per second)",
     "(A:GEAR POSITION, enum)",
-    "(A:INTERACTIVE POINT OPEN:0, percent)",
-    "(A:INTERACTIVE POINT OPEN:3, percent)",
-    "(A:INTERACTIVE POINT OPEN:5, percent)",
+    "(A:INTERACTIVE POINT OPEN:0, Percent)",
+    "(A:INTERACTIVE POINT OPEN:3, Percent)",
+    "(A:INTERACTIVE POINT OPEN:5, Percent)",
     "(C:fs9gps:FlightPlanDestinationAltitude, Feet)"
 };
 
