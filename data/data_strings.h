@@ -34,7 +34,7 @@ const PCSTRINGZ pcstring_aSimVars[aSimVarsCount] = {
     "(A:ELECTRICAL MASTER BATTERY:1, Bool)",
     "(A:ELECTRICAL MASTER BATTERY:2, Bool)",
     "(A:AMBIENT TEMPERATURE, Celsius)",
-    "(A:TOTAL AIR TEMPERATURE, Celcius)",
+    "(A:TOTAL AIR TEMPERATURE, Celsius)",
     "(A:AMBIENT PRESSURE, inHg)",
     "(A:AIRSPEED TRUE, Knots)",
     "(A:AIRSPEED INDICATED, Knots)",

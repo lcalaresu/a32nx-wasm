@@ -16,11 +16,21 @@
 * ============== *
 */
 uint64_t timeSinceEpoch();
+bool timer(double* timer_value, const double deltaT);
 double convert_rankineToCelcius(const double rankine);
 double convert_inHgToPSI(const double inHg);
 double convert_PaToPSI(const double Pa);
 double convert_feetToMeters(const double feet);
 double convert_metersToFeet(const double meters);
+double temperature_AtAltitude(const double amb_temp, const double amb_alt, const double target_alt);
+double pressure_AtAltitude(const double target_alt);
+double altitude_AtPressure(const double pressure);
+double idealGasPressure(const double volume, const double temp, const double moles);
+double idealGasMoles(const double pressure, const double volume, const double temp);
+void debug_print(const char* message);
+
+
+
 
 uint64_t timeSinceEpoch() {
     using namespace std::chrono;
@@ -91,6 +101,17 @@ double idealGasPressure(const double volume, const double temp, const double mol
 double idealGasMoles(const double pressure, const double volume, const double temp) {
     const double ideal_gas_constant = 8.314462618;
     return (pressure * volume / (temp * ideal_gas_constant));
+}
+
+bool timer(double* timer_value, const double deltaT) {
+    //set timer_value before using this and pass a pointer to that value
+    //returns false if the timer is yet to finish, else returns true and sets timervalue to -1
+    if (*timer_value > 0) {
+        *timer_value -= deltaT * 0.001;
+        return false;
+    }
+    *timer_value = -1;
+    return true;
 }
 
 void debug_print(const char* message) {
