@@ -73,7 +73,7 @@ const PCSTRINGZ pcstring_lSimVars[totalRealLVarsCount*2] = {
         "BATT2_VOLTAGE","Volts",
         "BATT1_AMPERAGE","Amperes",
         "BATT2_AMPERAGE","Amperes",
-        "BATT_BUS_LOAD","Amperes"
+        "BATT_BUS_LOAD","Amperes",
         "EXT_GEN_ONLINE","Bool",
         "EXT_GEN_VOLTAGE","Volts",
         "EXT_GEN_AMPERAGE","Amperes",
@@ -211,10 +211,10 @@ const PCSTRINGZ pcstring_lSimVars[totalRealLVarsCount*2] = {
         "LANDING_ELEV","Feet",
         "CPC_SYS1", "Bool",
         "CPC_SYS2", "Bool",
-        "A32NX_LANDING_ELEVATION","Feet"
-        "XMLVAR_KNOB_OVHD_CABINPRESS_LDGELEV","Percent"
+        "A32NX_LANDING_ELEVATION","Feet",
+        "XMLVAR_KNOB_OVHD_CABINPRESS_LDGELEV","Percent",
         "A32NX_CAB_PRESS_MODE_MAN", "Bool",
-        "A32NX_MAN_VS_CONTROL","Enum"
+        "A32NX_MAN_VS_CONTROL","Enum",
         "A32NX_DITCHING", "Bool"
 };
 
