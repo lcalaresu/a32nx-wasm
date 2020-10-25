@@ -100,7 +100,7 @@ void initUnitEnums() {
 
 void init_units_string_hash() {
     for (int i = 0; i < totalRealLVarsCount; i++) {
-        unsigned int string_hash = COMPILE_TIME_CRC32_STR(pcstring_lSimVars[i+1]);
+        unsigned int string_hash = COMPILE_TIME_CRC32_STR(pcstring_lSimVars[(i * 2)+1]);
         switch (string_hash)
         {
             case COMPILE_TIME_CRC32_STR("Bool"):
@@ -147,7 +147,7 @@ void initLocalSimVarsIDs() {
     ID_LSIMVAR = (ID*)malloc(sizeof(ID) * totalRealLVarsCount);
     for (int i = 0; i < totalRealLVarsCount; i++) {
         lastLVarsValue[i] = -1;
-        ID_LSIMVAR[i] = register_named_variable(pcstring_lSimVars[i]);
+        ID_LSIMVAR[i] = register_named_variable(pcstring_lSimVars[i * 2]);
     }
 }
 
