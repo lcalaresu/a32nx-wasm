@@ -32,6 +32,7 @@ public:
     void init() {
         initUnitEnums();
         initLocalSimVarsIDs();
+        init_units_string_hash();
         srand(time(nullptr));
         ELEC_SYSTEM.init();
         PACK_SYSTEM.init();
