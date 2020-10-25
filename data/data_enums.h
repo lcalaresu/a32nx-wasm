@@ -4,14 +4,15 @@
 typedef enum unitsEnum {
     bool_units,
     percent_units,
-    volts_units,
-    amperes_units,
-    hertz_units,
     PSI_units,
     number_units,
     enum_units,
-    celcius_units,
-
+    celsius_units,
+    feet_units,
+    feet_per_sec_units,
+    volts_units,
+    amperes_units,
+    hertz_units,
     enumUnitsCount
 }unitsEnum;
 
@@ -225,18 +226,18 @@ enum lSimVars {
     * BLEED Valves *
     * ============ *
     */
-    ENG1_IP_VALVE,              //L:ENG1_IP_VALVE, Bool
-    ENG2_IP_VALVE,              //L:ENG2_IP_VALVE, Bool
-    ENG1_HP_VALVE,              //L:ENG1_HP_VALVE, Bool
-    ENG2_HP_VALVE,              //L:ENG2_HP_VALVE, Bool
-    ENG1_BLEED_VALVE,           //L:ENG1_BLEED_VALVE, Bool
-    ENG2_BLEED_VALVE,           //L:ENG2_BLEED_VALVE, Bool
-    APU_BLEED_VALVE,            //L:APU_BLEED_VALVE, Bool
-    GPU_BLEED_VALVE,            //L:GPU_BLEED_VALVE, Bool
-    ENG1_BLEED_STARTER_VALVE,   //L:ENG1_BLEED_STARTER, Bool
-    ENG2_BLEED_STARTER_VALVE,   //L:ENG2_BLEED_STARTER, Bool
-    WING_ANTIICE,               //L:WING_ANTICE, Bool
-    X_BLEED_VALVE,              //L:X_BLEED_VALVE, Bool
+    ENG1_IP_VALVE,              //L:ENG1_IP_VALVE, number
+    ENG2_IP_VALVE,              //L:ENG2_IP_VALVE, number
+    ENG1_HP_VALVE,              //L:ENG1_HP_VALVE, number
+    ENG2_HP_VALVE,              //L:ENG2_HP_VALVE, number
+    ENG1_BLEED_VALVE,           //L:ENG1_BLEED_VALVE, number
+    ENG2_BLEED_VALVE,           //L:ENG2_BLEED_VALVE, number
+    APU_BLEED_VALVE,            //L:APU_BLEED_VALVE, number
+    GPU_BLEED_VALVE,            //L:GPU_BLEED_VALVE, number
+    ENG1_BLEED_STARTER_VALVE,   //L:ENG1_BLEED_STARTER, number
+    ENG2_BLEED_STARTER_VALVE,   //L:ENG2_BLEED_STARTER, number
+    WING_ANTIICE,               //L:WING_ANTICE, number
+    X_BLEED_VALVE,              //L:X_BLEED_VALVE, number
 
     /*
     * ============== *

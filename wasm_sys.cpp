@@ -7,17 +7,14 @@ ServiceDef service;
 
 bool initialized = false;
 bool kill = false;
-//struct timeval timestruct;
-
 
 // Callbacks
 extern "C" {
     MSFS_CALLBACK bool wasm_sys_gauge_callback(FsContext ctx, int service_id, void* pData)
     {
         debug_print("MSFS_CALLBACK initiated...");
-        //gettimeofday(&timestruct, 0);
+
         uint64_t currentAbsTime = timeSinceEpoch();
-        //const uint64_t currentAbsTime = (timestruct.tv_sec * (uint64_t)1000000 + timestruct.tv_usec) * 0.001;
         if (!(initialized)) {
             if (service.handleSimConnect(service_id)) {
                 debug_print("Service handled simconnect open with status: SUCCESS");
