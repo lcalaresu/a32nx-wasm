@@ -82,7 +82,7 @@ const PCSTRINGZ pcstring_lSimVars[totalRealLVarsCount*2] = {
         "APU_GEN_VOLTAGE","Volts",
         "APU_GEN_AMPERAGE","Amperes",
         "APU_GEN_FREQ","Hertz",
-        "APU_LOAD_PERCENT",
+        "APU_LOAD_PERCENT", "Percent",
         "GEN1_ONLINE","Bool",
         "GEN2_ONLINE","Bool",
         "GEN1_VOLTAGE","Volts",
