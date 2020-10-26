@@ -116,7 +116,9 @@ bool timer(double* timer_value, const double deltaT) {
 
 void debug_print(const char* message) {
     #ifdef DEBUG
-    printf("%s\n", message);
+    printf("<====WASM_SYS_DEBUG: ");
+    printf("%s", message);
+    printf("====>\n");
     #endif
 }
 #endif // !UTILS
