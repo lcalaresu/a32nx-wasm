@@ -30,10 +30,10 @@ private:
     EngSys ENG_SYSTEM;
 public:
     void init() {
+        srand(time(nullptr));
         initUnitEnums();
         initLocalSimVarsIDs();
-        init_units_string_hash();
-        srand(time(nullptr));
+        initLSimVarsUnit();
         ELEC_SYSTEM.init();
         PACK_SYSTEM.init();
         BLEED_SYSTEM.init();

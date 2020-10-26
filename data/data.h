@@ -11,6 +11,15 @@
 * DATA CRUD STUFF *
 * =============== *
 */
+
+
+void initUnitEnums();
+void initLocalSimVarsIDs();
+void updateGetLSimVars();
+void updateSetLSimVars();
+void updateASimVars();
+void initLSimVarsUnit();
+
 //compile time string hashing credits to: https://stackoverflow.com/a/23683218
 static constexpr unsigned int crc_table[256] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
@@ -76,15 +85,9 @@ struct MM<size, size, dummy> {
 };
 #define COMPILE_TIME_CRC32_STR(x) (MM<sizeof(x)-1>::crc32(x))
 
-void initUnitEnums();
-void initLocalSimVarsIDs();
-void updateGetLSimVars();
-void updateSetLSimVars();
-void updateASimVars();
-
-ENUM* ENUM_UNITS;
-ID* ID_LSIMVAR;
-ID ID_LSIMVAR_UNIT[totalRealLVarsCount];
+ENUM ENUM_UNITS[enumUnitsCount];
+ID ID_LSIMVAR[totalRealLVarsCount];
+ENUM ENUM_LSIMVAR_UNIT[totalRealLVarsCount];
 FLOAT64 aSimVarsValue[aSimVarsCount];
 FLOAT64 lSimVarsValue[totalLVarsCount];
 FLOAT64 lastLVarsValue[totalLVarsCount];
@@ -92,54 +95,53 @@ FLOAT64 lastLVarsValue[totalLVarsCount];
 std::vector<int> dirtylSimVars;
 
 void initUnitEnums() {
-    ENUM_UNITS = (ENUM*)malloc(sizeof(ENUM) * enumUnitsCount);
     for (int i = 0; i < enumUnitsCount; i++) {
         ENUM_UNITS[i] = get_units_enum(pcstring_units[i]);
     }
 }
 
-void init_units_string_hash() {
+void initLSimVarsUnit() {
     for (int i = 0; i < totalRealLVarsCount; i++) {
-        int size = sizeof(pcstring_lSimVars[(i * 2) + 1]);
+        int size = sizeof(pcstring_lSimVars[i][1]);
         char* str = (char *)malloc(sizeof(char) * size);
-        for (int i = 0; i < size; i++) {
-            str[i] = towlower(pcstring_lSimVars[(i * 2)+1][i]);
+        for (int j = 0; j < size; j++) {
+            str[j] = towlower(pcstring_lSimVars[i][1][j]);
         }
         unsigned int string_hash = COMPILE_TIME_CRC32_STR(str);
         switch (string_hash)
         {
             case COMPILE_TIME_CRC32_STR("bool"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[bool_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[bool_units];
                 break;
             case COMPILE_TIME_CRC32_STR("percent"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[percent_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[percent_units];
                 break;
             case COMPILE_TIME_CRC32_STR("psi"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[PSI_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[PSI_units];
                 break;
             case COMPILE_TIME_CRC32_STR("number"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[number_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[number_units];
                 break;
             case COMPILE_TIME_CRC32_STR("enum"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[enum_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[enum_units];
                 break;
             case COMPILE_TIME_CRC32_STR("celsius"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[celsius_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[celsius_units];
                 break;
             case COMPILE_TIME_CRC32_STR("feet"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[feet_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[feet_units];
                 break;
             case COMPILE_TIME_CRC32_STR("feet per seconds"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[feet_per_sec_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[feet_per_sec_units];
                 break;
             case COMPILE_TIME_CRC32_STR("volts"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[volts_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[volts_units];
                 break;
             case COMPILE_TIME_CRC32_STR("amperes"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[amperes_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[amperes_units];
                 break;
             case COMPILE_TIME_CRC32_STR("hertz"):
-                ID_LSIMVAR_UNIT[i] = ENUM_UNITS[hertz_units];
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[hertz_units];
                 break;
         default:
             printf("INVALID TYPE ENTERED at %d\n",i);
@@ -149,10 +151,9 @@ void init_units_string_hash() {
 }
 
 void initLocalSimVarsIDs() {
-    ID_LSIMVAR = (ID*)malloc(sizeof(ID) * totalRealLVarsCount);
     for (int i = 0; i < totalRealLVarsCount; i++) {
         lastLVarsValue[i] = -1;
-        ID_LSIMVAR[i] = register_named_variable(pcstring_lSimVars[i * 2]);
+        ID_LSIMVAR[i] = register_named_variable(pcstring_lSimVars[i][0]);
     }
 }
 
@@ -172,7 +173,7 @@ void updateSetLSimVars() {
     }
     //update only dirtyLVars
     for (auto i = dirtylSimVars.end(); i != dirtylSimVars.begin(); --i) {
-        set_named_variable_typed_value(ID_LSIMVAR[*i], lSimVarsValue[*i], ID_LSIMVAR_UNIT[*i]);
+        set_named_variable_typed_value(ID_LSIMVAR[*i], lSimVarsValue[*i], ENUM_LSIMVAR_UNIT[*i]);
         dirtylSimVars.pop_back();
     }
 }
