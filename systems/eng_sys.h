@@ -80,8 +80,9 @@ private:
         const double ambient = aSimVarsValue[AMB_TEMP];
         if (startup) {
             double apu_egt = (apu_n1_temp_x4 * pow(N1, 4)) + (apu_n1_temp_x3 * pow(N1, 3)) + (apu_n1_temp_x2 * pow(N1, 2)) + (apu_n1_temp_x * N1) + apu_n1_temp_const;
-            lSimVarsValue[APU_EGT] = max(ambient, apu_egt);
-            if (lSimVarsValue[APU_N1] >= 100 && lSimVarsValue[APU_EGT] > (500 - rand() % 13)) {
+            if (lSimVarsValue[APU_N1] < 100) {
+                lSimVarsValue[APU_EGT] = max(ambient, apu_egt);
+            } else if (lSimVarsValue[APU_EGT] > (500 - rand() % 13)){
                 lSimVarsValue[APU_EGT] -= 0.4 * deltaT * 0.001;
             }
         }
