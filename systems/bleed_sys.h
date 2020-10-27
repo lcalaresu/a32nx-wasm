@@ -18,48 +18,41 @@ private:
     const double ip_n2_temp_x = 354.046322806;
     const double ip_n2_temp_x2 = -6.481339053;
     const double ip_n2_temp_x3 = 0.050869800;
+    const double ip_n2_temp_x4 = -0.000142944;
     const double hp_n2_temp_const = 228.758383738;
     const double hp_n2_temp_x = -12.257304394;
     const double hp_n2_temp_x2 = 0.392117580;
     const double hp_n2_temp_x3 = -0.004708863;
-
+    const double hp_n2_temp_x4 = 0.000022670;
+    
     int eng_ID;
 
     double engN2ToIPPressure(const double eng_N2) {
         if (eng_N2 < 87) {
-            return aSimVarsValue[AMB_PRESS];
+            return (((20 - aSimVarsValue[AMB_PRESS]) * eng_N2 / 87) + aSimVarsValue[AMB_PRESS]);
         }
         return (ip_n2_press_const + (ip_n2_press_x * eng_N2) + (ip_n2_press_x2 * pow(eng_N2, 2)) + (ip_n2_press_x3 * pow(eng_N2, 3)));
     }
     
     double engN2ToHPPressure(const double eng_N2) {
         if (eng_N2 <= 70) {
-            const double hp_press = (50/70) * eng_N2;
-            return max(aSimVarsValue[AMB_PRESS], hp_press);
+            return (((54 - aSimVarsValue[AMB_PRESS]) * eng_N2 / 85) + aSimVarsValue[AMB_PRESS]);
         }
         return (hp_n2_press_const + (hp_n2_press_x * eng_N2) + (hp_n2_press_x2 * pow(eng_N2, 2)) + (hp_n2_press_x3 * pow(eng_N2, 3)));
     }
     
     double engN2ToIPTemp(const double eng_N2) {
-        if (eng_N2 < 30) {
-            const double ip_temp = eng_N2 * 2;
-            return max(aSimVarsValue[AMB_TEMP], ip_temp);
-        } 
-        else if (eng_N2 < 70) {
-            return eng_N2 + 30;
+         if (eng_N2 < 80) {
+            return (((100 - aSimVarsValue[AMB_TEMP]) * eng_N2 / 80) + aSimVarsValue[AMB_TEMP]);
         }
-        else if (eng_N2 < 80) {
-            return 100;
-        }
-        return (ip_n2_temp_const + (ip_n2_temp_x * eng_N2) + (ip_n2_temp_x2 * pow(eng_N2, 2)) + (ip_n2_temp_x3 * pow(eng_N2, 3)));
+        return (ip_n2_temp_const + (ip_n2_temp_x * eng_N2) + (ip_n2_temp_x2 * pow(eng_N2, 2)) + (ip_n2_temp_x3 * pow(eng_N2, 3)) + (ip_n2_temp_x4 * pow(eng_N2, 4)));
     }
 
     double engN2ToHPTemp(const double eng_N2) {
-        if (eng_N2 < 30) {
-            const double bleed_temp = 80 / 30 * eng_N2;
-            return max(aSimVarsValue[AMB_TEMP], bleed_temp);
+        if (eng_N2 < 50) {
+            return (((95 - aSimVarsValue[AMB_TEMP]) * eng_N2 / 30) + aSimVarsValue[AMB_TEMP]);
         }
-        return (hp_n2_temp_const + (hp_n2_temp_x * eng_N2) + (hp_n2_temp_x2 * pow(eng_N2, 2)) + (hp_n2_temp_x3 * pow(eng_N2, 3)));
+        return (hp_n2_temp_const + (hp_n2_temp_x * eng_N2) + (hp_n2_temp_x2 * pow(eng_N2, 2)) + (hp_n2_temp_x3 * pow(eng_N2, 3)) + (hp_n2_temp_x4 * pow(eng_N2, 4)));
     }
 
 public:
@@ -432,8 +425,8 @@ private:
         return 0;
     }
     void initPID() {
-        duct1_temp_PID.init(0.4, 0.01, 0.6, lastAbsTime, 20, -10);
-        duct2_temp_PID.init(0.4, 0.01, 0.6, lastAbsTime, 20, -10);
+        duct1_temp_PID.init(0.4, 0.01, 0.06, lastAbsTime, 20, -10);
+        duct2_temp_PID.init(0.4, 0.01, 0.06, lastAbsTime, 20, -10);
         duct1_press_PID.init(0.6, 0.02, 0.7, lastAbsTime, 30, -30);
         duct2_press_PID.init(0.6, 0.02, 0.7, lastAbsTime, 30, -30);
     }

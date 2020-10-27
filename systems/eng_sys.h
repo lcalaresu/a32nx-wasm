@@ -26,9 +26,9 @@ private:
     const double apu_N1_x = 2.375010484;
     const double apu_N1_x2 = 0.034236847;
     const double apu_N1_x3 = -0.007404136;
-    const double apu_N1_x4 = 0.000268;
+    const double apu_N1_x4 = 0.000254;
     const double apu_N1_x5 = -0.000002438;
-    const double apu_n1_temp_const = -105.565;
+    const double apu_n1_temp_const = -96.565;
     const double apu_n1_temp_x = 28.571;
     const double apu_n1_temp_x2 = 0.0884;
     const double apu_n1_temp_x3 = -0.0081;
@@ -40,13 +40,13 @@ private:
 
     void openFlap(const double currentAbsTime) {
         if (lSimVarsValue[APU_FLAP_OPEN] <= 100) {
-            lSimVarsValue[APU_FLAP_OPEN] += 100 * (deltaT * 0.001 / apu_flap_delay);	//pct time finished for opening flap
+            lSimVarsValue[APU_FLAP_OPEN] += 100 * (deltaT * 0.001 / apu_flap_delay);    //pct time finished for opening flap
         }
     }
     
     void closeFlap(const double currentAbsTime) {
         if (lSimVarsValue[APU_FLAP_OPEN] >= 0) {
-            lSimVarsValue[APU_FLAP_OPEN] -= 100 * (deltaT * 0.001 / apu_flap_delay);	//pct time finished for closing flap
+            lSimVarsValue[APU_FLAP_OPEN] -= 100 * (deltaT * 0.001 / apu_flap_delay);    //pct time finished for closing flap
         }
     }
     
@@ -80,11 +80,8 @@ private:
         const double ambient = aSimVarsValue[AMB_TEMP];
         if (startup) {
             double apu_egt = (apu_n1_temp_x4 * pow(N1, 4)) + (apu_n1_temp_x3 * pow(N1, 3)) + (apu_n1_temp_x2 * pow(N1, 2)) + (apu_n1_temp_x * N1) + apu_n1_temp_const;
-            if (apu_egt > 500) {
-                apu_egt = 495 + rand() % 3;
-            }
             lSimVarsValue[APU_EGT] = max(ambient, apu_egt);
-            if (lSimVarsValue[APU_EGT] > 500) {
+            if (lSimVarsValue[APU_N1] >= 100 && lSimVarsValue[APU_EGT] > (500 - rand() % 13)) {
                 lSimVarsValue[APU_EGT] -= 0.4 * deltaT * 0.001;
             }
         }
