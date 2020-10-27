@@ -27,7 +27,7 @@ private:
         return false;
     }
     void updateError(const double currentError, const double currentTime) {
-        const double _deltaT = currentTime - lastUpdateTime;
+        const double _deltaT = (currentTime - lastUpdateTime) * 0.001;
         Ep = currentError;
         if (crossZero()) {
             Ei = 0;                 //predicted(integral) error is reset to 0 when Ep(currentError) crosses zero.
