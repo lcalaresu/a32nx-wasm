@@ -116,6 +116,9 @@ void initLSimVarsUnit() {
             case COMPILE_TIME_CRC32_STR("percent"):
                 ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[percent_units];
                 break;
+            case COMPILE_TIME_CRC32_STR("percent over 100"):
+                ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[percent_over_100_units];
+                break;
             case COMPILE_TIME_CRC32_STR("psi"):
                 ENUM_LSIMVAR_UNIT[i] = ENUM_UNITS[PSI_units];
                 break;

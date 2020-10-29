@@ -4,6 +4,7 @@
 typedef enum unitsEnum {
     bool_units,
     percent_units,
+    percent_over_100_units,
     PSI_units,
     number_units,
     enum_units,
