@@ -156,6 +156,7 @@ private:
             lSimVarsValue[ENG1_BLEED_STARTER_VALVE + eng_ID] = 0;
             if (hp_valve_open_pct[eng_ID] < 1) {
                 hp_valve_open_pct[eng_ID] += deltaT * 0.001 * valveOpenRate;
+                lSimVarsValue[ENG1_HP_VALVE + eng_ID] = 0.5;
             }
             if (hp_valve_open_pct[eng_ID] >= 1) {
                 lSimVarsValue[ENG1_HP_VALVE + eng_ID] = 1;
@@ -166,6 +167,7 @@ private:
             lSimVarsValue[ENG1_BLEED_STARTER_VALVE + eng_ID] = 0;
             if (ip_valve_open_pct[eng_ID] < 1) {
                 ip_valve_open_pct[eng_ID] += deltaT * 0.001 * valveOpenRate;
+                lSimVarsValue[ENG1_IP_VALVE + eng_ID] = 0.5;
             }
             if (ip_valve_open_pct[eng_ID] >= 1) {
                 lSimVarsValue[ENG1_IP_VALVE + eng_ID] = 1;
@@ -273,6 +275,7 @@ private:
             lSimVarsValue[APU_BLEED_TOGGLE_OFF] = 0;
             if (apu_valve_open_pct < 100) {
                 apu_valve_open_pct += deltaT * 0.001 * valveOpenRate;
+                lSimVarsValue[APU_BLEED_VALVE] = 0.5;
             }
             if (apu_valve_open_pct >= 50) {
                 lSimVarsValue[APU_BLEED_VALVE] = 1;
@@ -294,6 +297,7 @@ private:
         if (aSimVarsValue[EXT_POWER] && gpu_safety_check) {
             if (gpu_valve_open_pct < 100) {
                 gpu_valve_open_pct += deltaT * 0.001 * valveOpenRate;
+                lSimVarsValue[GPU_BLEED_VALVE] = 0.5;
             }
             if (gpu_valve_open_pct >= 50) {
                 lSimVarsValue[GPU_BLEED_VALVE] = 1;
