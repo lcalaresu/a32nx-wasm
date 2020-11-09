@@ -176,7 +176,9 @@ void updateSetLSimVars() {
     }
     //update only dirtyLVars
     for (auto i = dirtylSimVars.end(); i != dirtylSimVars.begin(); --i) {
-        set_named_variable_typed_value(ID_LSIMVAR[*i], lSimVarsValue[*i], ENUM_LSIMVAR_UNIT[*i]);
+        //to be replaced once the SDK implementation gets fixed
+        //set_named_variable_typed_value(ID_LSIMVAR[*i], lSimVarsValue[*i], ENUM_LSIMVAR_UNIT[*i]);
+        set_named_variable_value(ID_LSIMVAR[*i], lSimVarsValue[*i]);
         dirtylSimVars.pop_back();
     }
 }
