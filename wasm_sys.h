@@ -48,7 +48,7 @@ public:
         lSimVarsValue[FLIGHT_PHASE] = flightPhase();
 
         ELEC_SYSTEM.update(currentAbsTime);
-        PACK_SYSTEM.update();
+        PACK_SYSTEM.update(currentAbsTime);
         BLEED_SYSTEM.update(currentAbsTime);
         PRESS_SYSTEM.update(currentAbsTime);
         ENG_SYSTEM.update(currentAbsTime);

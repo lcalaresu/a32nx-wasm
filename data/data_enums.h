@@ -286,6 +286,12 @@ enum lSimVars {
     PACK2_OUTLET_TEMP,      //L:PACK2_OUTLET_TEMP, Celcius
     PACK1_CMPRSO_TEMP,      //L:PACK1_CMPRSO_TEMP, Celcius
     PACK2_CMPRSO_TEMP,      //L:PACK2_CMPRSO_TEMP, Celcius
+    PACK1_TURB_BYPASS_POS,  //L:PACK1_TURB_BYPASS_POS, Percent
+    PACK2_TURB_BYPASS_POS,  //L:PACK2_TURB_BYPASS_POS, Percent
+    PACK1_FLOW_RATE,        //L:PACK1_FLOW_RATE, Percent
+    PACK2_FLOW_RATE,        //L:PACK2_FLOW_RATE, Percent
+    PACK1_FCV_POS,          //L:PACK1_FLOW_CONTROL_VALVE_POS, Percent
+    PACK2_FCV_POS,          //L:PACK2_FLOW_CONTROL_VALVE_POS, Percent
 
     /*
     * ========== *
@@ -295,6 +301,20 @@ enum lSimVars {
     CKPT_TEMP,            //L:CKPT_TEMP, Celcius
     FWD_TEMP,             //L:FWD_TEMP, Celcius
     AFT_TEMP,             //L:AFT_TEMP, Celcius
+
+    /*
+    * ==== *
+    * ACSC *
+    * ==== *
+    */
+    CKPT_DUCT_TEMP,       //L:CKPT_DUCT_TEMP, Celcius
+    AFT_DUCT_TEMP,        //L:AFT_DUCT_TEMP, Celcius
+    FWD_DUCT_TEMP,        //L:FWD_DUCT_TEMP, Celcius
+    CKPT_TRIM_VALVE_POS,  //L:CKPT_TRIM_VALVE_POS, Percent
+    AFT_TRIM_VALVE_POS,   //L:AFT_TRIM_VALVE_POS, Percent
+    FWD_TRIM_VALVE_POS,   //L:FWD_TRIM_VALVE_POS, Percent
+    HOT_AIR_VALVE_POS,    //L:HOT_AIR_VALVE_POS, Percent
+    MIXER_UNIT_OUT_FLOW_RATE,        //L:MIXER_UNIT_OUT_FLOW_RATE, Percent
 
     /*
     * ========== *
@@ -481,6 +501,14 @@ enum ELECCircuit {
     //HOT_BUS2
     CIRCUIT_702PP,  //42
     CIRCUIT_704PP  //43
+};
+
+enum packFlow {
+    FLOW_2PACKS_LO,
+    FLOW_2PACKS_NORM,
+    FLOW_2PACKS_HI,
+    FLOW_1PACK,
+    FLOW_NO_PACK
 };
 
 #endif // !DATAENUMS
